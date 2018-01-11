@@ -1,0 +1,36 @@
+@extends('auth.app') @section('content')
+<div class="container">
+	<div class="wrapper clearfix">
+		<div class="login">
+			<div class="loginbox">
+				<img
+					src="{{Cookie::get('userHeadIcon')?Cookie::get('userHeadIcon'):url('/images/homeimgs/avatar.png')}}"
+					alt="" class="login-avatar">
+				<div class="login-form" id="lgform">
+					<p>
+						<input id="account" type="text" class="input username"
+							placeholder="用户名/邮箱/账套名" val-name="帐号"
+							value="{{Cookie::get('userAccount')}}">
+					</p>
+					<p>
+						<input id="password" type="password" class="input pwd"
+							placeholder="密码" val-name="密码" value="">
+					</p>
+					<p>
+						<input type="text" id="vercode" val-name="验证码"
+							class="input verify-input"><img id="verify" class="verify"
+							alt="验证码" src="{{url('/verify/image?acid='.time())}}" title="点击更换验证码">
+					</p>
+					<p class="t-right">
+						<a href="{{ url('/password/email') }}">忘记密码？</a>
+					</p>
+					<a id="sublogin" class="button button-login"> 登 录 </a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+<script type="text/javascript"
+	src="{{URL::asset('/javascript/pagejs/home.js')}}"></script>
+@endsection
