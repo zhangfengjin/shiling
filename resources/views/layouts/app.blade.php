@@ -32,8 +32,8 @@
         <div id="left_menu" class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
-                    <a href="/" class="site_title"><i class="fa fa-weibo"></i>
-                        <span>{{ config('app.name', 'WAX管理平台') }}</span></a>
+                    <a href="/" class="site_title"><i class="fa fa-laptop"></i>
+                        <span>{{ config('app.name', '领师管理平台') }}</span></a>
                 </div>
                 <div class="clearfix"></div>
                 <!-- sidebar menu -->
@@ -82,7 +82,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
                                 <li><a href="http://account.weibo.com/set/index" target="_blank"> 个人信息</a></li>
-                                <li><a href="http://weibo.com/logout.php"> 退出</a></li>
+                                <li><a href="{{url('/login')}}"> 退出</a></li>
                             </ul>
                         </li>
                         {{--<li role="presentation" class="dropdown">

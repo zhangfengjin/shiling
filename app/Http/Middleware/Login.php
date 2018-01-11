@@ -15,6 +15,14 @@ class Login
      */
     public function handle($request, Closure $next)
     {
+        $user = [
+            "user" => [
+                "uid"=>123,
+                "userName"=>"zfj",
+                "avatar"=>""
+            ]
+        ];
+        $request->attributes->add($user);
         return $next($request);
     }
 }
