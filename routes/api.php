@@ -12,7 +12,14 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['domain' => 'lingshi.weibo.com'], function () {
+    Route::any('/', function () {
+        return response('', 403);
+    });
+    Route::resource("verify/code", 'Verify\VerifyController');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::group(['namespace' => 'Api', 'middleware' => ['apicheck']], function () {
+        Route::resource("user", "UserController");
+    });
+
 });

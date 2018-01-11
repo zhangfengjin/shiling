@@ -228,4 +228,5 @@ return [
 
     ],
 
+    'mail_username' => env('MAIL_USERNAME', 'yonyouupu8@yonyou.com')
 ];
