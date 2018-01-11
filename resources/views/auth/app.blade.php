@@ -24,17 +24,17 @@
 <body>
 <div class="header">
     <div class="wrapper clearfix">
-        <a href="{{url('/')}}" class="logo"> <img
-                    src="{{url('/images/homeimgs/logo.png')}}" alt=""> <span
+        <a href="{{url('/')}}" class="logo"> {{--<img
+                    src="{{url('/images/homeimgs/logo.png')}}" alt="">--}} <span
                     id="homeNavigate">会员登录</span>
         </a> @if(empty($user))<span class="header-span"> 您还没有登录账号？<a
-                    href="{{ url('/auth/register') }}" class="register">点击注册</a>
+                    href="{{ url('/register') }}" class="register">点击注册</a>
 			</span> @endif
     </div>
 </div>
 @yield('content')
 <div class="footer">
-    <p></p>
+    <p>版权所有</p>
 </div>
 </body>
 </html>

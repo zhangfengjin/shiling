@@ -3,9 +3,6 @@
 	<div class="wrapper clearfix">
 		<div class="login">
 			<div class="loginbox">
-				<img
-					src="{{Cookie::get('userHeadIcon')?Cookie::get('userHeadIcon'):url('/images/homeimgs/avatar.png')}}"
-					alt="" class="login-avatar">
 				<div class="login-form" id="lgform">
 					<p>
 						<input id="account" type="text" class="input username"
@@ -22,7 +19,7 @@
 							alt="验证码" src="{{url('/verify/image?acid='.time())}}" title="点击更换验证码">
 					</p>
 					<p class="t-right">
-						<a href="{{ url('/password/email') }}">忘记密码？</a>
+						<a href="{{ url('/password') }}">忘记密码？</a>
 					</p>
 					<a id="sublogin" class="button button-login"> 登 录 </a>
 				</div>

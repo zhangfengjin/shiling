@@ -35,6 +35,8 @@ Route::group(['domain' => 'lingshi.weibo.com', 'middleware' => ['login', 'auth2'
         Route::group(["namespace" => 'Auth'], function () {
             Route::get("/login", "LoginController@index");
             Route::post("/login", "LoginController@index");
+            Route::get("/register", "RegisterController@index");
+            Route::get("/password", "ResetPasswordController@index");
         });
     }
 );
