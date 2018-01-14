@@ -12,7 +12,7 @@ class VerifyController extends Controller
      * 发送验证码--包括手机验证码和邮箱验证码
      * @return array
      */
-    public function index()
+    public function code()
     {
         return DataStandard::printStandardData([]);
     }

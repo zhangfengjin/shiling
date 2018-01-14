@@ -17,26 +17,15 @@ class ApiCheck
      */
     public function handle($request, Closure $next)
     {
-        $contentType = $request->header('content-type');
-        $contentType = strtolower($contentType);
-        if (strpos($contentType, 'application/json') === false) {
-            return $this->output("验证失败", 110);
-        }
-        //校验token或者user_id
-        $token = $request->input('token');
+        $sign = $request->input('sign');//签名
+        $token = $request->input('token');//登录token 用户唯一标识
         if (empty($token)) {
-            return $this->output("验证失败", 111);
+            return DataStandard::printStandardData([],"验证失败", 111);
         }
-        return $next($request);
-    }
-
-    public function output($retMsg, $errCode)
-    {
-        $output = [
-            'code' => $errCode,
-            'data' => [],
-            'message' => $retMsg
-        ];
-        return response()->json($output);
+        if (Cache::has($token)) {
+            return $next($request);
+        } else {
+            return DataStandard::printStandardData([],"登录超时", 112);
+        }
     }
 }

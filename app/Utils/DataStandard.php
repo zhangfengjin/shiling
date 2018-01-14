@@ -35,12 +35,22 @@ class DataStandard
      * @param int $code
      * @return array
      */
-    public static function printStandardData($data = "", $msg = "", $code = 0)
+    public static function getStandardData($data = [], $msg = "", $code = 0)
     {
         return json_encode([
             "code" => $code,
             "data" => $data,
             "message" => $msg
         ]);
+    }
+
+    public static function printStandardData($data = [], $msg = "", $code = 0)
+    {
+        $output = [
+            'code' => $code,
+            'data' => $data,
+            'message' => $msg
+        ];
+        return response()->json($output);
     }
 }

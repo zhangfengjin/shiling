@@ -227,6 +227,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
-
+    'app_key' => [
+        '123121212' => []
+    ],
     'mail_username' => env('MAIL_USERNAME', 'yonyouupu8@yonyou.com')
 ];
