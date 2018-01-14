@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width"/>
     <title>{{ config('app.name', '领师管理平台') }}</title>
     <!-- ajax psot\put\delete等非get请求时必须 -->
-    <meta name="_token" content="{{ csrf_token() }}" charset="utf-8"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}" charset="utf-8"/>
     <link href="{{URL::asset('css/plugins/bootstrap/bootstrap.min.css')}}"
           rel="stylesheet"/>
     <link href="{{URL::asset('css/auth_custom.css')}}" rel="stylesheet"/>

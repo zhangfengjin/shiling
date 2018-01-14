@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Utils\DataStandard;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
@@ -44,8 +46,40 @@ class LoginController extends Controller
         return view("auth.login");
     }
 
+    /**
+     * @return string
+     */
+    public function username()
+    {
+        return "tel";
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function guard()
+    {
+        return Auth::guard();
+    }
+
+    /**
+     * 登录
+     * @param Request $request
+     * @return array
+     */
     public function login(Request $request)
     {
-        Session::put("user", [12]);
+        $account = $request->input('account');
+        $credentials = array(
+            "name" => $account
+        );
+        $credentials ["password"] = $request->input('password');
+        if ($this->guard()->attempt($credentials, true)) {
+            $user = Auth::user();
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData('', "登录失败", 201);
     }
+
+
 }

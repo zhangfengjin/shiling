@@ -25,7 +25,7 @@ class Api
         $appKey = $request->input('appKey');//appkey
         $appKeys = config("app.app_key");
         if (empty($appKey) || !isset($appKeys[$appKey])) {
-            DataStandard::printStandardData([], "验证失败", 111);
+            return DataStandard::printStandardData([], "验证失败", 111);
         }
         return $next($request);
     }

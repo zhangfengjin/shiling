@@ -25,7 +25,7 @@ class ApiCheck
         if (Cache::has($token)) {
             return $next($request);
         } else {
-            return DataStandard::printStandardData([],"登录超时", 112);
+            return DataStandard::printStandardData([],"未登录", 112);
         }
     }
 }

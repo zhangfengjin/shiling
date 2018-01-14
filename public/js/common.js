@@ -26,6 +26,10 @@ CommonUtil = function (util) {
             }
             return request;
         },
+        // 在当前窗体跳转
+        redirect: function (route) {
+            window.location.href = util.getRootPath() + (route == undefined ? "" : route);
+        },
         openWin: function (url) {
             var link = $("<a href='" + url + "' target='_blank'></a>").get(0);
             var e = document.createEvent('MouseEvents');
@@ -97,7 +101,8 @@ CommonUtil = function (util) {
                     headers: headers,
                     crossDomain: true,
                     success: function (ret) {
-                        if (ret.code == 200)//请求成功
+                        console.log(ret);
+                        if (ret.code === 0)//请求成功
                             successfn(ret);
                         else {
                             try {

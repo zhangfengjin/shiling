@@ -19,9 +19,9 @@ Route::group(['domain' => 'lingshi.weibo.com'],
             Route::get("/login", "LoginController@index");
             Route::get("/reset", "ResetPasswordController@index");
 
-            Route::post("/register", "RegisterController@index");
-            Route::post("/login", "LoginController@index");
-            Route::post("/reset", "ResetPasswordController@index");
+            Route::post("/register", "RegisterController@register");
+            Route::post("/login", "LoginController@login");
+            Route::post("/reset", "ResetPasswordController@reset");
         });
 
         Route::group(['middleware' => ['login', 'auth2']], function () {
