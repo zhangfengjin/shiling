@@ -99,6 +99,7 @@ class RegisterController extends Controller
         $user = $userService->create($user); // 注册
         if ($user) {
             $this->guard()->login($user); // 登录
+
             return DataStandard::getStandardData();
         }
         return DataStandard::getStandardData([], "注册失败", 204);

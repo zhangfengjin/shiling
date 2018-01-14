@@ -126,7 +126,7 @@ CommonUtil = function (util) {
                                     });
                                 }
                                 else {
-                                    layer.msg(ret.msg, {
+                                    layer.msg(ret.message, {
                                         offset: "50px"
                                     });
                                 }

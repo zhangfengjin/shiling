@@ -58,7 +58,7 @@ class UserService
     {
         $user = new User();
         $user->tel = $input["tel"];
-        $user->password = $input["password"];
+        $user->password = bcrypt($input["password"]);
         $user->save();
         return $user;
     }

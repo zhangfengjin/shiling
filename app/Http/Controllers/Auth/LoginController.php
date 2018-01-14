@@ -71,7 +71,7 @@ class LoginController extends Controller
     {
         $account = $request->input('account');
         $credentials = array(
-            "name" => $account
+            "tel" => $account
         );
         $credentials ["password"] = $request->input('password');
         if ($this->guard()->attempt($credentials, true)) {
