@@ -7,6 +7,7 @@ use App\Utils\DataStandard;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
@@ -76,6 +77,8 @@ class LoginController extends Controller
         $credentials ["password"] = $request->input('password');
         if ($this->guard()->attempt($credentials, true)) {
             $user = Auth::user();
+            $token = DataStandard::getToken($user->id);
+            Cache::put($token, $token, 60 * 24 * 365);
             return DataStandard::getStandardData();
         }
         return DataStandard::getStandardData('', "登录失败", 201);

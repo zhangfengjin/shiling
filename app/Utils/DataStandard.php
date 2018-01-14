@@ -53,4 +53,13 @@ class DataStandard
         ];
         return response()->json($output);
     }
+
+    /**
+     * 获取token
+     * @return string
+     */
+    public static function getToken($uuid = 888)
+    {
+        return md5($uuid . substr(microtime(), 2, 8) . rand(10, 100));
+    }
 }

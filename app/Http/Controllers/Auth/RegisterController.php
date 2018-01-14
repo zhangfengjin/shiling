@@ -9,6 +9,7 @@ use App\Utils\DataStandard;
 use App\Utils\RegHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -89,15 +90,21 @@ class RegisterController extends Controller
             if ($userService->uniqueTel($tel) > 0) {
                 return DataStandard::getStandardData([], "手机已被抢注", 203);
             }
+        } else {
+            return DataStandard::getStandardData([], "手机格式不正确", 205);
         }
         if (RegHelper::validateEmail($email)) {
             if ($userService->uniqueEmail($email) > 0) {
                 return DataStandard::getStandardData([], "邮箱已被抢注", 204);
             }
+        } else {
+            return DataStandard::getStandardData([], "邮箱格式不正确", 206);
         }
         $user = $request->all();
         $user = $userService->create($user); // 注册
         if ($user) {
+            $token = DataStandard::getToken($user->id);
+            Cache::put($token, $token, 60 * 24 * 365);
             $this->guard()->login($user); // 登录
 
             return DataStandard::getStandardData();
