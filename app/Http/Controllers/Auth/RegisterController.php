@@ -103,13 +103,12 @@ class RegisterController extends Controller
         $user = $request->all();
         $user = $userService->create($user); // 注册
         if ($user) {
+            $this->guard()->login($user); // 登录
             $token = DataStandard::getToken($user->id);
             Cache::put($token, $token, 60 * 24 * 365);
-            $this->guard()->login($user); // 登录
-
-            return DataStandard::getStandardData();
+            return DataStandard::getStandardData(["token" => $token]);
         }
-        return DataStandard::getStandardData([], "注册失败", 204);
+        return DataStandard::getStandardData([], "注册失败", 210);
     }
 
     /**

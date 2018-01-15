@@ -79,7 +79,7 @@ class LoginController extends Controller
             $user = Auth::user();
             $token = DataStandard::getToken($user->id);
             Cache::put($token, $token, 60 * 24 * 365);
-            return DataStandard::getStandardData();
+            return DataStandard::getStandardData(["token" => $token]);
         }
         return DataStandard::getStandardData('', "登录失败", 201);
     }
