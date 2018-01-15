@@ -20,11 +20,27 @@ class VerifyController extends Controller
     {
         $tel = $request->input('tel');
         $email = $request->input('email');
-        $userService = new UserService ();
         $telEmail = new TelEmailService();
         $verifyService = new VerifyService();
         $code = $verifyService->getVerifyCode();
         if (!empty($tel)) {
+            if (RegHelper::validateTel($tel)) {
+                $telEmail->sendTelVerify($code, $tel);
+            } else {
+                return DataStandard::getStandardData([], "手机格式不正确", 205);
+            }
+        } else if (!empty($email)) {
+            if (RegHelper::validateEmail($email)) {
+                $telEmail->sendEmailVerify($code, $email);
+            } else {
+                return DataStandard::getStandardData([], "邮箱格式不正确", 204);
+            }
+        } else {
+            return DataStandard::getStandardData([], "输入参数不正确", 12000);
+        }
+        return DataStandard::printStandardData();
+
+        /*if (!empty($tel)) {
             if (RegHelper::validateTel($tel)) {
                 if ($userService->uniqueTel($tel) > 0) {
                     //todo
@@ -39,7 +55,7 @@ class VerifyController extends Controller
                 if ($userService->uniqueEmail($email) > 0) {
                     //todo
                     //发送邮箱验证码
-                    $telEmail->sendTelVerify($code, $email);
+                    $telEmail->sendEmailVerify($code, $email);
                 }
             } else {
                 return DataStandard::getStandardData([], "邮箱已被抢注", 204);
@@ -47,9 +63,7 @@ class VerifyController extends Controller
         } else {
             return DataStandard::getStandardData([], "输入参数不正确", 12000);
         }
-
-
-        return DataStandard::printStandardData();
+        return DataStandard::printStandardData();*/
     }
 
 }

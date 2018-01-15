@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['domain' => 'lingshi.weibo.com', 'middleware' => ['api']], function () {
+Route::group(['domain' => 'lingshi.weibo.com', 'middleware' => ['lsapi']], function () {
     Route::any('/', function () {
         return response('', 403);
     });

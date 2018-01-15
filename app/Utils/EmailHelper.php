@@ -15,9 +15,10 @@ class EmailHelper
 {
     public static function sendEmail($content, $receiver)
     {
+        echo 12;
         Mail::raw($content, function ($message) use ($receiver) {
-            $username = config('app.mail_username');
-            $message->from($username, '领师APP');
+            /*$username = config('app.mail_username');
+            $message->from($username, '领师APP');*/
             $message->to($receiver)->subject("领师APP用户验证码");
         });
     }

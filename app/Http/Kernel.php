@@ -56,7 +56,7 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'api' => \App\Http\Middleware\Api::class,
+        'lsapi' => \App\Http\Middleware\Api::class,
         'apiauth' => \App\Http\Middleware\ApiCheck::class,
         'login' => \App\Http\Middleware\Login::class,
         'auth2' => \App\Http\Middleware\Authenticate::class,

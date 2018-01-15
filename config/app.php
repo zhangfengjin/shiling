@@ -230,5 +230,5 @@ return [
     'app_key' => [
         '123121212' => []
     ],
-    'mail_username' => env('MAIL_USERNAME', 'yonyouupu8@yonyou.com')
+    'mail_username' => env('MAIL_USERNAME', 'fengjin1@staff.weibo.com')
 ];
