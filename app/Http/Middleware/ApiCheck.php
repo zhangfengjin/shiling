@@ -20,12 +20,12 @@ class ApiCheck
         $sign = $request->input('sign');//签名
         $token = $request->input('token');//登录token 用户唯一标识
         if (empty($token)) {
-            return DataStandard::printStandardData([],"验证失败", 111);
+            return DataStandard::printStandardData([],"验证失败", 123);
         }
-        if (Cache::has($token)) {
+        if (true) {//Cache::has($token)
             return $next($request);
         } else {
-            return DataStandard::printStandardData([],"未登录", 112);
+            return DataStandard::printStandardData([],"未登录", 124);
         }
     }
 }
