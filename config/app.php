@@ -230,5 +230,25 @@ return [
     'app_key' => [
         '123' => []
     ],
-    'mail_username' => env('MAIL_USERNAME', 'fengjin1@staff.weibo.com')
+    'mail_username' => env('MAIL_USERNAME', 'fengjin1@staff.weibo.com'),
+    'pay' => [
+        'wechat' => [
+            'wechat' => [
+                'appid' => 'wx2421b1c4370ec43b',             // 公众号APPID
+                'mch_id' => '10000100',             // 微信商户号
+                'notify_url' => '',         // 支付成功后回调
+                'key' => '0CB01533B8C1EF103065174F50BCA001',                // 微信支付签名秘钥
+                'cert_client' => '',        // 客户端证书路径，退款时需要用到
+                'cert_key' => '',           // 客户端秘钥路径，退款时需要用到
+            ]
+        ],
+        'alipay' => [
+            'alipay' => [
+                'appid' => '',             // 支付宝提供的 APP_ID
+                'notify_url' => '',         // 支付宝异步通知地址
+                'ali_public_key' => '',     // 支付宝公钥，1行填写
+                'private_key' => '',        // 自己的私钥，1行填写
+            ]
+        ]
+    ]
 ];

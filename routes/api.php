@@ -28,7 +28,7 @@ Route::group(['domain' => 'lingshi.weibo.com', 'middleware' => ['lsapi']], funct
         Route::resource("user", "UserController");
 
         Route::group(['prefix' => 'pay'], function () {
-            Route::post("unifiedorder", "WxPayController@unifiedorder");
+            Route::post("unifiedorder", "PayController@unifiedorder");
         });
     });
 
