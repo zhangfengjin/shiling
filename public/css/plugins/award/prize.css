@@ -1,0 +1,3042 @@
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, form, img, dl, dt, dd, table, th, td, .wmx80, blockquote, fieldset, div, strong, label, em {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+ul, ol, li {
+    list-style: none;
+}
+
+input, button, textarea {
+    margin: 0;
+    font-size: 12px;
+    vertical-align: middle;
+    font-family: "Microsoft Yahei";
+}
+
+body {
+    font: 12px/1.5 "Microsoft Yahei", SimHei, helvetica, arial, sans-serif;
+    margin: 0;
+    color: #515567;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+    color: #585858;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.cl {
+    height: 0;
+    font-size: 1px;
+    clear: both;
+    line-height: 0;
+}
+
+a, img, button, textarea {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-appearance: none;
+}
+
+img {
+    display: block;
+}
+
+.none {
+    display: none;
+}
+
+*:focus {
+    outline: none;
+}
+
+i, em, ins {
+    font-style: normal;
+    text-decoration: none;
+}
+
+nav, footer, section, header, article {
+    display: block;
+}
+
+.wrap {
+    width: 1400px;
+    margin: 0 auto;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.pr {
+    position: relative;
+}
+
+.pa {
+    position: absolute;
+}
+
+.oh {
+    overflow: hidden;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+.clearfix:before, .clearfix:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+input[type="submit"], input[type="reset"], input[type="button"], button {
+    -webkit-appearance: none;
+    padding: 0;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #e9e9e9 inset;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(120, 240, 255, .1);
+}
+
+::-webkit-scrollbar-track:hover {
+    background: rgba(120, 240, 255, .1);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(120, 240, 255, .8);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(120, 240, 255, .8);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgba(120, 240, 255, .8);
+}
+
+iframe {
+    position: fixed;
+    top: 15%;
+    width: 1400px;
+    height: 700px;
+    z-index: 9;
+    border: 0;
+}
+
+.bgwrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: 100% 100%;
+    overflow: hidden;
+}
+
+.bgwrap h1 {
+    /*font-size: 80px;
+    color: #fff;
+    text-align: center;
+    font-weight: normal;
+    position: fixed;
+    width: 1400px;
+    left: 50%;
+    top: 45%;
+    margin-left: -700px*/;
+}
+
+.bgwrap2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(../img/bg2.jpg) no-repeat center;
+    background-size: 100% 100%;
+    overflow: hidden;
+}
+
+.bgwrap3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(../img/bg3.jpg) no-repeat center;
+    background-size: 100% 100%;
+    overflow: hidden;
+}
+
+.bgwrap2 .mainbody {
+    top: 18%;
+}
+
+.bgwrap3 .mainbody {
+    top: 23%;
+    bottom: 15%;
+}
+
+.timecount {
+    font-size: 24px;
+    color: #fff;
+}
+
+.timecount p {
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+    margin: 0 10px;
+    background: url(../../../images/award/time.png) no-repeat center;
+    background-size: 100% 100%;
+    text-align: center;
+    font-size: 24px;
+    color: #78f0ff;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 15%;
+    z-index: 999;
+}
+
+.header .headerwrap {
+    height: 100%;
+}
+
+.header .headerwrap .logo {
+    width: 115px;
+    height: 60px;
+    left: 0;
+    top: 50%;
+    margin-top: -30px;
+}
+
+.header .headerwrap .title {
+    top: 50%;
+    margin-top: -30px;
+    left: 50%;
+}
+
+.header .headerwrap .title p {
+    height: 60px;
+    line-height: 60px;
+    padding: 0 40px;
+    text-align: center;
+    background: url(../img/titlebg.png) no-repeat center;
+    background-size: 100% 100%;
+    color: #fff;
+    font-size: 24px;
+}
+
+.header .headerwrap .code {
+    right: 0;
+    top: 50%;
+    width: 120px;
+    height: 120px;
+    margin-top: -60px;
+}
+
+.header .headerwrap .code img {
+    width: 100%;
+    height: 100%;
+}
+
+.header2 {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 15%;
+    z-index: 999;
+}
+
+.header2 .headerwrap {
+    height: 100%;
+}
+
+.header2 .headerwrap .logo {
+    width: 115px;
+    height: 60px;
+    left: 0;
+    top: 50%;
+    margin-top: -30px;
+}
+
+.header2 .headerwrap .title {
+    top: 50%;
+    margin-top: -30px;
+    left: 50%;
+}
+
+.header2 .headerwrap .title p {
+    height: 60px;
+    line-height: 60px;
+    padding: 0 40px;
+    text-align: center;
+    background: url(../../../images/award/r_titlebg.png) no-repeat center;
+    background-size: 100% 100%;
+    color: #fff;
+    font-size: 24px;
+}
+
+.header2 .headerwrap .code {
+    right: 0;
+    top: 50%;
+    width: 120px;
+    height: 120px;
+    margin-top: -60px;
+}
+
+.header2 .headerwrap .code img {
+    width: 100%;
+    height: 100%;
+}
+
+.header3 {
+    position: fixed;
+    top: 8%;
+    width: 100%;
+    height: 15%;
+}
+
+.header3 .headerwrap {
+    height: 100%;
+}
+
+.header3 .headerwrap .logo {
+    width: 115px;
+    height: 60px;
+    left: 0;
+    top: 50%;
+    margin-top: -30px;
+}
+
+.header3 .headerwrap .title {
+    top: 50%;
+    margin-top: -30px;
+    left: 50%;
+}
+
+.header3 .headerwrap .title p {
+    height: 60px;
+    line-height: 60px;
+    padding: 0 40px;
+    text-align: center;
+    background: url(../img/r_titlebg.png) no-repeat center;
+    background-size: 100% 100%;
+    color: #fff;
+    font-size: 24px;
+}
+
+.header3 .headerwrap .code {
+    right: 0;
+    top: 50%;
+    width: 120px;
+    height: 120px;
+    margin-top: -60px;
+}
+
+.header3 .headerwrap .code img {
+    width: 100%;
+    height: 100%;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+}
+
+.footer .iconwrap {
+    height: 100%;
+    overflow: hidden;
+}
+
+.footer .iconwrap .btnlist {
+    padding-top: 20px;
+    float: left;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.footer .iconwrap i {
+    position: relative;
+    float: left;
+    width: 60px;
+    height: 60px;
+}
+
+.footer .iconwrap i:hover {
+    background: url(../../../images/award/bottomhover.png) no-repeat center;
+    animation: bottomhover .8s steps(27) infinite;
+}
+
+.footer .iconwrap i a {
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+}
+
+.footer .iconwrap i.index a {
+    background: url(../img/bicon0.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.tdqiandao a {
+    background: url(../img/bicon1.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.guestshow a {
+    background: url(../img/bicon1.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.choujiang a {
+    background: url(../img/bicon2.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.danmu_on a {
+    background: url(../img/bicon3.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.peidui a {
+    background: url(../img/bicon4.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.hongbao a {
+    background: url(../img/bicon5.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.taolun a {
+    background: url(../img/bicon6.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.pingfen a {
+    background: url(../img/bicon7.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.toupiao a {
+    background: url(../img/bicon8.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.ziliao a {
+    background: url(../img/bicon9.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.yaoyiyao a {
+    background: url(../img/bicon10.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.gyaoyiyao a {
+    background: url(../img/bicon17.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.choujiang2 a {
+    background: url(../img/bicon11.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.qiandao a {
+    background: url(../img/bicon12.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.qiangqian a {
+    background: url(../img/bicon13.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.back a {
+    background: url(../img/bicon14.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.laohuji a {
+    background: url(../img/bicon15.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.zhufu a {
+    background: url(../img/bicon16.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.baping a {
+    background: url(../img/bicon40.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.yearaward a {
+    background: url(../img/bicon41.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.qrcode a {
+    background: url(../img/bicon19.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i p {
+    display: none;
+    position: absolute;
+    width: 100px;
+    top: -20px;
+    left: 50%;
+    margin-left: -50px;
+    text-align: center;
+    font-size: 14px;
+    color: #78f0ff;
+}
+
+.footer .iconwrap i.guestshow a {
+    background: url(../img/bicon20.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.photo_upload a {
+    background: url(../img/bicon21.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.signmix a {
+    background: url(../img/bicon22.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.baping a {
+    background: url(../img/bicon40.png) no-repeat center;
+    background-size: contain;
+}
+
+.footer .iconwrap i.realinfo_award a {
+    background: url(../img/bicon23.png) no-repeat center;
+    background-size: contain;
+}
+
+.mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .8);
+}
+
+.tk {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.tkbg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url(../../../images/award/tkbg.jpg) no-repeat center;
+    background-size: 100% 100%;
+    opacity: 1;
+}
+
+.tkbg .star {
+    position: absolute;
+}
+
+.tkbg .star1 {
+    -webkit-animation: star1 2.5s linear forwards;
+    animation: star1 2.5s linear forwards;
+}
+
+.tkbg .star2 {
+    -webkit-animation: star2 1.5s linear forwards;
+    animation: star2 1.5s linear forwards;
+}
+
+.tkbg .star3 {
+    -webkit-animation: star3 1.5s ease-in-out infinite;
+    animation: star3 1.5s ease-in-out infinite;
+}
+
+.tkbg .star4 {
+    -webkit-animation: star4 1.5s ease-in-out infinite;
+    animation: star4 1.5s ease-in-out infinite;
+}
+
+.tkbg .star5 {
+    -webkit-animation: star5 1.5s ease-in-out infinite;
+    animation: star5 1.5s ease-in-out infinite;
+}
+
+.tkbody {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 1400px;
+    margin: 0 auto;
+}
+
+.tkbody .picpart {
+    float: left;
+}
+
+.tkbody .picpart ul {
+    overflow: hidden;
+}
+
+.tkbody .picpart li {
+    float: left;
+    position: relative;
+    margin: 25px;
+}
+
+.closedico {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 999999;
+    font-size: 45px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 45px;
+    overflow: hidden;
+}
+
+.cjtk1 .picpart {
+    left: 50%;
+    margin-left: -125px;
+}
+
+.cjtk1 h1 {
+    height: 60px;
+    line-height: 60px;
+    font-size: 36px;
+    color: #fff;
+    text-align: center;
+    margin: 80px 0 40px;
+    font-weight: normal;
+}
+
+.cjtk1 img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}
+
+.cjtk1 i {
+    display: block;
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    top: -50px;
+    left: -50px;
+    background: url(../img/numberbg.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.cjtk1 p {
+    width: 250px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 50px;
+}
+
+.cjtk2 h1 {
+    height: 60px;
+    line-height: 60px;
+    font-size: 36px;
+    color: #fff;
+    text-align: center;
+    margin: 80px 0 40px;
+    font-weight: normal;
+}
+
+.cjtk2 img {
+    width: 214px;
+    height: 214px;
+    border-radius: 50%;
+    margin: 8px;
+}
+
+.cjtk2 i {
+    display: block;
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    left: -50px;
+    margin: 15px;
+    background: url(../img/numberbg.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.cjtk2 p {
+    width: 230px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 50px;
+}
+
+.choujiang .leftpart {
+    height: 100%;
+    width: 650px;
+}
+
+.choujiang .leftpart .leftbg {
+    width: 100%;
+    height: 100%;
+}
+
+.choujiang .leftpart .cont {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.choujiang .leftpart .cont h1 {
+    font-size: 32px;
+    color: #78f0ff;
+    font-weight: normal;
+    text-align: center;
+    margin-top: 10%;
+    letter-spacing: 5px;
+}
+
+.choujiang .leftpart .cont .picwrap {
+    margin-top: 5%;
+}
+
+.choujiang .leftpart .cont .picwrap .pic {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+    border-radius: 50%;
+    padding: 40px;
+    background: url(../img/headbg.png) no-repeat center;
+    background-size: contain;
+    z-index: 1;
+}
+
+.choujiang .leftpart .cont .picwrap .round {
+    top: -50px;
+    left: 125px;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.choujiang .leftpart .cont .prize {
+    height: 60px;
+    margin-top: 5%;
+}
+
+.choujiang .leftpart .cont .prize .prizewrap {
+    width: 260px;
+    left: 50%;
+    margin-left: -130px;
+}
+
+.choujiang .leftpart .cont .prize a {
+    width: 55px;
+    height: 60px;
+}
+
+.choujiang .leftpart .cont .prize a.leftarrow {
+    background: url(../../../images/award/leftarrow.png) no-repeat center;
+}
+
+.choujiang .leftpart .cont .prize a.rightarrow {
+    background: url(../../../images/award/rightarrow.png) no-repeat center;
+}
+
+.choujiang .leftpart .cont .prize p {
+    float: left;
+    width: 150px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #78f0ff;
+    text-align: center;
+    letter-spacing: 5px;
+}
+
+.choujiang .leftpart .cont .btn {
+    display: block;
+    width: 200px;
+    height: 85px;
+    line-height: 80px;
+    margin: 5% auto 0;
+    background: url(../../../images/award/buttonbg.png) no-repeat center;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #78f0ff;
+    letter-spacing: 5px;
+}
+
+.choujiang .rightpart {
+    height: 100%;
+    width: 650px;
+}
+
+.choujiang .rightpart .rightbg {
+    width: 100%;
+    height: 100%;
+    transform: rotateY(180deg);
+}
+
+.choujiang .rightpart .cont {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.choujiang .rightpart .cont h1 {
+    font-size: 32px;
+    color: #78f0ff;
+    font-weight: normal;
+    text-align: center;
+    margin-top: 10%;
+    letter-spacing: 5px;
+}
+
+.choujiang .rightpart .cont .list {
+    position: absolute;
+    top: 130px;
+    bottom: 100px;
+    width: 99%;
+    overflow-y: auto;
+}
+
+.choujiang .rightpart .cont .list ul {
+    width: 90%;
+    padding: 0 5%;
+}
+
+.choujiang .rightpart .cont .list li {
+    overflow: hidden;
+    border: 2px solid rgba(120, 240, 255, .4);
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.choujiang .rightpart .cont .list li em {
+    float: left;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    margin: 48px 5px 18px 15px;
+    font-size: 24px;
+    color: #78f0ff;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(120, 240, 255, .1);
+}
+
+.choujiang .rightpart .cont .list li em span {
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 60px;
+    top: -8px;
+    left: -8px;
+}
+
+.choujiang .rightpart .cont .list li:nth-child(1) em span, .choujiang .rightpart .cont .list li:nth-child(2) em span, .choujiang .rightpart .cont .list li:nth-child(3) em span {
+    background: url(../img/numberbg.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.choujiang .rightpart .cont .list li img {
+    float: left;
+    width: 100px;
+    height: 100px;
+    padding: 20px;
+    background: url(../img/headbg_s.png) no-repeat center;
+    border-radius: 50%;
+}
+
+.choujiang .rightpart .cont .list li p {
+    float: left;
+    width: 300px;
+    height: 140px;
+    line-height: 140px;
+    font-size: 30px;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.choujiang .rightpart .cont .list li a {
+    display: none;
+    float: right;
+    width: 30px;
+    height: 30px;
+    margin: 55px 15px;
+    background: url(../../../images/award/closeicon.png) no-repeat center;
+}
+
+.choujiang .rightpart .cont .list li:hover a {
+    display: block;
+}
+
+.choujiang2 .mainbg {
+    width: 100%;
+    height: 100%;
+}
+
+.choujiang2 .mainwrap {
+    top: 15%;
+    width: 100%;
+}
+
+.choujiang2 .mainwrap .leftpart {
+    height: 100%;
+    width: 700px;
+    top: 0;
+}
+
+.choujiang2 .mainwrap .leftpart h1 {
+    font-size: 32px;
+    color: #78f0ff;
+    font-weight: normal;
+    text-align: center;
+    letter-spacing: 5px;
+}
+
+.choujiang2 .mainwrap .leftpart .picwrap {
+    width: 100%;
+    margin-top: 5%;
+}
+
+.choujiang2 .mainwrap .leftpart .picwrap .pic {
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    padding: 30px;
+    background: url(../../../images/award/headbg.png) no-repeat center;
+    background-size: contain;
+    z-index: 10;
+}
+
+.choujiang2 .mainwrap .leftpart .picwrap .round {
+    width: 300px;
+    top: -25px;
+    left: -25px;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.choujiang2 .mainwrap .leftpart .picwrap .giftpic {
+    margin-left: 60px;
+}
+
+.choujiang2 .mainwrap .leftpart .picwrap .userpic {
+    margin-right: 60px;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap {
+    width: 570px;
+    margin: 5% auto 0;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item {
+    position: relative;
+    padding: 0 15px;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item p {
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item p span {
+    float: left;
+    width: 130px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+    color: #78f0ff;
+    text-align: center;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item p span.peomun {
+    width: 96px;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item p span.giftmun {
+    width: 160px;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item p i {
+    float: right;
+    width: 20px;
+    height: 40px;
+    margin: 0 5px;
+    background: url(../img/downarrow.png) no-repeat center;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item .itemselect {
+    display: none;
+    position: absolute;
+    width: 140px;
+    height: 120px;
+    background: rgba(0, 0, 0, .6);
+    z-index: 99;
+    overflow-y: auto;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item .itemselect a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    width: 140px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item .itemselect.peomun, .choujiang2 .mainwrap .leftpart .prizewrap .item .itemselect.peomun a {
+    width: 100px;
+}
+
+.choujiang2 .mainwrap .leftpart .prizewrap .item .itemselect.giftmun, .choujiang2 .mainwrap .leftpart .prizewrap .item .itemselect.giftmun a {
+    width: 160px;
+}
+
+.choujiang2 .mainwrap .leftpart .btn {
+    display: block;
+    width: 200px;
+    height: 85px;
+    line-height: 80px;
+    margin: 5% auto 0;
+    background: url(../../../images/award/buttonbg.png) no-repeat center;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #78f0ff;
+    letter-spacing: 5px;
+}
+
+.choujiang2 .rightpart {
+    height: 100%;
+    width: 700px;
+    top: 0;
+}
+
+.choujiang2 .rightpart h1 {
+    font-size: 32px;
+    color: #78f0ff;
+    font-weight: normal;
+    text-align: center;
+    letter-spacing: 5px;
+}
+
+.choujiang2 .rightpart h1 em {
+    margin-right: 20px;
+}
+
+.choujiang2 .rightpart .btn {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -100px;
+    width: 200px;
+    height: 85px;
+    line-height: 80px;
+    background: url(../../../images/award/buttonbg.png) no-repeat center;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #78f0ff;
+    letter-spacing: 5px;
+}
+
+.choujiang2 .rightpart {
+    right: 0;
+}
+
+.choujiang2 .rightpart .list {
+    top: 50px;
+    bottom: 100px;
+    width: 99%;
+    overflow-y: auto;
+}
+
+.choujiang2 .rightpart .list ul {
+    width: 90%;
+    padding: 0 5%;
+    overflow: hidden;
+}
+
+.choujiang2 .rightpart .list li {
+    float: left;
+    margin: 7px;
+    position: relative;
+}
+
+.choujiang2 .rightpart .list li img {
+    width: 100px;
+    height: 100px;
+    padding: 20px;
+    background: url(../img/headbg_s.png) no-repeat center;
+    border-radius: 50%;
+}
+
+.choujiang2 .rightpart .list li p {
+    width: 140px;
+    font-size: 22px;
+    height: 33px;
+    height: 33px;
+    line-height: 33px;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.choujiang2 .rightpart .list li a {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background: url(../img/closeicon.png) no-repeat center;
+    background-size: cover;
+}
+
+.choujiang2 .rightpart .list li:hover a {
+    display: block;
+}
+
+.selectbox {
+    width: 250px;
+    height: 40px;
+    border: 1px solid #78f0ff;
+    border-radius: 10px;
+}
+
+.selectbox p {
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.selectbox p span {
+    float: left;
+    width: 220px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-indent: 10px;
+}
+
+.selectbox p i {
+    float: right;
+    width: 20px;
+    height: 40px;
+    margin-right: 10px;
+    background: url(../img/downarrow_w.png) no-repeat center;
+}
+
+.selectbox .items {
+    display: none;
+    position: absolute;
+    width: 250px;
+    height: 120px;
+    background: rgba(0, 0, 0, .6);
+    z-index: 99;
+    overflow-y: auto;
+}
+
+.selectbox .items a {
+    display: block;
+    width: 250px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.taolun .topic {
+    float: left;
+    width: 1380px;
+    height: 90%;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px -5px #78f0ff;
+    background: rgba(120, 240, 255, .05);
+}
+
+.taolun .topic h1 {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 80px;
+    line-height: 80px;
+    font-size: 42px;
+    text-align: center;
+    color: #fff;
+    font-weight: normal;
+    letter-spacing: 3px;
+    background: url(../img/titlebg2.png) no-repeat center bottom;
+}
+
+.taolun .topic .topicwrap {
+    width: 99%;
+    top: 90px;
+    bottom: 10px;
+    overflow-y: auto;
+}
+
+.taolun .topic .topicwrap ul {
+    width: 97%;
+    margin: 5px 1% 0 2%;
+}
+
+.taolun .topic .topicwrap li {
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 0 5px 0 #fff;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, .5);
+}
+
+.taolun .topic .topicwrap li .userhead img {
+    width: 116px;
+    height: 116px;
+    border-radius: 50%;
+    padding: 22px;
+}
+
+.taolun .topic .topicwrap li .userhead i {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    top: 0;
+    left: 0;
+    background: url(../img/numberbg.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.taolun .topic .topicwrap .userinfo {
+    width: 84%;
+    margin: 20px;
+    color: #fff;
+}
+
+.taolun .topic .topicwrap .topinfo {
+    height: 60px;
+    line-height: 60px;
+    font-size: 24px;
+}
+
+.taolun .topic .topicwrap .topinfo p.floor {
+    margin-left: 40px;
+}
+
+.taolun .topic .topicwrap .words {
+    font-size: 40px;
+    line-height: 60px;
+}
+
+.mainbody.ziliao {
+    margin-top: 40px;
+}
+
+.ziliao .filewrap {
+    float: left;
+    width: 1380px;
+    height: 90%;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px -5px #78f0ff;
+    background: rgba(120, 240, 255, .05);
+    overflow-y: auto;
+}
+
+.ziliao .filewrap ul {
+    overflow: hidden;
+}
+
+.ziliao .filewrap li {
+    float: left;
+    width: 300px;
+    margin: 20px;
+    border: 1px solid #78f0ff;
+    border-radius: 10px;
+}
+
+.ziliao .filewrap li i {
+    display: block;
+    margin: 30px auto;
+}
+
+.ziliao .filewrap li.jpg i {
+    width: 100px;
+    height: 100px;
+    background: url(../../../images/award/jpg.png) no-repeat center;
+    background-size: cover;
+}
+
+.ziliao .filewrap li.png i {
+    width: 100px;
+    height: 100px;
+    background: url(../../../images/award/png.png) no-repeat center;
+    background-size: cover;
+}
+
+.ziliao .filewrap li.word i {
+    width: 100px;
+    height: 100px;
+    background: url(../img/word.png) no-repeat center;
+    background-size: cover;
+}
+
+.ziliao .filewrap li.ppt i {
+    width: 100px;
+    height: 100px;
+    background: url(../img/ppt.png) no-repeat center;
+    background-size: cover;
+}
+
+.ziliao .filewrap li.excel i {
+    width: 100px;
+    height: 100px;
+    background: url(../img/excel.png) no-repeat center;
+    background-size: cover;
+}
+
+.ziliao .filewrap li.pdf i {
+    width: 100px;
+    height: 100px;
+    background: url(../img/pdf.png) no-repeat center;
+    background-size: cover;
+}
+
+.ziliao .filewrap li p {
+    font-size: 24px;
+    text-align: center;
+    color: #fff;
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ziliao .filewrap li a {
+    display: block;
+    width: 100px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 20px;
+    color: #78f0ff;
+    border: 1px solid #78f0ff;
+    text-align: center;
+    margin: 20px auto;
+    border-radius: 5px;
+}
+
+.pingfen .score {
+    float: left;
+    width: 1380px;
+    height: 90%;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px -5px #78f0ff;
+    background: rgba(120, 240, 255, .05);
+}
+
+.pingfen .score h1 {
+    height: 80px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 80px;
+    font-size: 42px;
+    text-align: center;
+    color: #fff;
+    font-weight: normal;
+    letter-spacing: 3px;
+}
+
+.pingfen .score .scorewrap {
+    width: 100%;
+    top: 90px;
+    bottom: 10px;
+}
+
+.pingfen .score .scorewrap ul {
+    height: 100%;
+    overflow: hidden;
+}
+
+.pingfen .score .scorewrap li {
+    float: left;
+    height: 100%;
+    width: 15%;
+}
+
+.pingfen .score .scorewrap li:nth-child(1) {
+    margin-left: 5%;
+}
+
+.pingfen .score .scorewrap li .scoretop {
+    height: 13%;
+}
+
+.pingfen .score .scorewrap li .scoretop p {
+    height: 55px;
+    width: 55px;
+    line-height: 55px;
+    margin: 5px auto;
+    border: 2px solid #b58d41;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.pingfen .score .scorewrap li .scoremiddle {
+    position: relative;
+    height: 77%;
+    width: 38px;
+    margin: 0 auto;
+    border: 1px solid #78f0ff;
+    background: #061823;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.pingfen .score .scorewrap li .scoremiddle em {
+    position: absolute;
+    bottom: 0;
+    width: 40px;
+    background: url(../../../images/award/scorebg.png) repeat-y center;
+    background-size: 100%;
+}
+
+.pingfen .score .scorewrap li .scoremiddle img {
+    position: absolute;
+    top: -110px;
+}
+
+.pingfen .score .scorewrap li .scorebottom {
+    height: 10%;
+}
+
+.pingfen .score .scorewrap li .scorebottom p {
+    width: 80%;
+    margin: 5px auto;
+    font-size: 24px;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.peidui .userhead {
+    width: 100%;
+    height: 75%;
+}
+
+.peidui .userhead .leftuser, .peidui .userhead .rightuser {
+    width: 500px;
+    height: 500px;
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+    margin: 20px 90px 0;
+}
+
+.peidui .picwrap img {
+    width: 70%;
+    height: 70%;
+    padding: 15%;
+    border-radius: 50%;
+}
+
+.peidui .picwrap {
+    width: 100%;
+    height: 100%;
+    background: url(../../../images/award/headbg_l.png) no-repeat center;
+    animation: headbg .5s steps(10) infinite;
+}
+
+.peidui .leftuser .picwrap {
+    -webkit-transform-origin: 0 50%;
+    transform-origin: 0 50%;
+    -webkit-transform: rotateY(40deg);
+    transform: rotateY(40deg);
+}
+
+.peidui .rightuser .picwrap {
+    -webkit-transform: rotateY(-40deg);
+    transform: rotateY(-40deg);
+    -webkit-transform-origin: 100% 50%;
+    transform-origin: 100% 50%;
+}
+
+.peidui .laser {
+    width: 500px;
+    height: 200px;
+    top: 160px;
+    left: 50%;
+    margin-left: -250px;
+    background: url(../../../images/award/laser.png) no-repeat center;
+    animation: laser 1s steps(10) infinite;
+    background-size: cover;
+}
+
+.peidui .userhead .btn {
+    display: block;
+    width: 200px;
+    height: 85px;
+    line-height: 85px;
+    top: 450px;
+    left: 50%;
+    margin-left: -100px;
+    background: url(../../../images/award/buttonbg.png) no-repeat center;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #78f0ff;
+    letter-spacing: 5px;
+}
+
+.peidui .userlist {
+    width: 100%;
+    height: 25%;
+}
+
+.peidui .userlist .listtitle {
+    float: left;
+    position: relative;
+    width: 100px;
+    height: 100%;
+    line-height: 40px;
+    top: -8%;
+    margin-right: 30px;
+    font-size: 24px;
+    color: #fff;
+    writing-mode: tb;
+    text-align: center;
+}
+
+.peidui .userlist .listwrap {
+    width: 1260px;
+    height: 100%;
+}
+
+.peidui .userlist .leftarrow {
+    width: 15px;
+    height: 30px;
+    position: relative;
+    top: 40%;
+    margin-top: -15px;
+    background: url(../../../images/award/leftarrow_p.png) no-repeat center;
+}
+
+.peidui .userlist .rightarrow {
+    width: 15px;
+    height: 30px;
+    position: relative;
+    top: 40%;
+    margin-top: -15px;
+    background: url(../../../images/award/rightarrow_p.png) no-repeat center;
+}
+
+.peidui .userlist .listwrap .ulwrap {
+    float: left;
+    width: 1230px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.peidui .userlist .listwrap ul {
+    overflow: hidden;
+    height: 100%;
+    position: relative;
+}
+
+.peidui .userlist .listwrap li {
+    overflow: hidden;
+    float: left;
+}
+
+.peidui .userlist .listwrap li .liwrap {
+    position: relative;
+    float: left;
+    padding: 0 13px;
+}
+
+.peidui .userlist .listwrap li i {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    top: 0;
+    left: 0;
+    background: url(../../../images/award/numberbg.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.peidui .userlist .listwrap li img {
+    height: 100px;
+    width: 100px;
+    padding: 20px;
+    border-radius: 50%;
+}
+
+.peidui .userlist .listwrap li p {
+    width: 140px;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.peidui .userlist .listwrap li a {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background: url(../img/closeicon.png) no-repeat center;
+    background-size: cover;
+}
+
+.peidui .userlist .listwrap li:hover a {
+    display: block;
+}
+
+.pairsuccess h1 {
+    height: 60px;
+    line-height: 60px;
+    font-size: 36px;
+    color: #fff;
+    text-align: center;
+    margin: 80px 0 40px;
+    font-weight: normal;
+}
+
+.pairsuccess .leftpart {
+    margin-left: 600px;
+}
+
+.pairsuccess .rightpart {
+    margin-right: 600px;
+}
+
+.pairsuccess img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}
+
+.pairsuccess i {
+    display: block;
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    top: -50px;
+    left: -50px;
+    background: url(../img/numberbg.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.pairsuccess p {
+    width: 250px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 50px;
+}
+
+.toupiao .vote {
+    float: left;
+    width: 100%;
+    height: 90%;
+    margin-top: 10px;
+}
+
+.toupiao .vote h1 {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 80px;
+    line-height: 80px;
+    font-size: 42px;
+    text-align: center;
+    color: #fff;
+    font-weight: normal;
+    letter-spacing: 3px;
+}
+
+.toupiao .vote .votewrap {
+    width: 100%;
+    top: 90px;
+    bottom: 10px;
+}
+
+.toupiao .vote .votewrap ul {
+    height: 100%;
+    overflow: hidden;
+}
+
+.toupiao .vote .votewrap li {
+    float: left;
+    height: 100%;
+    width: 13%;
+    position: relative;
+}
+
+.toupiao .vote .votewrap li:first-child {
+    margin-left: 11%;
+}
+
+.toupiao .vote .votewrap li .voteitem {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.toupiao .vote .votewrap li .voteitem span {
+    display: block;
+    height: 55px;
+    width: 55px;
+    line-height: 55px;
+    margin: 5px auto;
+    font-size: 36px;
+    color: #ffd200;
+    text-align: center;
+}
+
+.toupiao .vote .votewrap li .voteitem em {
+    display: block;
+    position: relative;
+    width: 40px;
+    margin: 0 auto;
+    background: url(../../../images/award/voteitem.png) repeat-y center;
+    background-size: 100% 100%;
+    min-height: 0;
+    max-height: 360px;
+}
+
+.toupiao .vote .votewrap li .voteitem img {
+    position: absolute;
+    bottom: -100px;
+}
+
+.toupiao .vote .votewrap li .voteitem p {
+    position: relative;
+    z-index: 20;
+    width: 80%;
+    margin: 30px auto 50px;
+    font-size: 24px;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.qiandao .signwrap {
+    width: 1200px;
+    margin: 30px auto 0;
+    padding: 20px 100px;
+    background: url(../img/signbg.png) no-repeat center;
+    background-size: 100% 100%;
+}
+
+.qiandao .signwrap ul {
+    overflow: hidden;
+}
+
+.qiandao .signwrap li {
+    float: left;
+    width: 112px;
+    height: 112px;
+    margin: 3px;
+    border: 1px solid #007cae;
+    background: rgba(0, 124, 174, .1);
+}
+
+.qiandao .signwrap li img {
+    width: 100%;
+    height: 100%;
+}
+
+.qiandao p {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    color: #78f0ff;
+    font-size: 20px;
+}
+
+.signbox {
+    position: fixed;
+    top: 50%;
+    margin-top: -150px;
+    -webkit-animation: signbox 3s ease-in-out forwards;
+    -o-animation: signbox 3s ease-in-out forwards;
+    animation: signbox 3s ease-in-out forwards;
+}
+
+.signbox img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.signbox p {
+    height: 200px;
+    line-height: 180px;
+    width: 500px;
+    position: absolute;
+    top: 50px;
+    left: 400px;
+    background: #fff;
+    border-radius: 20px;
+    font-size: 80px;
+    text-align: center;
+}
+
+.signbox p i {
+    display: block;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    top: 58px;
+    left: -40px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+#tagsList a img {
+    float: left;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+#tagsList a p {
+    float: left;
+    color: #fff;
+    width: 200px;
+    font-size: 24px;
+}
+
+#tagsList {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    margin: 7% auto 0;
+}
+
+#tagsList a {
+    position: absolute;
+    overflow: hidden;
+    width: 300px;
+    background: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 20px 0 rgba(120, 240, 255, .4);
+    padding: 5px;
+    border-radius: 30px;
+}
+
+.laohuji .gamewrap {
+    width: 1400px;
+    height: 670px;
+    background: url(../img/gamebg.png) no-repeat center;
+}
+
+.laohuji .gamewrap .gametitle {
+    width: 566px;
+    height: 141px;
+    left: 50%;
+    margin-left: -283px;
+    top: -20px;
+}
+
+.laohuji .gamewrap .gamelight {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(../img/gamelight.png) no-repeat center;
+    background-size: cover;
+    animation: laohuji .3s steps(2) infinite;
+}
+
+.laohuji .gamewrap .gamebody .bodytop {
+    width: 670px;
+    margin: 0 auto;
+    padding-top: 130px;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .prize .leftarrow {
+    float: left;
+    width: 51px;
+    height: 62px;
+    background: url(../img/gamearrow_l.png) no-repeat center;
+    margin: 10px 10px 0 0;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .prize .rightarrow {
+    float: right;
+    width: 51px;
+    height: 62px;
+    background: url(../img/gamearrow_r.png) no-repeat center;
+    margin: 10px 0 0 10px;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .prize p {
+    float: left;
+    width: 300px;
+    height: 80px;
+    line-height: 75px;
+    background: url(../img/box.png) no-repeat center #1e1b1b;
+    background-size: 100% 100%;
+    font-size: 28px;
+    color: #fce58e;
+    text-align: center;
+    font-weight: bold;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .number {
+    width: 170px;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .number p {
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .number p span {
+    float: left;
+    width: 120px;
+    height: 80px;
+    line-height: 75px;
+    font-size: 26px;
+    color: #000;
+    text-align: center;
+    background: url(../img/box2.png) no-repeat center;
+    font-weight: bold;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .number p i {
+    float: right;
+    width: 36px;
+    height: 30px;
+    background: url(../img/gamearrow_d.png) no-repeat center;
+    margin-top: 25px;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .number .items {
+    display: none;
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: rgba(0, 0, 0, .6);
+    z-index: 99;
+    overflow-y: auto;
+}
+
+.laohuji .gamewrap .gamebody .bodytop .number .items a {
+    display: block;
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+.laohuji .gamewrap .gamebody .bodymiddle a {
+    display: block;
+    position: absolute;
+    width: 67px;
+    height: 175px;
+    top: 50%;
+    margin-top: -88px;
+    right: 43px;
+}
+
+.laohuji .gamewrap .gamebody .bodymiddle .middlewrap {
+    width: 1200px;
+    height: 320px;
+    background: url(../img/gamebody.png) no-repeat left;
+    margin: 20px auto;
+    padding-right: 50px;
+}
+
+.laohuji .gamewrap .gamebody .bodymiddle .middlewrap .gameitems {
+    width: 175px;
+    height: 275px;
+    margin-top: 23px;
+    margin-left: 21px;
+    background: url(../img/gameitem.png) no-repeat center #000;
+    background-size: 100% 100%;
+}
+
+.laohuji .gamewrap .gamebody .bodymiddle .middlewrap .gameitems p {
+    position: absolute;
+    width: 175px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 28px;
+    color: #fceeb9;
+    text-align: center;
+    background: url(../img/namebg.png) no-repeat center;
+    bottom: -85px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.laohuji .gamewrap .gamebody .bodymiddle .middlewrap .gameitems.lock {
+    background: url(../img/lock.png) no-repeat center #781a10;
+    background-size: 100% 100%;
+}
+
+.shuqian .gamewrap {
+    width: 100%;
+    height: 100%;
+}
+
+.shuqian .gamewrap .gametitle {
+    width: 800px;
+    height: 158px;
+    left: 50%;
+    margin-left: -400px;
+    top: -10px;
+}
+
+.shuqian .gamewrap .gamebody {
+    bottom: 0;
+    top: 0;
+}
+
+.shuqian .gamewrap .gamebody ul {
+    overflow: hidden;
+    height: 100%;
+}
+
+.shuqian .gamewrap .gamebody li {
+    float: left;
+    width: 120px;
+    height: 100%;
+    margin: 0 27px;
+    position: relative;
+}
+
+.shuqian .gamewrap .gamebody li .itemwrap {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.shuqian .gamewrap .gamebody li .moneytop {
+    width: 100%;
+    height: 24px;
+    background: url(../img/moneytop.png) no-repeat center;
+}
+
+.shuqian .gamewrap .gamebody li .moneybottom {
+    width: 100%;
+    height: 16px;
+    background: url(../img/moneybottom.png) no-repeat center;
+}
+
+.shuqian .gamewrap .gamebody li i {
+    display: block;
+    width: 100%;
+    background: url(../img/moneymiddle.png) repeat-y center;
+}
+
+.shuqian .gamewrap .gamebody li .userinfo {
+    position: absolute;
+    top: -170px;
+    width: 100%;
+}
+
+.shuqian .gamewrap .gamebody li .userinfo img {
+    width: 90px;
+    height: 90px;
+    border: 3px solid #e0b914;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.shuqian .gamewrap .gamebody li .userinfo p {
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 5px;
+}
+
+.shuqian .gamewrap .gamebody li .userinfo span {
+    display: block;
+    color: #e0b914;
+    font-size: 20px;
+    text-align: center;
+}
+
+.gamebtn {
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    bottom: 30px;
+    right: 13%;
+    border: 2px solid #c6ae8a;
+    font-size: 28px;
+    text-align: center;
+    color: #c6ae8a;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, .5);
+}
+
+.countdown {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .8);
+}
+
+.countdown .number {
+    width: 475px;
+    height: 400px;
+    position: absolute;
+    top: 50%;
+    margin-top: -200px;
+}
+
+.countdown .number.num10 {
+    right: -475px;
+    -webkit-animation: numright 1s ease-in forwards;
+    animation: numright 1s ease-in forwards;
+}
+
+.countdown .number.num9 {
+    left: -475px;
+    -webkit-animation: numleft 1s ease-in 1s forwards;
+    animation: numleft 1s ease-in 1s forwards;
+}
+
+.countdown .number.num8 {
+    right: -475px;
+    -webkit-animation: numright 1s ease-in 2s forwards;
+    animation: numright 1s ease-in 2s forwards;
+}
+
+.countdown .number.num7 {
+    left: -475px;
+    -webkit-animation: numleft 1s ease-in 3s forwards;
+    animation: numleft 1s ease-in 3s forwards;
+}
+
+.countdown .number.num6 {
+    right: -475px;
+    -webkit-animation: numright 1s ease-in 4s forwards;
+    animation: numright 1s ease-in 4s forwards;
+}
+
+.countdown .number.num5 {
+    left: -475px;
+    -webkit-animation: numleft 1s ease-in 5s forwards;
+    animation: numleft 1s ease-in 5s forwards;
+}
+
+.countdown .number.num4 {
+    right: -475px;
+    -webkit-animation: numright 1s ease-in 6s forwards;
+    animation: numright 1s ease-in 6s forwards;
+}
+
+.countdown .number.num3 {
+    left: -475px;
+    -webkit-animation: numleft 1s ease-in 7s forwards;
+    animation: numleft 1s ease-in 7s forwards;
+}
+
+.countdown .number.num2 {
+    right: -475px;
+    -webkit-animation: numright 1s ease-in 8s forwards;
+    animation: numright 1s ease-in 8s forwards;
+}
+
+.countdown .number.num1 {
+    left: -475px;
+    -webkit-animation: numleft 1s ease-in 9s forwards;
+    animation: numleft 1s ease-in 9s forwards;
+}
+
+.countdown .number img {
+    width: 100%;
+    height: 100%;
+}
+
+.stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(../img/firework.png) no-repeat center rgba(0, 0, 0, .75);
+}
+
+.stage .stagewrap {
+    width: 100%;
+    height: 100%;
+    background: url(../img/stage.png) no-repeat center bottom;
+}
+
+.stage .stagewrap .medal {
+    width: 300px;
+    position: absolute;
+}
+
+.stage .stagewrap .no1 {
+    left: 50%;
+    margin-left: -130px;
+    bottom: 35%;
+}
+
+.stage .stagewrap .no2 {
+    left: 30%;
+    margin-left: -150px;
+    bottom: 25%;
+}
+
+.stage .stagewrap .no3 {
+    right: 30%;
+    margin-right: -200px;
+    bottom: 20%;
+}
+
+.stage .stagewrap .medal img {
+    position: relative;
+    width: 211px;
+    height: 211px;
+    padding: 39px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.stage .stagewrap .medal p {
+    width: 100%;
+    font-size: 40px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 30px;
+}
+
+.stage .stagewrap .no1 img {
+    background: url(../img/medal1.png) no-repeat center;
+}
+
+.stage .stagewrap .no2 img {
+    background: url(../img/medal2.png) no-repeat center;
+}
+
+.stage .stagewrap .no3 img {
+    background: url(../img/medal3.png) no-repeat center;
+}
+
+.stage .stagewrap .medal i {
+    position: absolute;
+    width: 577px;
+    height: 577px;
+    top: -144px;
+    left: -144px;
+    background: url(../img/light2.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 3s linear infinite;
+    animation: round 3s linear infinite;
+    opacity: .5;
+}
+
+@keyframes round {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes headbg {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -5000px 0;
+    }
+}
+
+@keyframes bottomhover {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -1620px 0;
+    }
+}
+
+@keyframes laser {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -5000px 0;
+    }
+}
+
+@keyframes laohuji {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -2800px 0;
+    }
+}
+
+@keyframes numleft {
+    0% {
+        left: -475px;
+    }
+    30% {
+        left: 50%;
+        margin-left: -237px;
+    }
+    100% {
+        left: 50%;
+        margin-left: -237px;
+        -webkit-transform-origin: 50% 50%;
+        transform-origin: 50% 50%;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+}
+
+@keyframes numright {
+    0% {
+        right: -475px;
+    }
+    30% {
+        right: 50%;
+        margin-right: -237px;
+    }
+    100% {
+        right: 50%;
+        margin-right: -237px;
+        -webkit-transform-origin: 50% 50%;
+        transform-origin: 50% 50%;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+}
+
+@keyframes signbox {
+    0% {
+        right: -1000px;
+        opacity: 0;
+    }
+    20% {
+        right: 50%;
+        margin-right: -150px;
+        opacity: 1;
+    }
+    90% {
+        right: 50%;
+        margin-right: -150px;
+        opacity: 1;
+        -webkit-transform: scale(0.2);
+        -ms-transform: scale(0.2);
+        -o-transform: scale(0.2);
+        transform: scale(0.2);
+    }
+    100% {
+        right: 50%;
+        margin-right: -150px;
+        opacity: 0;
+    }
+}
+
+@keyframes star1 {
+    0% {
+        top: 100px;
+        left: -500px;
+        -webkit-transform: scale(1.5);
+        -ms-transform: scale(1.5);
+        -o-transform: scale(1.5);
+        transform: scale(1.5);
+    }
+    100% {
+        top: 100px;
+        left: 200px;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        -o-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes star2 {
+    0% {
+        bottom: -100px;
+        right: -500px;
+        -webkit-transform: scale(1.5);
+        -ms-transform: scale(1.5);
+        -o-transform: scale(1.5);
+        transform: scale(1.5);
+    }
+    100% {
+        bottom: -80px;
+        right: -200px;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        -o-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes star3 {
+    0% {
+        top: 200px;
+        left: 650px;
+    }
+    50% {
+        top: 180px;
+        left: 650px;
+    }
+    100% {
+        top: 200px;
+        left: 650px;
+    }
+}
+
+@keyframes star4 {
+    0% {
+        bottom: 350px;
+        right: 350px;
+    }
+    50% {
+        bottom: 340px;
+        right: 350px;
+    }
+    100% {
+        bottom: 350px;
+        right: 350px;
+    }
+}
+
+@keyframes star5 {
+    0% {
+        top: 150px;
+        left: 1250px;
+    }
+    50% {
+        top: 140px;
+        left: 1250px;
+    }
+    100% {
+        top: 150px;
+        left: 1250px;
+    }
+}
+
+@keyframes lock_l {
+    0% {
+        left: 0;
+    }
+    100% {
+        left: -50%;
+    }
+}
+
+@keyframes lock_r {
+    0% {
+        right: 0;
+    }
+    100% {
+        right: -50%;
+    }
+}
+
+@keyframes rmb {
+    0% {
+        top: -200px;
+        -webkit-transform: scale(.8);
+        -ms-transform: scale(.8);
+        -o-transform: scale(.8);
+        transform: scale(.8);
+        opacity: .8;
+    }
+    100% {
+        top: 100%;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        -o-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.barragebox {
+    overflow: hidden;
+    background-color: rgba(120, 240, 255, .5);
+    border-radius: 40px;
+    position: absolute;
+    z-index: 999;
+}
+
+.barragebox img {
+    float: left;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 10px;
+}
+
+.barragebox p {
+    float: left;
+    color: #fff;
+    font-size: 30px;
+    padding: 15px;
+    max-width: 1000px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 50px;
+    margin: 0;
+}
+
+.barragebox p.fontsize_small {
+    font-size: 22px;
+}
+
+.barragebox p.fontsize_large {
+    font-size: 36px;
+}
+
+.barragebox p.color_black {
+    color: #000;
+}
+
+.barragebox p.color_red {
+    color: red;
+}
+
+.barragebox p.song {
+    font-family: "宋体";
+}
+
+.barragebox p.hei {
+    font-family: "microsoft yahei";
+}
+
+.countdownbox {
+    position: fixed;
+    width: 200px;
+    height: 190px;
+    background: url(../img/countdown.png) no-repeat center;
+    background-size: 100% 100%;
+    font-size: 60px;
+    text-align: center;
+    color: #fff;
+    line-height: 230px;
+}
+
+.countdownbox2 {
+    position: fixed;
+    width: 240px;
+    height: 210px;
+    top: 200px;
+    right: 50px;
+    background: url(../img/countdown2.png) no-repeat center;
+    background-size: 100% 100%;
+    font-size: 60px;
+    text-align: center;
+    color: #fff;
+    line-height: 250px;
+}
+
+.yyytk h1 {
+    position: absolute;
+    left: 50%;
+    height: 150px;
+    line-height: 150px;
+    padding: 0 50px;
+    font-size: 60px;
+    color: #fff;
+    text-align: center;
+    font-weight: normal;
+    background: url(../img/yyytkbg.png) no-repeat center;
+    background-size: 100% 100%;
+}
+
+.yyytk .picpart {
+    margin-top: 200px;
+    position: relative;
+    left: 50%;
+    margin-left: -510px;
+}
+
+.yyytk .picpart img {
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+}
+
+.yyytk .picpart li {
+    margin: 110px 40px 0;
+}
+
+.yyytk .picpart li:nth-child(2) {
+    margin: 40px 50px 0;
+}
+
+.yyytk .picpart li:nth-child(2) img {
+    width: 300px;
+    height: 300px;
+}
+
+.yyytk .picpart i {
+    display: block;
+    position: absolute;
+    width: 330px;
+    height: 330px;
+    top: -50px;
+    left: -50px;
+    background: url(../img/numberbg.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.yyytk .picpart li:nth-child(2) i {
+    width: 400px;
+    height: 400px;
+}
+
+.yyytk .picpart span {
+    display: block;
+    width: 230px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 50px;
+}
+
+.yyytk .picpart p {
+    width: 230px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.yyytk .picpart li:nth-child(2) span {
+    width: 300px;
+}
+
+.yyytk .picpart li:nth-child(2) p {
+    width: 300px;
+}
+
+.graybg {
+    display: none;
+    background: #000;
+    opacity: .5;
+    z-index: 66;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.chrometk {
+    width: 644px;
+    height: 326px;
+    background: #fff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    margin-left: -322px;
+    margin-top: -163px;
+}
+
+.chrometk .stlsd {
+    height: 48px;
+    background: #01c192;
+    line-height: 48px;
+    color: #fff;
+    font-size: 18px;
+    padding-left: 15px;
+}
+
+.chrometk dl {
+    padding: 32px 0 0 123px;
+    font-size: 20px;
+    color: #01c192;
+    line-height: 34px;
+}
+
+.chrometk dt {
+    padding: 10px 0;
+}
+
+.chrometk dt a {
+    display: inline-block;
+    padding-left: 34px;
+    font-size: 18px;
+    background: url(../img/chromeico.png) no-repeat left center;
+    color: #01c192;
+}
+
+.chrometk dd span {
+    display: block;
+    padding-top: 15px;
+}
+
+.chrometk dd a {
+    display: inline-block;
+    height: 39px;
+    background: #01c192;
+    line-height: 39px;
+    color: #fff;
+    width: 173px;
+    text-align: center;
+    font-size: 18px;
+    margin-right: 60px;
+}
+
+.chrometk dd a img {
+    vertical-align: middle;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.topictk {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .8);
+    z-index: 1000;
+}
+
+.topictk .topictkwrap {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin: -340px 0 0 -700px;
+    width: 1340px;
+    height: 620px;
+    padding: 30px;
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 20px -5px #78f0ff;
+    background: #051624;
+}
+
+.topictk .topictkwrap .userhead img {
+    width: 116px;
+    height: 116px;
+    border-radius: 50%;
+    padding: 22px;
+}
+
+.topictk .topictkwrap .userhead i {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    top: 0;
+    left: 0;
+    background: url(../img/numberbg.png) no-repeat center;
+    background-size: cover;
+    -webkit-animation: round 1.5s linear infinite;
+    animation: round 1.5s linear infinite;
+}
+
+.topictk .topictkwrap .userinfo {
+    width: 84%;
+    margin: 20px;
+    color: #fff;
+}
+
+.topictk .topictkwrap .topinfo {
+    height: 60px;
+    line-height: 60px;
+    font-size: 24px;
+}
+
+.topictk .topictkwrap .topinfo p.floor {
+    margin-left: 40px;
+}
+
+.topictk .topictkwrap .words {
+    font-size: 40px;
+    line-height: 60px;
+}
+
+.bptk {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .5);
+    z-index: 9999;
+}
+
+.bptk .bpwrap {
+    width: 1200px;
+    margin: 220px auto 0;
+    border: 2px solid #feb140;
+    border-radius: 10px;
+    text-align: center;
+    background: #020e15;
+}
+
+.bptk .bpwrap .bphead {
+    width: 472px;
+    top: -170px;
+    left: 50%;
+    margin-left: -236px;
+    background: url(../img/bphead.png) no-repeat center top;
+    background-size: contain;
+    overflow: hidden;
+}
+
+.bptk .bpwrap .bphead img {
+    width: 146px;
+    height: 146px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    margin: 50px auto;
+}
+
+.bptk .bpwrap h1 {
+    display: inline-block;
+    min-width: 150px;
+    max-width: 400px;
+    padding: 15px 50px;
+    background: url(../img/bpname.png) no-repeat center;
+    background-size: 100% 100%;
+    text-align: center;
+    line-height: 30px;
+    margin-top: 80px;
+    color: #fff;
+    font-weight: normal;
+    font-size: 28px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bptk .bpwrap h2 {
+    font-size: 40px;
+    color: #feb140;
+    margin-bottom: 30px;
+}
+
+.bptk .bpwrap .bpclock {
+    width: 70px;
+    height: 70px;
+    background: url(../img/clock_n.png) no-repeat center;
+    background-size: cover;
+    color: #feb140;
+    font-size: 34px;
+    line-height: 75px;
+    overflow: hidden;
+    top: 30px;
+    right: 50px;
+}
+
+.bptk .bptext p {
+    width: 1000px;
+    height: 350px;
+    padding-left: 100px;
+    margin: 30px auto;
+    font-size: 40px;
+    text-align: left;
+    background: url(../img/bpicon.png) no-repeat top left;
+    overflow-y: auto;
+    color: #fff;
+}
+
+.bptk .bpimg {
+    overflow: hidden;
+}
+
+.bptk .bpimg img {
+    float: left;
+    width: 300px;
+    border: 2px solid #feb140;
+    margin: 60px 100px 0;
+    min-height: 200px;
+    max-height: 350px;
+}
+
+.bptk .bpimg p {
+    float: left;
+    width: 600px;
+    height: 350px;
+    margin: 30px auto;
+    font-size: 40px;
+    text-align: left;
+    overflow-y: auto;
+    color: #fff;
+}
+
+.bptk .bpimg i {
+    display: block;
+    width: 40px;
+    height: 50px;
+    position: absolute;
+    background: url(../img/bpicon.png) no-repeat top left;
+    background-size: contain;
+    top: 40px;
+    left: 80px;
+}
