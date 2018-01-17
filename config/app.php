@@ -254,6 +254,7 @@ return [
         ]
     ],
     'qrcode' => [
-        'path' => public_path('qrcodes/'),
+        'sign'=>'http://lingshi.weibo.com/api/signin/code',
+        'path' => public_path('qrcodes/qrcode_ls.png'),
     ]
 ];

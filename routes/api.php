@@ -32,7 +32,7 @@ Route::group(['domain' => 'lingshi.weibo.com',], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });
 
-            Route::post("signin/{meetid}", "MeetController@signin");
+            Route::post("signin/code", "MeetController@signin");
         });
     });
 
