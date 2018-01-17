@@ -24,10 +24,12 @@ Route::group(['domain' => 'lingshi.weibo.com'],
             Route::post("/reset", "ResetPasswordController@reset");
         });
 
-        Route::group(['middleware' => ['login', 'auth2']], function () {
+        Route::group(['namespace' => 'Home', 'middleware' => ['login', 'auth2']], function () {
             Route::get('/', function () {
                 return view('home');
             });
+            Route::post("meet/upload", "MeetController@upload");
+            Route::resource("meet", "MeetController");
         });
     }
 );
