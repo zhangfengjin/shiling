@@ -59,6 +59,7 @@ class UserService
         $user = new User();
         $user->tel = $input["tel"];
         $user->password = bcrypt($input["password"]);
+        $user->im_token = $input["im_token"];
         $user->save();
         return $user;
     }

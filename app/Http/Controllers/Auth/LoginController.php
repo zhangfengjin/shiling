@@ -70,14 +70,14 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $account = $request->input('account');
+        $account = $request->input('tel');
         $credentials = array(
             "tel" => $account
         );
         $credentials ["password"] = $request->input('password');
         if ($this->guard()->attempt($credentials, true)) {
             $user = Auth::user();
-            $token = DataStandard::getToken($user->id);
+            $token = $user->im_token;// DataStandard::getToken($user->id);
             Cache::put($token, $token, 60 * 24 * 365);
             return DataStandard::getStandardData(["token" => $token]);
         }
