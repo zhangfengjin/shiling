@@ -10,6 +10,8 @@ namespace App\Http\Services;
 
 
 use App\User;
+use App\Utils\WyIMHelper;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -56,6 +58,14 @@ class UserService
      */
     public function create($input)
     {
+        $input['im_token'] = "";
+        $wyIM = new WyIMHelper();
+        $ret = $wyIM->createUserId($input['tel']);
+        if ($ret['code'] === 200) {
+            $input['im_token'] = $ret["info"]["token"];
+        } else {
+            Log::info(json_encode($ret));
+        }
         $user = new User();
         $user->tel = $input["tel"];
         $user->password = bcrypt($input["password"]);

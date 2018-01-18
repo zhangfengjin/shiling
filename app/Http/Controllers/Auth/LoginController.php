@@ -77,7 +77,7 @@ class LoginController extends Controller
         $credentials ["password"] = $request->input('password');
         if ($this->guard()->attempt($credentials, true)) {
             $user = Auth::user();
-            $token = $user->im_token;// DataStandard::getToken($user->id);
+            $token = empty($user->im_token) ? DataStandard::getToken($user->id) : $user->im_token;
             Cache::put($token, $token, 60 * 24 * 365);
             return DataStandard::getStandardData(["token" => $token]);
         }

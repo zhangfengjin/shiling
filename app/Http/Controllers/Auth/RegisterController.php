@@ -7,7 +7,6 @@ use App\User;
 use App\Http\Controllers\Controller;
 use App\Utils\DataStandard;
 use App\Utils\RegHelper;
-use App\Utils\WyIMHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -103,18 +102,10 @@ class RegisterController extends Controller
             return DataStandard::getStandardData([], "邮箱格式不正确", 206);
         }
         $user = $request->all();
-        $user['im_token'] = "";
-        $wyIM = new WyIMHelper();
-        $ret = $wyIM->createUserId($tel);
-        if ($ret['code'] === 200) {
-            $user['im_token'] = $ret["info"]["token"];
-        } else {
-            Log::info(json_encode($ret));
-        }
         $user = $userService->create($user); // 注册
         if ($user) {
             $this->guard()->login($user); // 登录
-            $token = $user['im_token']; //DataStandard::getToken($user->id);
+            $token = empty($user['im_token']) ? DataStandard::getToken($user->id) : $user['im_token'];
             Cache::put($token, $token, 60 * 24 * 365);
             return DataStandard::getStandardData(["token" => $token]);
         }
