@@ -29,9 +29,10 @@ Route::group(['domain' => 'lingshi.weibo.com'],
                 return view('home');
             });
             Route::post("meet/upload", "MeetController@upload");
-            Route::resource("meet", "MeetController");
-
             Route::get("award","AwardController@index");
+
+            Route::resource("meet", "MeetController");
+            Route::resource("goods", "GoodsController");
         });
     }
 );
