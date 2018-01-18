@@ -13,50 +13,40 @@ use App\Utils\UploadHelper;
 
 class UploadService
 {
-    public function uploadfile($action, $CONFIG)
+    /**
+     * 上传到本地
+     * @param $action
+     * @return array
+     */
+    public function uploadfile($action)
     {
+        header("Content-Type:text/html;charset=utf-8");
+        date_default_timezone_set("Asia/chongqing");
+        $filepath = config() . "/upload.json";
+        $initConfig = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents($filepath)), true);
         /* 上传配置 */
-        $base64 = "upload";
         switch (htmlspecialchars($action)) {
             case 'uploadimage' :
                 $config = array(
-                    "pathFormat" => $CONFIG ['imagePathFormat'],
-                    "maxSize" => $CONFIG ['imageMaxSize'],
-                    "allowFiles" => $CONFIG ['imageAllowFiles']
+                    "pathFormat" => $initConfig ['imagePathFormat'],
+                    "maxSize" => $initConfig ['imageMaxSize'],
+                    "allowFiles" => $initConfig ['imageAllowFiles']
                 );
-                $fieldName = $CONFIG ['imageFieldName'];
-                break;
-            case 'uploadscrawl' :
-                $config = array(
-                    "pathFormat" => $CONFIG ['scrawlPathFormat'],
-                    "maxSize" => $CONFIG ['scrawlMaxSize'],
-                    "allowFiles" => $CONFIG ['scrawlAllowFiles'],
-                    "oriName" => "scrawl.png"
-                );
-                $fieldName = $CONFIG ['scrawlFieldName'];
-                $base64 = "base64";
-                break;
-            case 'uploadvideo' :
-                $config = array(
-                    "pathFormat" => $CONFIG ['videoPathFormat'],
-                    "maxSize" => $CONFIG ['videoMaxSize'],
-                    "allowFiles" => $CONFIG ['videoAllowFiles']
-                );
-                $fieldName = $CONFIG ['videoFieldName'];
+                $fieldName = $initConfig ['imageFieldName'];
                 break;
             case 'uploadfile' :
             default :
                 $config = array(
-                    "pathFormat" => $CONFIG ['filePathFormat'],
-                    "maxSize" => $CONFIG ['fileMaxSize'],
-                    "allowFiles" => $CONFIG ['fileAllowFiles']
+                    "pathFormat" => $initConfig ['filePathFormat'],
+                    "maxSize" => $initConfig ['fileMaxSize'],
+                    "allowFiles" => $initConfig ['fileAllowFiles']
                 );
-                $fieldName = $CONFIG ['fileFieldName'];
+                $fieldName = $initConfig ['fileFieldName'];
                 break;
         }
 
         /* 生成上传实例对象并完成上传 */
-        $up = new UploadHelper ($fieldName, $config, $base64);
+        $up = new UploadHelper ($fieldName, $config);
 
         /**
          * 得到上传文件所对应的各个参数,数组结构

@@ -6,10 +6,6 @@
     <script type="text/javascript" charset="utf-8" src="{{url('/js/plugins/umeditor/umeditor.min.js')}}"></script>
     <script type="text/javascript" src="{{url('/js/plugins/umeditor/lang/zh-cn/zh-cn.js')}}"></script>
 
-    <style type="text/css">
-
-    </style>
-
     <script type="text/plain" id="myEditor" style="width:1000px;height:240px;">
     </script>
 
