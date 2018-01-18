@@ -6,6 +6,7 @@ use App\Http\Services\UploadService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class GoodsController extends Controller
 {
@@ -94,6 +95,7 @@ class GoodsController extends Controller
      */
     public function upload(Request $request)
     {
+        Log::info(123123);
         $upload = new UploadService();
         $action = $_GET ['action'];
         $upload->uploadfile($action);

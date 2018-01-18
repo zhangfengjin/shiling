@@ -1,4 +1,7 @@
 @extends('layouts.app_table')@section('tablecontent')
+    <script type="text/javascript">
+        var uploadAction = CommonUtil.getRootPath() + "/goods/upload";
+    </script>
     <link href="{{url('/js/plugins/umeditor/themes/default/css/umeditor.css')}}" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="{{url('/js/plugins/umeditor/third-party/jquery.min.js')}}"></script>
     <script type="text/javascript" src="{{url('/js/plugins/umeditor/third-party/template.min.js')}}"></script>

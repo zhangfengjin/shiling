@@ -29,13 +29,7 @@ UM.I18N['zh-cn'] = {
         'kaiti':'楷体',
         'heiti':'黑体',
         'lishu':'隶书',
-        'yahei':'微软雅黑',
-        'andaleMono':'andale mono',
-        'arial': 'arial',
-        'arialBlack':'arial black',
-        'comicSansMs':'comic sans ms',
-        'impact':'impact',
-        'timesNewRoman':'times new roman'
+        'yahei':'微软雅黑'
     },
     'ok':"确认",
     'cancel':"取消",

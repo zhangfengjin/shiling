@@ -25,6 +25,24 @@
     <script src="{{url('js/plugins/jquery/jquery.min.js')}}"></script>
     <!-- jQuery -->
     <script src="{{url('js/plugins/device/device.min.js')}}"></script>
+    <!-- Scripts -->
+    <script src="{{url('js/plugins/jquery.cookie/jquery.cookie.js')}}"></script>
+    <!-- Bootstrap -->
+    <script src="{{url('js/plugins/bootstrap/bootstrap.min.js')}}"></script>
+    {{--html控件resize事件--}}
+    <script src="{{url('js/plugins/jquery-resize/jquery.ba-resize.min.js')}}"></script>
+    <!-- FastClick 在移动浏览器上发生介于轻敲及点击之间的指令时，能够让你摆脱300毫秒的延迟.让你的应用程序更加灵敏迅捷-->
+    <script src="{{url('js/plugins/fastclick/fastclick.js')}}"></script>
+    <!-- NProgress 前端页面记载进度条-->
+    <script src="{{url('js/plugins/nprogress/nprogress.js')}}"></script>
+    <!-- Chosen 下拉-->
+    <script src="{{url('js/plugins/chosen/chosen.jquery.js')}}"></script>
+    <!-- layer 层-->
+    <script src="{{url('js/plugins/layer/layer.js')}}"></script>
+    {{--表单校验--}}
+    <script src="{{url('js/plugins/parsleyjs/parsley.min.js')}}"></script>
+    <script src="{{url('js/plugins/parsleyjs/i18n/zh_cn.js')}}"></script>
+    <script src="{{url('js/common.js')}}"></script>
 </head>
 <body class="footer_fixed {{$share["bodyNav"]}} body_overflow">
 <div class="container body">
@@ -132,24 +150,6 @@
         <!-- /footer content -->
     </div>
 </div>
-<!-- Scripts -->
-<script src="{{url('js/plugins/jquery.cookie/jquery.cookie.js')}}"></script>
-<!-- Bootstrap -->
-<script src="{{url('js/plugins/bootstrap/bootstrap.min.js')}}"></script>
-{{--html控件resize事件--}}
-<script src="{{url('js/plugins/jquery-resize/jquery.ba-resize.min.js')}}"></script>
-<!-- FastClick 在移动浏览器上发生介于轻敲及点击之间的指令时，能够让你摆脱300毫秒的延迟.让你的应用程序更加灵敏迅捷-->
-<script src="{{url('js/plugins/fastclick/fastclick.js')}}"></script>
-<!-- NProgress 前端页面记载进度条-->
-<script src="{{url('js/plugins/nprogress/nprogress.js')}}"></script>
-<!-- Chosen 下拉-->
-<script src="{{url('js/plugins/chosen/chosen.jquery.js')}}"></script>
-<!-- layer 层-->
-<script src="{{url('js/plugins/layer/layer.js')}}"></script>
-{{--表单校验--}}
-<script src="{{url('js/plugins/parsleyjs/parsley.min.js')}}"></script>
-<script src="{{url('js/plugins/parsleyjs/i18n/zh_cn.js')}}"></script>
-<script src="{{url('js/common.js')}}"></script>
 
 <!-- Custom Theme Scripts -->
 <script src="{{url('js/custom.js')}}"></script>

@@ -11,8 +11,8 @@
 |
 */
 
-
-Route::group(['domain' => 'lingshi.weibo.com'],
+//linkteach.cn
+Route::group(['domain' => ''],
     function () {
         Route::group(["namespace" => 'Auth', 'prefix' => 'auth'], function () {
             Route::get("/register", "RegisterController@index");
@@ -31,6 +31,7 @@ Route::group(['domain' => 'lingshi.weibo.com'],
             Route::post("meet/upload", "MeetController@upload");
             Route::get("award","AwardController@index");
 
+            Route::post("goods/upload", "GoodsController@upload");
             Route::resource("meet", "MeetController");
             Route::resource("goods", "GoodsController");
         });

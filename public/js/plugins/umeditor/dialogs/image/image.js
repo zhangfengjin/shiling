@@ -371,7 +371,7 @@
             "<div class=\"edui-image-wrapper\">" +
             "<ul class=\"edui-tab-nav\">" +
             "<li class=\"edui-tab-item edui-active\"><a data-context=\".edui-image-local\" class=\"edui-tab-text\"><%=lang_tab_local%></a></li>" +
-            "<li  class=\"edui-tab-item\"><a data-context=\".edui-image-JimgSearch\" class=\"edui-tab-text\"><%=lang_tab_imgSearch%></a></li>" +
+            /*"<li  class=\"edui-tab-item\"><a data-context=\".edui-image-JimgSearch\" class=\"edui-tab-text\"><%=lang_tab_imgSearch%></a></li>" +*/
             "</ul>" +
             "<div class=\"edui-tab-content\">" +
             "<div class=\"edui-image-local edui-tab-pane edui-active\">" +
