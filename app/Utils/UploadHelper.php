@@ -17,22 +17,24 @@ class UploadHelper
     private $oriName;              //原始文件名
     private $fileName;             //新文件名
     private $fullName;             //完整文件名,即从当前配置目录开始的URL
+    private $UrlPath;
+    private $Url;
     private $fileSize;             //文件大小
     private $fileType;             //文件类型
     private $stateInfo;            //上传状态信息,
     private $stateMap = array(    //上传状态映射表，国际化用户需考虑此处数据的国际化
-        "SUCCESS" ,                //上传成功标记，在UEditor中内不可改变，否则flash判断会出错
-        "文件大小超出 upload_max_filesize 限制" ,
-        "文件大小超出 MAX_FILE_SIZE 限制" ,
-        "文件未被完整上传" ,
-        "没有文件被上传" ,
-        "上传文件为空" ,
-        "POST" => "文件大小超出 post_max_size 限制" ,
-        "SIZE" => "文件大小超出网站限制" ,
-        "TYPE" => "不允许的文件类型" ,
-        "DIR" => "目录创建失败" ,
-        "IO" => "输入输出错误" ,
-        "UNKNOWN" => "未知错误" ,
+        "SUCCESS",                //上传成功标记，在UEditor中内不可改变，否则flash判断会出错
+        "文件大小超出 upload_max_filesize 限制",
+        "文件大小超出 MAX_FILE_SIZE 限制",
+        "文件未被完整上传",
+        "没有文件被上传",
+        "上传文件为空",
+        "POST" => "文件大小超出 post_max_size 限制",
+        "SIZE" => "文件大小超出网站限制",
+        "TYPE" => "不允许的文件类型",
+        "DIR" => "目录创建失败",
+        "IO" => "输入输出错误",
+        "UNKNOWN" => "未知错误",
         "MOVE" => "文件保存时出错",
         "DIR_ERROR" => "创建目录失败"
     );
@@ -40,15 +42,15 @@ class UploadHelper
     /**
      * 构造函数
      * @param string $fileField 表单名称
-     * @param array $config  配置项
-     * @param bool $base64  是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
+     * @param array $config 配置项
+     * @param bool $base64 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
      */
-    public function __construct( $fileField , $config , $base64 = false )
+    public function __construct($fileField, $config, $base64 = false)
     {
         $this->fileField = $fileField;
         $this->config = $config;
-        $this->stateInfo = $this->stateMap[ 0 ];
-        $this->upFile( $base64 );
+        $this->stateInfo = $this->stateMap[0];
+        $this->upFile($base64);
     }
 
     /**
@@ -56,55 +58,56 @@ class UploadHelper
      * @param $base64
      * @return mixed
      */
-    private function upFile( $base64 )
+    private function upFile($base64)
     {
         //处理base64上传
-        if ( "base64" == $base64 ) {
-            $content = $_POST[ $this->fileField ];
-            $this->base64ToImage( $content );
+        if ("base64" == $base64) {
+            $content = $_POST[$this->fileField];
+            $this->base64ToImage($content);
             return;
         }
 
         //处理普通上传
-        $file = $this->file = $_FILES[ $this->fileField ];
-        if ( !$file ) {
-            $this->stateInfo = $this->getStateInfo( 'POST' );
+        $file = $this->file = $_FILES[$this->fileField];
+        if (!$file) {
+            $this->stateInfo = $this->getStateInfo('POST');
             return;
         }
-        if ( $this->file[ 'error' ] ) {
-            $this->stateInfo = $this->getStateInfo( $file[ 'error' ] );
+        if ($this->file['error']) {
+            $this->stateInfo = $this->getStateInfo($file['error']);
             return;
         }
-        if ( !is_uploaded_file( $file[ 'tmp_name' ] ) ) {
-            $this->stateInfo = $this->getStateInfo( "UNKNOWN" );
+        if (!is_uploaded_file($file['tmp_name'])) {
+            $this->stateInfo = $this->getStateInfo("UNKNOWN");
             return;
         }
 
-        $this->oriName = $file[ 'name' ];
-        $this->fileSize = $file[ 'size' ];
+        $this->oriName = $file['name'];
+        $this->fileSize = $file['size'];
         $this->fileType = $this->getFileExt();
 
-        if ( !$this->checkSize() ) {
-            $this->stateInfo = $this->getStateInfo( "SIZE" );
+        if (!$this->checkSize()) {
+            $this->stateInfo = $this->getStateInfo("SIZE");
             return;
         }
-        if ( !$this->checkType() ) {
-            $this->stateInfo = $this->getStateInfo( "TYPE" );
+        if (!$this->checkType()) {
+            $this->stateInfo = $this->getStateInfo("TYPE");
             return;
         }
 
         $folder = $this->getFolder();
 
-        if ( $folder === false ) {
-            $this->stateInfo = $this->getStateInfo( "DIR_ERROR" );
+        if ($folder === false) {
+            $this->stateInfo = $this->getStateInfo("DIR_ERROR");
             return;
         }
+        $fileName = $this->getName();
+        $this->fullName = $folder . '/' . $fileName;
+        $this->Url = $this->UrlPath . '/' . $fileName;
 
-        $this->fullName = $folder . '/' . $this->getName();
-
-        if ( $this->stateInfo == $this->stateMap[ 0 ] ) {
-            if ( !move_uploaded_file( $file[ "tmp_name" ] , $this->fullName ) ) {
-                $this->stateInfo = $this->getStateInfo( "MOVE" );
+        if ($this->stateInfo == $this->stateMap[0]) {
+            if (!move_uploaded_file($file["tmp_name"], $this->fullName)) {
+                $this->stateInfo = $this->getStateInfo("MOVE");
             }
         }
     }
@@ -114,17 +117,18 @@ class UploadHelper
      * @param $base64Data
      * @return mixed
      */
-    private function base64ToImage( $base64Data )
+    private function base64ToImage($base64Data)
     {
-        $img = base64_decode( $base64Data );
-        $this->fileName = time() . rand( 1 , 10000 ) . ".png";
+        $img = base64_decode($base64Data);
+        $this->fileName = time() . rand(1, 10000) . ".png";
         $this->fullName = $this->getFolder() . '/' . $this->fileName;
-        if ( !file_put_contents( $this->fullName , $img ) ) {
-            $this->stateInfo = $this->getStateInfo( "IO" );
+        $this->Url = $this->UrlPath . $this->fileName;
+        if (!file_put_contents($this->fullName, $img)) {
+            $this->stateInfo = $this->getStateInfo("IO");
             return;
         }
         $this->oriName = "";
-        $this->fileSize = strlen( $img );
+        $this->fileSize = strlen($img);
         $this->fileType = ".png";
     }
 
@@ -135,11 +139,11 @@ class UploadHelper
     public function getFileInfo()
     {
         return array(
-            "originalName" => $this->oriName ,
-            "name" => $this->fileName ,
-            "url" => $this->fullName ,
-            "size" => $this->fileSize ,
-            "type" => $this->fileType ,
+            "originalName" => $this->oriName,
+            "name" => $this->fileName,
+            "url" => $this->Url,
+            "size" => $this->fileSize,
+            "type" => $this->fileType,
             "state" => $this->stateInfo
         );
     }
@@ -149,9 +153,9 @@ class UploadHelper
      * @param $errCode
      * @return string
      */
-    private function getStateInfo( $errCode )
+    private function getStateInfo($errCode)
     {
-        return !$this->stateMap[ $errCode ] ? $this->stateMap[ "UNKNOWN" ] : $this->stateMap[ $errCode ];
+        return !$this->stateMap[$errCode] ? $this->stateMap["UNKNOWN"] : $this->stateMap[$errCode];
     }
 
     /**
@@ -160,7 +164,7 @@ class UploadHelper
      */
     private function getName()
     {
-        return $this->fileName = time() . rand( 1 , 10000 ) . $this->getFileExt();
+        return $this->fileName = time() . rand(1, 10000) . $this->getFileExt();
     }
 
     /**
@@ -169,16 +173,16 @@ class UploadHelper
      */
     private function checkType()
     {
-        return in_array( $this->getFileExt() , $this->config[ "allowFiles" ] );
+        return in_array($this->getFileExt(), $this->config["allowFiles"]);
     }
 
     /**
      * 文件大小检测
      * @return bool
      */
-    private function  checkSize()
+    private function checkSize()
     {
-        return $this->fileSize <= ( $this->config[ "maxSize" ] * 1024 );
+        return $this->fileSize <= ($this->config["maxSize"] * 1024);
     }
 
     /**
@@ -187,7 +191,7 @@ class UploadHelper
      */
     private function getFileExt()
     {
-        return strtolower( strrchr( $this->file[ "name" ] , '.' ) );
+        return strtolower(strrchr($this->file["name"], '.'));
     }
 
     /**
@@ -196,13 +200,15 @@ class UploadHelper
      */
     private function getFolder()
     {
-        $pathStr = $this->config[ "savePath" ];
-        if ( strrchr( $pathStr , "/" ) != "/" ) {
+        $pathStr = $this->config["savePath"];
+        if (strrchr($pathStr, "/") != "/") {
             $pathStr .= "/";
         }
-        $pathStr .= date( "Ymd" );
-        if ( !file_exists( $pathStr ) ) {
-            if ( !mkdir( $pathStr , 0777 , true ) ) {
+        $pathStr .= date("Ymd");
+        $this->UrlPath = $pathStr;
+        $pathStr = base_path('public') . $pathStr;
+        if (!file_exists($pathStr)) {
+            if (!mkdir($pathStr, 0777, true)) {
                 return false;
             }
         }

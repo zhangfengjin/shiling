@@ -195,7 +195,6 @@
             var request =me.getRequest(url);
             $("input[name='_token']").val(request['token']);
             url=url + (url.indexOf("?") == -1 ? "?" : "&") + "editorid="+me.editor.id;//初始form提交地址;
-            alert(url);
             $("form", $(sel, me.dialog)).attr("action", url);
 
             return me;

@@ -97,8 +97,10 @@ class GoodsController extends Controller
     {
         $upload = new UploadService();
         $action = $_GET ['action'];
-        $upload->uploadfile($action);
-        return DataStandard::getStandardData();
+
+        $file = $upload->uploadfile($action);
+        echo json_encode($file);
+        //return DataStandard::getStandardData();
     }
 
 }

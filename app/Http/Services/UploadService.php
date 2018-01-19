@@ -28,16 +28,17 @@ class UploadService
         switch (htmlspecialchars($action)) {
             case 'uploadimage' :
                 $config = array(
-                    "savePath" => base_path('public') . $initConfig ['imagePathFormat'],
+                    "savePath" =>$initConfig ['imagePathFormat'],
                     "maxSize" => $initConfig ['imageMaxSize'],
-                    "allowFiles" => $initConfig ['imageAllowFiles']
+                    "allowFiles" => $initConfig ['imageAllowFiles'],
+                    "url" => $initConfig ['imagePathFormat']
                 );
                 $fieldName = $initConfig ['imageFieldName'];
                 break;
             case 'uploadfile' :
             default :
                 $config = array(
-                    "savePath" => base_path('public') . $initConfig ['filePathFormat'],
+                    "savePath" =>$initConfig ['filePathFormat'],
                     "maxSize" => $initConfig ['fileMaxSize'],
                     "allowFiles" => $initConfig ['fileAllowFiles']
                 );
