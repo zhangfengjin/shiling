@@ -1,6 +1,6 @@
 @extends('layouts.app_table')@section('tablecontent')
     <script type="text/javascript">
-        var uploadAction = CommonUtil.getRootPath() + "/goods/upload";
+        var uploadAction = CommonUtil.getRootPath() + "/goods/upload?action=uploadimage&token=" + $('meta[name="csrf-token"]').attr('content');
     </script>
     <link href="{{url('/js/plugins/umeditor/themes/default/css/umeditor.css')}}" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="{{url('/js/plugins/umeditor/third-party/jquery.min.js')}}"></script>

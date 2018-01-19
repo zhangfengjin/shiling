@@ -95,7 +95,6 @@ class GoodsController extends Controller
      */
     public function upload(Request $request)
     {
-        Log::info(123123);
         $upload = new UploadService();
         $action = $_GET ['action'];
         $upload->uploadfile($action);

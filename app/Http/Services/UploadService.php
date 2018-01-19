@@ -22,13 +22,13 @@ class UploadService
     {
         header("Content-Type:text/html;charset=utf-8");
         date_default_timezone_set("Asia/chongqing");
-        $filepath = config() . "/upload.json";
+        $filepath = base_path("config") . "/upload.json";
         $initConfig = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents($filepath)), true);
         /* 上传配置 */
         switch (htmlspecialchars($action)) {
             case 'uploadimage' :
                 $config = array(
-                    "pathFormat" => $initConfig ['imagePathFormat'],
+                    "savePath" => base_path('public') . $initConfig ['imagePathFormat'],
                     "maxSize" => $initConfig ['imageMaxSize'],
                     "allowFiles" => $initConfig ['imageAllowFiles']
                 );
@@ -37,7 +37,7 @@ class UploadService
             case 'uploadfile' :
             default :
                 $config = array(
-                    "pathFormat" => $initConfig ['filePathFormat'],
+                    "savePath" => base_path('public') . $initConfig ['filePathFormat'],
                     "maxSize" => $initConfig ['fileMaxSize'],
                     "allowFiles" => $initConfig ['fileAllowFiles']
                 );

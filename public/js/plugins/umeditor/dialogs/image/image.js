@@ -141,6 +141,7 @@
         uploadTpl: '<div class="edui-image-upload%%">' +
             '<span class="edui-image-icon"></span>' +
             '<form class="edui-image-form" method="post" enctype="multipart/form-data" target="up">' +
+            '<input type="hidden" name="_token" value="">'+
             '<input style=\"filter: alpha(opacity=0);\" class="edui-image-file" type="file" hidefocus name="upfile" accept="image/gif,image/jpeg,image/png,image/jpg,image/bmp"/>' +
             '</form>' +
 
@@ -173,12 +174,28 @@
 
             return me;
         },
+        getRequest: function (url) {// 获取Url参数 返回参数数组 调用方式：var Request = new
+            // Object();Request
+            // =GetRequest();Request['参数1'];
+            var request = new Object();
+            var idx=url.indexOf("?");
+            if (idx!= -1) {
+                var str = url.substr(idx+1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    request[strs[i].split("=")[0]] = decodeURI(strs[i]
+                        .split("=")[1]);
+                }
+            }
+            return request;
+        },
         config: function (sel) {
             var me = this,
                 url=me.editor.options.imageUrl;
-
+            var request =me.getRequest(url);
+            $("input[name='_token']").val(request['token']);
             url=url + (url.indexOf("?") == -1 ? "?" : "&") + "editorid="+me.editor.id;//初始form提交地址;
-
+            alert(url);
             $("form", $(sel, me.dialog)).attr("action", url);
 
             return me;
