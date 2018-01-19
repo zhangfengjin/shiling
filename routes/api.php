@@ -33,7 +33,8 @@ Route::group(['domain' => '',], function () {
             });
             Route::post("signin/code", "MeetController@signin");
 
-            Route::get("school/list","SchoolController@getList");
+            Route::get("school/list", "SchoolController@getList");
+            Route::get("role/list", "RoleController@getList");
         });
     });
 

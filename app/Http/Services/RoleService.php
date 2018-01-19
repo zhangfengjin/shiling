@@ -3,35 +3,31 @@
  * Created by PhpStorm.
  * User: fengjin1
  * Date: 2018/1/19
- * Time: 14:47
+ * Time: 15:36
  */
 
 namespace App\Http\Services;
 
 
-use App\Models\School;
+use App\Models\Role;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
 
-class SchoolService extends CommonService
+class RoleService extends CommonService
 {
     public function getList()
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = School::whereRaw($where)->count();
+        $total = Role::whereRaw($where)->count();
         //要查询的字段
         $select = [
-            'sch.id'
+            'id', 'name'
         ];
-        $schoolName = DB::raw("CONCAT(name,'(',province_name,'-',city_name,'-',area_name,')') as name");
-        array_push($select, $schoolName);
         //获取查询结果
-        $sortField = "sch.id";
+        $sortField = "id";
         $sSortDir = "asc";
-        $rows = DB::table("schools as sch")
-            ->join("areas as area", "area.id", "=", "sch.area_id")
-            ->whereRaw($where)->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
+        $rows = Role::whereRaw($where)->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
         foreach ($rows as $row) {
             $row->id = strval($row->id);
@@ -51,10 +47,10 @@ class SchoolService extends CommonService
             return $sql;
         }
         $where = [];
-        $schoolName = isset($searchs["school_name"]) ? trim($searchs["school_name"])
-            : (isset($this->allInput["school_name"]) ? trim($this->allInput["school_name"]) : "");//合同号
-        if (!empty($schoolName)) {
-            array_push($where, "name like '%$schoolName%'");
+        $roleName = isset($searchs["role_name"]) ? trim($searchs["role_name"])
+            : (isset($this->allInput["role_name"]) ? trim($this->allInput["role_name"]) : "");//合同号
+        if (!empty($roleName)) {
+            array_push($where, "name like '%$roleName%'");
         }
         $where = implode(" and ", $where);
         if (empty($where)) {
