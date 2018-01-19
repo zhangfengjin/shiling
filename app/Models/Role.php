@@ -8,4 +8,7 @@ class Role extends Model
 {
     //
     protected $table = 'roles';
+    protected $hidden = [
+        'flag'
+    ];
 }

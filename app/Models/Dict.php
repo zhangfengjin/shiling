@@ -8,4 +8,7 @@ class Dict extends Model
 {
     //
     protected $table = 'dicts';
+    protected $hidden = [
+        'flag'
+    ];
 }

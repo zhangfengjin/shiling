@@ -8,4 +8,7 @@ class MeetPrize extends Model
 {
     //
     protected $table = 'meet_prizes';
+    protected $hidden = [
+        'flag'
+    ];
 }

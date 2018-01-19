@@ -8,4 +8,7 @@ class Attachment extends Model
 {
     //
     protected $table = 'attachments';
+    protected $hidden = [
+        'flag'
+    ];
 }

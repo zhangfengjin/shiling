@@ -77,6 +77,31 @@ class UserService extends CommonService
     }
 
     /**
+     * @param $input
+     * @param $userId
+     * @return mixed
+     */
+    public function update($input, $userId)
+    {
+        $user = User::find($userId);
+        if ($user) {
+            $user->name = $input["name"];
+            $user->save();
+            return $user;
+        }
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function show($userId)
+    {
+        $user = User::find($userId);
+        return $user;
+    }
+
+    /**
      * 获取列表
      * @return array
      */

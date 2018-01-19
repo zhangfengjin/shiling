@@ -8,4 +8,7 @@ class School extends Model
 {
     //
     protected $table = 'schools';
+    protected $hidden = [
+        'flag'
+    ];
 }

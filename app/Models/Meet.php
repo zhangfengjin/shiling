@@ -8,4 +8,7 @@ class Meet extends Model
 {
     //
     protected $table = 'meets';
+    protected $hidden = [
+        'flag'
+    ];
 }

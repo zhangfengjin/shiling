@@ -8,4 +8,7 @@ class Goods extends Model
 {
     //
     protected $table = 'goods';
+    protected $hidden = [
+        'flag'
+    ];
 }

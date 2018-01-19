@@ -8,4 +8,7 @@ class NewsAtt extends Model
 {
     //
     protected $table = 'news_atts';
+    protected $hidden = [
+        'flag'
+    ];
 }

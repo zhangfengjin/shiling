@@ -8,4 +8,7 @@ class OrderGoods extends Model
 {
     //
     protected $table = 'order_goods';
+    protected $hidden = [
+        'flag'
+    ];
 }
