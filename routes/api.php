@@ -31,8 +31,9 @@ Route::group(['domain' => '',], function () {
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });
-
             Route::post("signin/code", "MeetController@signin");
+
+            Route::get();
         });
     });
 
