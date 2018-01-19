@@ -3,7 +3,6 @@
         var uploadAction = CommonUtil.getRootPath() + "/goods/upload?action=uploadimage&token=" + $('meta[name="csrf-token"]').attr('content');
     </script>
     <link href="{{url('/js/plugins/umeditor/themes/default/css/umeditor.css')}}" type="text/css" rel="stylesheet">
-    <script type="text/javascript" src="{{url('/js/plugins/umeditor/third-party/jquery.min.js')}}"></script>
     <script type="text/javascript" src="{{url('/js/plugins/umeditor/third-party/template.min.js')}}"></script>
     <script type="text/javascript" charset="utf-8" src="{{url('/js/plugins/umeditor/umeditor.config.js')}}"></script>
     <script type="text/javascript" charset="utf-8" src="{{url('/js/plugins/umeditor/umeditor.min.js')}}"></script>
