@@ -32,7 +32,7 @@ class CommonService
                 $this->iDisplayLength = intval($request->input("pagelength"));//每页长度
             }
             $this->iDisplayStart = $this->iDisplayStart ? $this->iDisplayStart : 0;
-            $this->iDisplayLength = $this->iDisplayLength ? $this->iDisplayLength : PHP_INT_MAX;
+            $this->iDisplayLength = $this->iDisplayLength ? $this->iDisplayLength : 500;//默认最多500行记录
             $this->searchs = json_decode($request->input("searchs"), true);
             if (!count($this->searchs) || empty($this->searchs)) {
                 $this->allInput = $request->all();

@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\DB;
 
 class RoleService extends CommonService
 {
+    /**
+     * 获取列表
+     * @return array
+     */
     public function getList()
     {
         $where = $this->getSearchWhere($this->searchs);

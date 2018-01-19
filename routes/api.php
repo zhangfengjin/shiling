@@ -26,8 +26,7 @@ Route::group(['domain' => '',], function () {
         });
 
         Route::group(['namespace' => 'Api', 'middleware' => ['apiauth']], function () {
-            Route::resource("user", "UserController");
-
+            Route::get("user/list", "UserController@getList");
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });
