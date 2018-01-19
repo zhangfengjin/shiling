@@ -22,6 +22,7 @@ class ApiCheck
         if (empty($token)) {
             return DataStandard::printStandardData([],"验证失败", 123);
         }
+        //todo
         if (true) {//Cache::has($token)
             return $next($request);
         } else {

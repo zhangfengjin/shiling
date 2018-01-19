@@ -10,34 +10,31 @@ namespace App\Http\Services;
 
 
 use App\Models\School;
+use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
 
-class SchoolService
+class SchoolService extends CommonService
 {
     public function getList()
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = School::whereRaw($where)->count();;
+        $total = School::whereRaw($where)->count();
         //要查询的字段
         $select = [
-            'contract_no', 'adid', 'dspid', 'impressions', 'start_time',
-            'end_time', 'cid', 'add_time', 'op_user', 'name'
+            'sch.id'
         ];
-        $pdbId = DB::raw("pdb.id id");
-        $pdbStatus = DB::raw("pdb.status status");
-        array_push($select, $pdbId, $pdbStatus);
+        $schoolName = DB::raw("CONCAT(name,'(',province_name,'-',city_name,'-',area_name,')') as name");
+        array_push($select, $schoolName);
         //获取查询结果
-        $sortField = "add_time";
+        $sortField = "sch.id";
         $sSortDir = "desc";
-        $rows = DB::table("wax_pdb_detail as pdb")
-            ->join("wax_dsp as dsp", "dsp.id", "=", "pdb.dspid")
+        $rows = DB::table("schools as sch")
+            ->join("areas as area", "area.id", "=", "sch.area_id")
             ->whereRaw($where)->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
-        $subLen = 15;
         foreach ($rows as $row) {
-            $row->status = DataEnum::getAuditStatus("pdb", $row->status);
-            $row->adid = strval($row->adid);
+            $row->id = strval($row->id);
         }
         return DataStandard::getListData($this->sEcho, $total, $rows);
     }

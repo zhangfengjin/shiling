@@ -24,7 +24,9 @@ class DataStandard
             "sEcho" => $sEcho,
             "iTotalRecords" => $totalCount,
             "iTotalDisplayRecords" => $totalCount,
-            "aaData" => $rows
+            "aaData" => $rows,
+            "count" => $totalCount,
+            "data" => $rows
         ];
     }
 

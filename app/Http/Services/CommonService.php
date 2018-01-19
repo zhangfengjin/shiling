@@ -28,9 +28,11 @@ class CommonService
             $this->user = $request->get("user");
             $this->sEcho = 1;// $request->input("sEcho");//请求服务器次数 必须
             if (!empty($this->sEcho)) {
-                $this->iDisplayStart = $request->input("pageindex");//开始index 从0开始
-                $this->iDisplayLength = $request->input("pagelength");//每页长度
+                $this->iDisplayStart = intval($request->input("pageindex"));//开始index 从0开始
+                $this->iDisplayLength = intval($request->input("pagelength"));//每页长度
             }
+            $this->iDisplayStart = $this->iDisplayStart ? $this->iDisplayStart : 0;
+            $this->iDisplayLength = $this->iDisplayLength ? $this->iDisplayLength : PHP_INT_MAX;
             $this->searchs = json_decode($request->input("searchs"), true);
             if (!count($this->searchs) || empty($this->searchs)) {
                 $this->allInput = $request->all();
