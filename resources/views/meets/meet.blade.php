@@ -1,4 +1,11 @@
 @extends('layouts.app_table')@section('tablecontent')
+    <script type="application/javascript">
+        var route = CommonUtil.getRootPath() + "/meet/upload?action=uploadimage&token=" + $('meta[name="csrf-token"]').attr('content');
+        var accept = {};
+        var fileNumLimit = 7;
+        var fileSizeLimit = 3 * 1024 * 1024;    // 3 M
+        var fileSingleSizeLimit = 1024 * 1024;  // 1 M
+    </script>
     <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/webuploader.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/style.css')}}"/>
     <div class="row">
@@ -30,11 +37,5 @@
     </div>
     <script type="text/javascript" src="{{url('/js/plugins/webuploader/webuploader.js')}}"></script>
     <script type="text/javascript" src="{{url('/js/plugins/webuploader/upload.js')}}"></script>
-    <script type="application/javascript">
-        var route = "/meet/upload";
-        var accept = {};
-        var fileNumLimit = 7;
-        var fileSizeLimit = 3 * 1024 * 1024;    // 3 M
-        var fileSingleSizeLimit = 1024 * 1024;  // 1 M
-    </script>
+
 @endsection

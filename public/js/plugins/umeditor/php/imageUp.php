@@ -14,7 +14,7 @@
 
     //背景保存在临时目录中
     $config[ "savePath" ] = $Path;
-    $up = new Uploader( "upfile" , $config );
+    $up = new Uploader( "file" , $config );
     $type = $_REQUEST['type'];
     $callback=$_GET['callback'];
 
