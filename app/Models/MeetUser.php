@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class MeetUser extends Model
 {
     //
+    protected $table = 'meet_users';
 }

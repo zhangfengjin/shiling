@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class MeetPrize extends Model
 {
     //
+    protected $table = 'meet_prizes';
 }

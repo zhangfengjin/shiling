@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class GoodsAtt extends Model
 {
     //
+    protected $table = 'goods_atts';
 }
