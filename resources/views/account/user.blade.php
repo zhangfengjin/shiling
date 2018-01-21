@@ -57,6 +57,22 @@
                                         <button id="reset" type="button" class="btn btn-round btn-default search_btn">重置
                                         </button>
                                     </div>
+
+                                    <li><label>封面</label>
+                                        <div>
+                                            <form id="uploadimg_form" style="float: left;"
+                                                  action="{{url('/user/import?action=uploadfile')}}"
+                                                  enctype="multipart/form-data" method="POST"
+                                                  target="refresh_iframe">
+                                                <input id="uploadcover" name="upfile" class="uploadImg"
+                                                       type="file"
+                                                       accept=".xlsx,.xls">
+                                                <input name="_token" type="hidden" value="{{csrf_token() }}">
+                                            </form>
+                                            <iframe id="refresh_iframe" name="refresh_iframe"
+                                                    style="display: none;">上传成功</iframe>
+                                        </div>
+                                    </li>
                                 </ul>
 
                             </div>
@@ -88,6 +104,23 @@
             var searchInfo;
             return me = {
                 _initOwn: function () {
+                    $("#uploadcover").change(function() {// 上传资料封面
+                        alert(12);
+                        $('#uploadimg_form').submit();
+                    });
+                    $("#refresh_iframe").load(
+                        function() {
+                            var data = $(
+                                window.frames['refresh_iframe'].document.body)
+                                .html();
+                            // 若iframe携带返回数据，则显示在feedback中
+                            if (data != null && data != "") {
+                                data = CommonUtil.parseToJson(data);
+                                $("#datumCover").attr("src", data.url);// 更换上传的封面
+                                $("#datumCover").attr("iconid", data.attid);// 更换上传的封面id
+                            }
+                        });
+
                     $("#search").on("click", function () {
                         me._searchList();
                     });
@@ -109,7 +142,7 @@
                     var aoColumns = [{
                         "sTitle": "",
                         "data": "id"
-                    },{
+                    }, {
                         "sTitle": "姓名",
                         "data": "name"
                     }];

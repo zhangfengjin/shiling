@@ -30,6 +30,7 @@ Route::group(['domain' => ''],
             });
             Route::get("user/list", "UserController@getList");//用户列表
             Route::get("user/export", "UserController@export");//用户列表
+            Route::post("user/import", "UserController@import");//用户列表
             Route::resource("user", "UserController");
 
             Route::group(['prefix' => 'pay'], function () {

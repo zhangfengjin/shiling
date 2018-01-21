@@ -6,6 +6,7 @@ use App\Http\Services\UserService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -106,5 +107,14 @@ class UserController extends Controller
         $userService = new UserService($request);
         $userService->export();
 
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function import(Request $request)
+    {
+        $userService = new UserService($request);
+        $userService->import();
     }
 }
