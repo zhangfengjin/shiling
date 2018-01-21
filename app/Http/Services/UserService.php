@@ -169,7 +169,7 @@ class UserService extends CommonService
         //获取查询结果
         $sortField = "id";
         $sSortDir = "asc";//DB::table(" as pdb")
-        $rows = User::->whereRaw($where)->orderBy($sortField, $sSortDir)
+        $rows = User::whereRaw($where)->orderBy($sortField, $sSortDir)
             ->get($select)->toArray();
         foreach ($rows as & $row) {
 

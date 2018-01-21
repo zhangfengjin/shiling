@@ -97,9 +97,14 @@ class UserController extends Controller
         return DataStandard::printStandardData($list);
     }
 
-    //
-    public function import()
+    /**
+     * 导出
+     * @param Request $request
+     */
+    public function export(Request $request)
     {
+        $userService = new UserService($request);
+        $userService->export();
 
     }
 }
