@@ -73,6 +73,7 @@ class UserController extends Controller
     public function update(Request $request, $userId)
     {
         $input = $request->all();
+        $input["role_id"] = 2;
         $userService = new UserService();
         $userService->update($input, $userId);
         return DataStandard::getStandardData();

@@ -28,6 +28,17 @@ Route::group(['domain' => ''],
             Route::get('/', function () {
                 return view('home');
             });
+            Route::get("user/list", "UserController@getList");//用户列表
+            Route::get("user/{userId}", "UserController@show");//获取用户信息
+            Route::put("user/{userId}", "UserController@update");//更新用户信息
+            Route::group(['prefix' => 'pay'], function () {
+                Route::post("unifiedorder", "PayController@unifiedorder");
+            });
+            Route::post("signin/code", "MeetController@signin");//二维码签到
+
+            Route::get("school/list", "SchoolController@getList");//学校列表
+            Route::get("role/list", "RoleController@getList");//角色列表
+
             Route::post("meet/upload", "MeetController@upload");
             Route::get("award","AwardController@index");
 
