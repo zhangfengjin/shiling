@@ -14,6 +14,7 @@ use App\Utils\DataStandard;
 use App\Utils\WyIMHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserService extends CommonService
 {
@@ -159,48 +160,32 @@ class UserService extends CommonService
      */
     public function export()
     {
-        /*//构建查询条件
+        //构建查询条件
         $where = $this->getSearchWhere($this->searchs);
-        //获取查询的记录数
-        $total = PdbDetail::whereRaw($where)->count();;
         //要查询的字段
         $select = [
-            'contract_no', 'adid', 'dspid', 'name', 'impressions',
-            'start_time', 'end_time', 'cid', 'add_time', "opc"
+            'ID', 'name'
         ];
-        $pdbStatus = DB::raw("wax_pdb_detail.status status");
-        array_push($select, $pdbStatus);
         //获取查询结果
-        $sortField = "add_time";
-        $sSortDir = "desc";//DB::table(" as pdb")
-        $rows = PdbDetail::join("wax_dsp as dsp", "dsp.id", "=", "wax_pdb_detail.dspid")
-            ->whereRaw($where)->orderBy($sortField, $sSortDir)
+        $sortField = "id";
+        $sSortDir = "asc";//DB::table(" as pdb")
+        $rows = User::->whereRaw($where)->orderBy($sortField, $sSortDir)
             ->get($select)->toArray();
         foreach ($rows as & $row) {
-            $row["status"] = DataEnum::getAuditStatus("pdb", $row["status"]);
-            $row["adid"] = " " . strval($row["adid"]);//. number_format($row["adid"], 0, ".", "");
-            $opc = $this->getSignPdbOPC($row["opc"]);
-            $row["gender"] = $opc["gender"];
-            $row["age"] = $opc["age"];
-            $row["interest"] = $opc["interest"];
-            $row["area"] = $opc["area"];
-            unset($row["opc"]);
-            array_filter($row);
+
         }
         //导出Excel的表头
         $title = [
-            '合同号', '订单号', 'DSP ID', 'DSP名称', '预定量(单位：CPM)',
-            '开始时间', '结束时间', '创意ID', '添加时间', '状态', '性别',
-            '年龄', '兴趣', '地域'
+            'id', '姓名'
         ];
         array_unshift($rows, $title);
-        $excelName = "WAX_PDB_List_" . date("Y-m-d-H-i-s");
+        $excelName = "User_List_" . date("Y-m-d-H-i-s");
         Excel::create($excelName, function ($excel) use ($rows) {
-            $excel->sheet('pdb_list', function ($sheet) use ($rows) {
-                $sheet->getStyle('B')->getNumberFormat()
-                    ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+            $excel->sheet('user_list', function ($sheet) use ($rows) {
+                /*$sheet->getStyle('B')->getNumberFormat()
+                    ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_TEXT);*/
                 $sheet->rows($rows);
             });
-        })->export('xlsx');*/
+        })->export('xlsx');
     }
 }
