@@ -48,9 +48,7 @@
                                         <label class="control-label col-md-5 col-sm-4 col-xs-12">审核状态</label>
                                         <select class="col-md-7 col-sm-8 col-xs-12" id="search_status">
                                             <option value=""></option>
-                                            @foreach($status as $key=>$val)
-                                                <option value="{{$key}}">{{$val}}</option>
-                                            @endforeach
+
                                         </select></li>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <button id="search" type="button" class="btn btn-round btn-default search_btn">
@@ -111,73 +109,9 @@
                     var aoColumns = [{
                         "sTitle": "",
                         "data": "id"
-                    }, {
-                        "sTitle": "Uid",
-                        "data": "uid",
-                        "columnType": "custom",
-                        "draw": function (full) {
-                            return $("<div></div>").html("<a target='_blank' class='list-col-btn' href='https://weibo.com/u/" + full.uid + "'>" + full.uid + "</a>");
-                        }
-                    }, {
-                        "sTitle": "DSP ID",
-                        "data": "dsp_id"
-                    }, {
-                        "sTitle": "DSP名称",
-                        "data": "dsp_name"
-                    }, {
-                        "sTitle": "广告主ID",
-                        "data": "client_id"
-                    }, {
-                        "sTitle": "广告主名称",
-                        "data": "client_name"
-                    }, {
-                        "sTitle": "审核人",
-                        "data": "audit_name",
-                        "sWidth": "60px"
-                    }, {
-                        "sTitle": "提交日期",
-                        "data": "add_time"
-                    }, {
-                        "sTitle": "审核日期",
-                        "data": "audit_time"
-                    }, {
-                        "sTitle": "资质图片",
-                        "data": "qualifications",
-                        "sWidth": "60px",
-                        "columnType": "photos",
-                        "info": "资质",
-                        "func": function (id, obj, photoTitle, width, photoId, photoEvent, successOpen) {
-                            TableList.controllerDisabled(obj);
-                            var status = obj.attr("status");
-                            var winWidth = $(window).width();
-                            if ((width + 10) > winWidth) {
-                                width = "80%";
-                            } else {
-                                width += "px";
-                            }
-                            layer.open({
-                                type: 1,
-                                title: photoTitle,
-                                shadeClose: true,
-                                scrollbar: false,
-                                area: [width], // 宽高
-                                content: $(photoId),
-                                success: function (layero) {
-                                    successOpen(layero, obj);
-                                },
-                                end: function () {
-                                    TableList.controllerRemoveDisabled(obj);
-                                    layer.closeAll('loading');
-                                }
-                            });
-                            //相册
-                            photoEvent(obj, photoId);
-                        }
-                    }, {
-                        "sTitle": "审核状态",
-                        "data": "status",
-                        "columnType": "custom",
-                        "tooltip": "reason"
+                    },{
+                        "sTitle": "姓名",
+                        "data": "name"
                     }];
                     var oSetting = {
                         "tableId": tableId,

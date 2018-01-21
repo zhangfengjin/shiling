@@ -29,8 +29,8 @@ Route::group(['domain' => ''],
                 return view('home');
             });
             Route::get("user/list", "UserController@getList");//用户列表
-            Route::get("user/{userId}", "UserController@show");//获取用户信息
-            Route::put("user/{userId}", "UserController@update");//更新用户信息
+            Route::resource("user", "UserController");
+
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });
