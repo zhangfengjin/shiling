@@ -99,7 +99,7 @@ class ResetPasswordController extends Controller
         if (empty($account)) {
             return DataStandard::getStandardData([], "账号未注册", 12001);
         }
-        $code = $request->input('code');
+        $code = $request->input('verify');
         $verifyService = new VerifyService();
         $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
         if (!$msg) { // 返回空字符串表示验证通过

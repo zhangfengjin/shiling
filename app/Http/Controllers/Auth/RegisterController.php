@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Services\UserService;
+use App\Http\Services\VerifyService;
 use App\User;
 use App\Http\Controllers\Controller;
 use App\Utils\DataStandard;
@@ -84,31 +85,46 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
+        $code = $request->input('verify');
         $tel = $request->input('phone');
         $email = $request->input('email');
-        $userService = new UserService ();
-        if (RegHelper::validateTel($tel)) {
-            if ($userService->uniqueTel($tel) > 0) {
-                return DataStandard::getStandardData([], "手机已被抢注", 203);
+        if (!empty($code) || !empty($tel) || !empty($email)) {
+            $account = "";
+            if (!empty($tel)) {
+                $account = $tel;
+            } else {
+                $account = $email;
             }
-        } else {
-            return DataStandard::getStandardData([], "手机格式不正确", 205);
-        }
-        if (RegHelper::validateEmail($email)) {
-            if ($userService->uniqueEmail($email) > 0) {
-                return DataStandard::getStandardData([], "邮箱已被抢注", 204);
+            $verifyService = new VerifyService();
+            $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
+            if (!$msg) { // 返回空字符串表示验证通过
+                $userService = new UserService ();
+                if (RegHelper::validateTel($tel)) {
+                    if ($userService->uniqueTel($tel) > 0) {
+                        return DataStandard::getStandardData([], "手机已被抢注", 203);
+                    }
+                } else {
+                    return DataStandard::getStandardData([], "手机格式不正确", 205);
+                }
+                if (RegHelper::validateEmail($email)) {
+                    if ($userService->uniqueEmail($email) > 0) {
+                        return DataStandard::getStandardData([], "邮箱已被抢注", 204);
+                    }
+                } else {
+                    return DataStandard::getStandardData([], "邮箱格式不正确", 206);
+                }
+                $user = $request->all();
+                $user = $userService->create($user); // 注册
+                if ($user) {
+                    $this->guard()->login($user); // 登录
+                    $token = empty($user['im_token']) ? DataStandard::getToken($user->id) : $user['im_token'];
+                    Cache::put($token, $token, 60 * 24 * 365);
+                    return DataStandard::getStandardData(["token" => $token]);
+                }
             }
-        } else {
-            return DataStandard::getStandardData([], "邮箱格式不正确", 206);
+            return DataStandard::getStandardData([], $msg, 12002);
         }
-        $user = $request->all();
-        $user = $userService->create($user); // 注册
-        if ($user) {
-            $this->guard()->login($user); // 登录
-            $token = empty($user['im_token']) ? DataStandard::getToken($user->id) : $user['im_token'];
-            Cache::put($token, $token, 60 * 24 * 365);
-            return DataStandard::getStandardData(["token" => $token]);
-        }
+
         return DataStandard::getStandardData([], "注册失败", 210);
     }
 
