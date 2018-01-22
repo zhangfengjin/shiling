@@ -42,33 +42,8 @@ class VerifyController extends Controller
         } else {
             return DataStandard::getStandardData([], "输入参数不正确", 12000);
         }
-        $verifyService->saveCode($code, $account, 60);//缓存code
+        $verifyService->saveCode($code, $account);//缓存code
         return DataStandard::printStandardData();
-
-        /*if (!empty($tel)) {
-            if (RegHelper::validateTel($tel)) {
-                if ($userService->uniqueTel($tel) > 0) {
-                    //todo
-                    // 发送手机验证码
-                    $telEmail->sendTelVerify($code, $tel);
-                }
-            } else {
-                return DataStandard::getStandardData([], "手机格式不正确", 205);
-            }
-        } else if (!empty($email)) {
-            if (RegHelper::validateEmail($email)) {
-                if ($userService->uniqueEmail($email) > 0) {
-                    //todo
-                    //发送邮箱验证码
-                    $telEmail->sendEmailVerify($code, $email);
-                }
-            } else {
-                return DataStandard::getStandardData([], "邮箱已被抢注", 204);
-            }
-        } else {
-            return DataStandard::getStandardData([], "输入参数不正确", 12000);
-        }
-        return DataStandard::printStandardData();*/
     }
 
 
