@@ -37,87 +37,39 @@ class TelEmailService
      */
     public function sendTelVerify($code, $receiver)
     {
-        $url = "http://upsms.yonyouup.com/index.php/Srv/Sms/SendMsg";
-        $ymd = date('Ymd', time());
-        $post_data = array(
-            "appId" => "UYS",
-            'billNo' => "UYS" . $ymd . substr(microtime(), 2, 8) . rand(10, 100),
-            'context' => array(
-                "code" => "$code",
-                "minute" => $this->minute,
-                "name" => "【领师APP】"
-            ),
-            'phone' => "$receiver",
-            'enterpriseUserId' => null,
-            'optionalData' => array(),
-            'templateId' => "2104",
-            'token' => 'IjKSeTZmi5ru4zfBFMCqyP1NH37nthEV'
-        );
-        // 按ASCII字典排序
-        ksort($post_data);
-        // 获取签名
-        $sSign = $this->getSign($post_data);
-        // 参数加入签名
-        $post_data ["sign"] = $sSign;
-        // 卸载token
-        unset ($post_data ["token"]);
-        // 数组外在包一层
-        /*
-         * $data = array ( "data" => json_encode ( $post_data ) );
-         */
-        $data = json_encode(array(
-            "data" => $post_data
-        ));
+        $url = "https://api.netease.im/sms/sendcode.action";
+        $post_data = [
+            'mobile' => $receiver,
+            'authCode' => $code
+        ];
+        $headers = $this->getSMSHeader();
         // 发送请求
-        $ResSN = HttpHelper::http_post_curlcontents($url, $data);
-        $ret = json_decode($ResSN, true);
-        if ($ret ["flag"]) {
-            return $ResSN;
-        } else {
-            Log::error("短信发送失败--" . $ResSN . "\r\n");
-        }
+        $ret = HttpHelper::http_post_curlcontents($url, $headers, $post_data);
+        Log::info($ret);
+        return $ret;
     }
 
-    private function getSign($Obj)
-    {
-        $Parameters = [];
-        foreach ($Obj as $k => $v) {
-            $Parameters [$k] = $v;
-        }
-        $String = $this->formatBizQueryParaMap($Parameters, false);
-        // die($String);
-        // echo "【string2】".$String."</br>";
-        // 签名步骤二：MD5加密
-        $String = md5($String);
-
-        // echo "【string3】 ".$String."</br>";
-        // 签名步骤三：所有字符转为大写
-        $result_ = strtoupper($String);
-        // echo "【result】 ".$result_."</br>";
-        return $result_;
-    }
-
-    /*
-     * 作用：格式化参数，签名过程需要使用
+    /**
+     * 必须的消息头
+     * @return array
      */
-    private function formatBizQueryParaMap($paraMap, $urlencode)
+    private function getSMSHeader()
     {
-        $buff = "";
-        ksort($paraMap);
-        foreach ($paraMap as $k => $v) {
-            if ($urlencode) {
-                $v = urlencode($v);
-            }
-            // $buff .= strtolower($k) . "=" . $v . "&";
-            if (is_array($v))
-                $buff .= $k . "=Array&";
-            else
-                $buff .= $k . "=" . $v . "&";
-        }
-        if (strlen($buff) > 0) {
-            $reqPar = substr($buff, 0, strlen($buff) - 1);
-        }
-        return $reqPar;
+        $appKey = config('app.wy.appkey');
+        $appSecret = config('app.wy.secret');
+        $curTime = time();
+        $ymd = date('Ymd', time());
+        $nonce = 'LS' . $ymd . substr(microtime(), 2, 8) . rand(10, 100);
+        // 构建checksum
+        $checksum = strtolower(sha1($appSecret . $nonce . $curTime));
+        // 构建header
+        return [
+            "AppKey:$appKey",
+            "CurTime:$curTime",
+            "CheckSum:$checksum",
+            "Nonce:$nonce",
+            'Content-Type: application/x-www-form-urlencoded;charset=utf-8',
+        ];
     }
 
 }

@@ -258,5 +258,9 @@ return [
     'qrcode' => [
         'sign' => 'http://lingshi.weibo.com/api/signin/code',
         'path' => public_path('qrcodes/qrcode_ls.png'),
+    ],
+    'wy' => [
+        'appkey' => env('Wy_App_Key', ''),
+        'secret' => env('Wy_Secret', '')
     ]
 ];
