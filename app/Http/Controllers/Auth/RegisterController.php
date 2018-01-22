@@ -97,7 +97,6 @@ class RegisterController extends Controller
             }
             $verifyService = new VerifyService();
             $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
-
             if (!$msg) { // 返回空字符串表示验证通过
                 $userService = new UserService ();
                 if (!empty($tel)) {

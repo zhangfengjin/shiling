@@ -10,6 +10,7 @@ namespace App\Http\Services;
 
 
 use App\Utils\EmailHelper;
+use App\Utils\HttpHelper;
 use Illuminate\Support\Facades\Log;
 
 class TelEmailService
@@ -119,50 +120,4 @@ class TelEmailService
         return $reqPar;
     }
 
-    /**
-     * 验证手机验证码
-     *
-     * @param unknown $code
-     * @return string
-     */
-    public function verTelEmailCodeValidate($code, $account)
-    {
-        $checkcode = Session::get('tscode');
-        $time = time();
-        $msg = "";
-        if (!empty ($checkcode)) { // 手机、图片验证码
-            if ($account == $checkcode ["receiver"]) {
-                if (($time - $checkcode ["time"]) < ($this->minute * 60)) { // 有效验证时间为10分钟
-                    if ($checkcode ["code"] == $code) {
-                        Session::forget('tscode');
-                        return $msg;
-                    }
-                    $msg = '验证码不正确';
-                } else {
-                    Session::forget("tscode");
-                    $msg = "验证码已过期，有效期为{$this->minute}分钟，请重新获取验证码";
-                }
-            } else {
-                $msg = "注册帐号已更改,请重新获取验证码";
-            }
-        } else
-            $msg = "验证码已过期，有效期为{$this->minute}分钟，请重新获取验证码";
-        return $msg;
-    }
-
-    /**
-     * 验证图片验证码
-     *
-     * @param unknown $code
-     */
-    public function verImgCodeValidate($code)
-    {
-        $vercode = Session::get('imgcode');
-        if (!empty ($vercode)) {
-            if ($vercode == $code)
-                return "";
-            Session::forget('imgcode');
-        }
-        return "校验码不正确";
-    }
 }

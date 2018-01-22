@@ -29,14 +29,14 @@ class VerifyService
     /**
      * @param $account
      */
-    public function saveCode($code, $account)
+    public function saveCode($code, $account, $minute = 10 * 60)
     {
         $checkcode = [
             "code" => $code,
             "receiver" => $account,
             "time" => time()
         ];
-        Cache::put($account, $checkcode);
+        Cache::put($account, $checkcode, $minute);
     }
 
     /**
@@ -48,9 +48,6 @@ class VerifyService
      */
     public function codeValidate($code, $account, $minute = 10)
     {
-        if ($code == "111111") { //test
-            return "";
-        }
         $checkcode = Cache::get($account);
         $time = time();
         $msg = "";
@@ -69,8 +66,9 @@ class VerifyService
             } else {
                 $msg = "注册帐号已更改,请重新获取验证码";
             }
-        } else
+        } else {
             $msg = "验证码已过期，有效期为{$minute}分钟，请重新获取验证码";
+        }
         return $msg;
     }
 }

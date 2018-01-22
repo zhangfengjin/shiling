@@ -42,7 +42,7 @@ class VerifyController extends Controller
         } else {
             return DataStandard::getStandardData([], "输入参数不正确", 12000);
         }
-        $verifyService->saveCode($code, $account);//缓存code
+        $verifyService->saveCode($code, $account, 60);//缓存code
         return DataStandard::printStandardData();
 
         /*if (!empty($tel)) {
