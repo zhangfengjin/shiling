@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Utils\DataStandard;
+use App\Utils\RegHelper;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,16 +72,30 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $account = $request->input('phone');
-        $credentials = array(
-            "tel" => $account
-        );
-        $credentials ["password"] = $request->input('password');
-        if ($this->guard()->attempt($credentials, true)) {
-            $user = Auth::user();
-            $token = empty($user->im_token) ? DataStandard::getToken($user->id) : $user->im_token;
-            Cache::put($token, $token, 60 * 24 * 365);
-            return DataStandard::getStandardData(["token" => $token]);
+        $login = false;
+        $credentials = [];
+        if (!empty($account)) {
+            if (RegHelper::validateTel($account)) {
+                $credentials["tel"] = $account;
+                $login = true;
+            }
+        } else {
+            $account = $request->input('email');
+            if (RegHelper::validateEmail($account)) {
+                $credentials["email"] = $account;
+                $login = true;
+            }
         }
+        if ($login) {
+            $credentials ["password"] = $request->input('password');
+            if ($this->guard()->attempt($credentials, true)) {
+                $user = Auth::user();
+                $token = empty($user->im_token) ? DataStandard::getToken($user->id) : $user->im_token;
+                Cache::put($token, $token, 60 * 24 * 365);
+                return DataStandard::getStandardData(["token" => $token]);
+            }
+        }
+
         return DataStandard::getStandardData('', "登录失败", 201);
     }
 
