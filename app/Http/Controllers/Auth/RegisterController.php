@@ -84,7 +84,7 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $tel = $request->input('tel');
+        $tel = $request->input('phone');
         $email = $request->input('email');
         $userService = new UserService ();
         if (RegHelper::validateTel($tel)) {

@@ -70,7 +70,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $account = $request->input('tel');
+        $account = $request->input('phone');
         $credentials = array(
             "tel" => $account
         );

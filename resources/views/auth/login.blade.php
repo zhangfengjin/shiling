@@ -26,7 +26,7 @@
         $(function () {
             function postLogin() {
                 var data={
-                    "tel":"15510249632",
+                    "phone":"15510249632",
                     "password":"111111"
                 };
                 CommonUtil.requestService('/auth/login', data, true, "post",

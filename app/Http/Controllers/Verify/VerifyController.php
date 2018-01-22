@@ -19,7 +19,7 @@ class VerifyController extends Controller
      */
     public function code(Request $request)
     {
-        $tel = $request->input('tel');
+        $tel = $request->input('phone');
         $email = $request->input('email');
         $telEmail = new TelEmailService();
         $verifyService = new VerifyService();

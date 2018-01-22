@@ -73,7 +73,7 @@ class ResetPasswordController extends Controller
      */
     public function reset(Request $request)
     {
-        $tel = $request->input('tel');
+        $tel = $request->input('phone');
         $email = $request->input('email');
         $userService = new UserService();
         $account = "";

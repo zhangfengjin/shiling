@@ -63,14 +63,14 @@ class UserService extends CommonService
     {
         $input['im_token'] = "";
         $wyIM = new WyIMHelper();
-        $ret = $wyIM->createUserId($input['tel']);
+        $ret = $wyIM->createUserId($input['phone']);
         if ($ret['code'] === 200) {
             $input['im_token'] = $ret["info"]["token"];
         } else {
             Log::info(json_encode($ret));
         }
         $user = new User();
-        $user->tel = $input["tel"];
+        $user->tel = $input["phone"];
         $user->password = bcrypt($input["password"]);
         $user->im_token = $input["im_token"];
         $user->save();

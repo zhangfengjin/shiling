@@ -41,7 +41,7 @@
         $(function () {
             function postLogin() {
                 var data = {
-                    "tel": "15510249631212121",
+                    "phone": "15510249631212121",
                     "email": "15510249632",
                     "password": "111111"
                 };
