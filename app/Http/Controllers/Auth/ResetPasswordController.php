@@ -12,6 +12,7 @@ use App\Utils\RegHelper;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ResetPasswordController extends Controller
 {
@@ -66,6 +67,12 @@ class ResetPasswordController extends Controller
         return view("auth.reset");
     }
 
+    private $basicValidator = [
+        'password' => 'required|min:6',
+        'confirm' => 'required|min:6',
+        'verify' => 'required|numeric|digits:6'
+    ];
+
     /**
      * 修改密码
      * @param Request $request
@@ -73,6 +80,11 @@ class ResetPasswordController extends Controller
      */
     public function reset(Request $request)
     {
+        $input = $request->all();
+        $validate = Validator::make($input, $this->basicValidator);
+        if ($validate->fails()) {
+            return DataStandard::getStandardData($validate->errors(), "参数输入错误", 10210);
+        }
         $password = $request->input('password');
         $confirm = $request->input('confirm');
         if ($password == $confirm) {

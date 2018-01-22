@@ -83,8 +83,20 @@ class RegisterController extends Controller
         return Auth::guard();
     }
 
+    private $basicValidator = [
+        'username' => 'required|max:60',
+        'password' => 'required|min:6',
+        'verify' => 'required|numeric|digits:6',
+        'subject'=>'required|numeric'
+    ];
+
     public function register(Request $request)
     {
+        $input = $request->all();
+        $validate = Validator::make($input, $this->basicValidator);
+        if ($validate->fails()) {
+            return DataStandard::getStandardData($validate->errors(), "参数输入错误", 10210);
+        }
         $code = $request->input('verify');
         $tel = $request->input('phone');
         $email = $request->input('email');

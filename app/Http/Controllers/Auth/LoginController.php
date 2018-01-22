@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -64,6 +65,10 @@ class LoginController extends Controller
         return Auth::guard();
     }
 
+    private $basicValidator = [
+        'password' => 'required'
+    ];
+
     /**
      * 登录
      * @param Request $request
@@ -71,6 +76,11 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        $input = $request->all();
+        $validate = Validator::make($input, $this->basicValidator);
+        if ($validate->fails()) {
+            return DataStandard::getStandardData($validate->errors(), "参数输入错误", 10210);
+        }
         $account = $request->input('phone');
         $login = false;
         $credentials = [];
@@ -95,7 +105,6 @@ class LoginController extends Controller
                 return DataStandard::getStandardData(["token" => $token]);
             }
         }
-
         return DataStandard::getStandardData('', "登录失败", 201);
     }
 
