@@ -35,7 +35,7 @@ class UserService extends CommonService
      */
     public function uniqueTel($tel)
     {
-        return User::where("tel", '=', $tel)->count();
+        return User::where("phone", '=', $tel)->count();
     }
 
 
@@ -63,14 +63,25 @@ class UserService extends CommonService
     {
         $input['im_token'] = "";
         $wyIM = new WyIMHelper();
-        $ret = $wyIM->createUserId($input['phone']);
+        $ret = $wyIM->createUserId($input['account']);
         if ($ret['code'] === 200) {
             $input['im_token'] = $ret["info"]["token"];
         } else {
             Log::info(json_encode($ret));
         }
         $user = new User();
-        $user->tel = $input["phone"];
+        $keys = [
+            "phone" => "phone",
+            "email" => "email",
+            "username" => "name",
+            "subject" => "course_id",
+            "role_id" => "role_id"
+        ];
+        foreach ($keys as $key => $val) {
+            if (isset($input[$key])) {
+                $user->$val = $input[$key];
+            }
+        }
         $user->password = bcrypt($input["password"]);
         $user->im_token = $input["im_token"];
         $user->save();
@@ -113,7 +124,7 @@ class UserService extends CommonService
         $total = User::whereRaw($where)->count();
         //要查询的字段
         $select = [
-            'u.id', 'u.name', 'u.tel', 'u.email'
+            'u.id', 'u.name', 'u.phone', 'u.email'
         ];
         $roleName = DB::raw("role.name as role_name");
         array_push($select, $roleName);
@@ -189,7 +200,8 @@ class UserService extends CommonService
         })->export('xlsx');
     }
 
-    public function import(){
+    public function import()
+    {
 
 
     }

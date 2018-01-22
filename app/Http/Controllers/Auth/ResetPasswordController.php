@@ -50,7 +50,7 @@ class ResetPasswordController extends Controller
      */
     public function username()
     {
-        return "tel";
+        return "phone";
     }
 
     /**
@@ -109,7 +109,7 @@ class ResetPasswordController extends Controller
             if (RegHelper::validateEmail($account)) {
                 $user = $userService->resetPWD("email", $account, $password);
             } else if (RegHelper::validateTel($account)) {
-                $user = $userService->resetPWD("tel", $account, $password);
+                $user = $userService->resetPWD("phone", $account, $password);
             }
             $this->guard()->login($user); // 登录
             return DataStandard::getStandardData();

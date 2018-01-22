@@ -53,7 +53,7 @@ class LoginController extends Controller
      */
     public function username()
     {
-        return "tel";
+        return "phone";
     }
 
     /**
@@ -76,7 +76,7 @@ class LoginController extends Controller
         $credentials = [];
         if (!empty($account)) {
             if (RegHelper::validateTel($account)) {
-                $credentials["tel"] = $account;
+                $credentials["phone"] = $account;
                 $login = true;
             }
         } else {

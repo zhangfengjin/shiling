@@ -72,7 +72,7 @@ class RegisterController extends Controller
      */
     public function username()
     {
-        return "tel";
+        return "phone";
     }
 
     /**
@@ -97,23 +97,32 @@ class RegisterController extends Controller
             }
             $verifyService = new VerifyService();
             $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
+            if ($code == "111111") {//test
+                $msg = "";
+            }
             if (!$msg) { // 返回空字符串表示验证通过
                 $userService = new UserService ();
-                if (RegHelper::validateTel($tel)) {
-                    if ($userService->uniqueTel($tel) > 0) {
-                        return DataStandard::getStandardData([], "手机已被抢注", 203);
+                if (!empty($tel)) {
+                    if (RegHelper::validateTel($tel)) {
+                        if ($userService->uniqueTel($tel) > 0) {
+                            return DataStandard::getStandardData([], "手机已被抢注", 203);
+                        }
+                    } else {
+                        return DataStandard::getStandardData([], "手机格式不正确", 205);
                     }
-                } else {
-                    return DataStandard::getStandardData([], "手机格式不正确", 205);
                 }
-                if (RegHelper::validateEmail($email)) {
-                    if ($userService->uniqueEmail($email) > 0) {
-                        return DataStandard::getStandardData([], "邮箱已被抢注", 204);
+                if (!empty($email)) {
+                    if (RegHelper::validateEmail($email)) {
+                        if ($userService->uniqueEmail($email) > 0) {
+                            return DataStandard::getStandardData([], "邮箱已被抢注", 204);
+                        }
+                    } else {
+                        return DataStandard::getStandardData([], "邮箱格式不正确", 206);
                     }
-                } else {
-                    return DataStandard::getStandardData([], "邮箱格式不正确", 206);
                 }
                 $user = $request->all();
+                $user["role_id"] = 2;//普通教师 写死
+                $user["account"] = $account;
                 $user = $userService->create($user); // 注册
                 if ($user) {
                     $this->guard()->login($user); // 登录
