@@ -28,7 +28,7 @@ class PayController extends Controller
     {
         $payType = $request->input('payType');
         if (empty($this->config)) {
-            return DataStandard::getStandardData('', "输入参数错误", 12001);
+            return DataStandard::getStandardData([], config("validator.100"), 100);
         }
         $config_biz = [
             'body' => 'APP支付测试',
@@ -42,7 +42,7 @@ class PayController extends Controller
             $wxOrder = $pay->driver('wechat')->gateway('app')->pay($config_biz);
             return DataStandard::getStandardData($wxOrder);
         } catch (\Exception $e) {
-            return DataStandard::getStandardData([], $e->getMessage(), 10);
+            return DataStandard::getStandardData([],config("validator.201"), 201);
         }
     }
 

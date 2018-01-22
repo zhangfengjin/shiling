@@ -79,7 +79,7 @@ class LoginController extends Controller
         $input = $request->all();
         $validate = Validator::make($input, $this->basicValidator);
         if ($validate->fails()) {
-            return DataStandard::getStandardData($validate->errors(), "参数输入错误", 10210);
+            return DataStandard::getStandardData($validate->errors(),  config("validator.100"), 100);
         }
         $account = $request->input('phone');
         $login = false;
@@ -105,7 +105,7 @@ class LoginController extends Controller
                 return DataStandard::getStandardData(["token" => $token]);
             }
         }
-        return DataStandard::getStandardData('', "登录失败", 201);
+        return DataStandard::getStandardData([], config("validator.120"), 120);
     }
 
 

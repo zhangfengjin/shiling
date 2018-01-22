@@ -30,17 +30,17 @@ class VerifyController extends Controller
                 $telEmail->sendTelVerify($code, $tel);
                 $account = $tel;
             } else {
-                return DataStandard::getStandardData([], "手机格式不正确", 205);
+                return DataStandard::getStandardData([], config("validator.114"), 114);
             }
         } else if (!empty($email)) {
             if (RegHelper::validateEmail($email)) {
                 $telEmail->sendEmailVerify($code, $email);
                 $account = $email;
             } else {
-                return DataStandard::getStandardData([], "邮箱格式不正确", 204);
+                return DataStandard::getStandardData([],config("validator.115"), 115);
             }
         } else {
-            return DataStandard::getStandardData([], "输入参数不正确", 12000);
+            return DataStandard::getStandardData([],config("validator.100"), 100);
         }
         $verifyService->saveCode($code, $account);//缓存code
         return DataStandard::printStandardData();

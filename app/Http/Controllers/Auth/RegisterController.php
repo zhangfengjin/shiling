@@ -95,7 +95,7 @@ class RegisterController extends Controller
         $input = $request->all();
         $validate = Validator::make($input, $this->basicValidator);
         if ($validate->fails()) {
-            return DataStandard::getStandardData($validate->errors(), "参数输入错误", 10210);
+            return DataStandard::getStandardData($validate->errors(),config("validator.100"), 100);
         }
         $code = $request->input('verify');
         $tel = $request->input('phone');
@@ -114,19 +114,19 @@ class RegisterController extends Controller
                 if (!empty($tel)) {
                     if (RegHelper::validateTel($tel)) {
                         if ($userService->uniqueTel($tel) > 0) {
-                            return DataStandard::getStandardData([], "手机已被抢注", 203);
+                            return DataStandard::getStandardData([],config("validator.117"),117);
                         }
                     } else {
-                        return DataStandard::getStandardData([], "手机格式不正确", 205);
+                        return DataStandard::getStandardData([],config("validator.114"), 114);
                     }
                 }
                 if (!empty($email)) {
                     if (RegHelper::validateEmail($email)) {
                         if ($userService->uniqueEmail($email) > 0) {
-                            return DataStandard::getStandardData([], "邮箱已被抢注", 204);
+                            return DataStandard::getStandardData([], config("validator.116"), 116);
                         }
                     } else {
-                        return DataStandard::getStandardData([], "邮箱格式不正确", 206);
+                        return DataStandard::getStandardData([],config("validator.115"), 115);
                     }
                 }
                 $user = $request->all();
@@ -140,10 +140,10 @@ class RegisterController extends Controller
                     return DataStandard::getStandardData(["token" => $token]);
                 }
             }
-            return DataStandard::getStandardData([], $msg, 12002);
+            return DataStandard::getStandardData([], $msg, 123);
         }
 
-        return DataStandard::getStandardData([], "注册失败", 210);
+        return DataStandard::getStandardData([],config("validator.119"), 119);
     }
 
     /**

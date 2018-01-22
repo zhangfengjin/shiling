@@ -19,13 +19,13 @@ class Api
         $contentType = $request->header('content-type');
         $contentType = strtolower($contentType);
         if (strpos($contentType, 'application/json') === false) {
-            return DataStandard::printStandardData([], "验证失败", 110);
+            return DataStandard::printStandardData([], config("validator.110"), 110);
         }
         //校验
         $appKey = $request->input('appKey');//appkey
         $appKeys = config("app.app_key");
         if (empty($appKey) || !isset($appKeys[$appKey])) {
-            return DataStandard::printStandardData([], "验证失败", 111);
+            return DataStandard::printStandardData([], config("validator.111"), 111);
         }
         return $next($request);
     }

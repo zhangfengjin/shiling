@@ -83,7 +83,7 @@ class ResetPasswordController extends Controller
         $input = $request->all();
         $validate = Validator::make($input, $this->basicValidator);
         if ($validate->fails()) {
-            return DataStandard::getStandardData($validate->errors(), "参数输入错误", 10210);
+            return DataStandard::getStandardData($validate->errors(),config("validator.100"), 100);
         }
         $password = $request->input('password');
         $confirm = $request->input('confirm');
@@ -98,7 +98,7 @@ class ResetPasswordController extends Controller
                         $account = $tel;
                     }
                 } else {
-                    return DataStandard::getStandardData([], "手机格式不正确", 205);
+                    return DataStandard::getStandardData([],config("validator.114"), 114);
                 }
             } else if (!empty($email)) {
                 if (RegHelper::validateEmail($email)) {
@@ -106,13 +106,13 @@ class ResetPasswordController extends Controller
                         $account = $email;
                     }
                 } else {
-                    return DataStandard::getStandardData([], "邮箱已被抢注", 204);
+                    return DataStandard::getStandardData([], config("validator.116"), 116);
                 }
             } else {
-                return DataStandard::getStandardData([], "输入参数不正确", 12000);
+                return DataStandard::getStandardData([], config("validator.100"), 100);
             }
             if (empty($account)) {
-                return DataStandard::getStandardData([], "账号未注册", 12001);
+                return DataStandard::getStandardData([], config("validator.118"), 118);
             }
             $code = $request->input('verify');
             $verifyService = new VerifyService();
@@ -128,9 +128,9 @@ class ResetPasswordController extends Controller
                 $this->guard()->login($user); // 登录
                 return DataStandard::getStandardData();
             }
-            return DataStandard::getStandardData([], $msg, 12002);
+            return DataStandard::getStandardData([], $msg, 123);
         }
-        return DataStandard::getStandardData([], "两次输入的密码不一致", 12003);
+        return DataStandard::getStandardData([],config("validator.121"), 121);
     }
 
 }

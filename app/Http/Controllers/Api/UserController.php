@@ -38,7 +38,7 @@ class UserController extends Controller
         $input = $request->all();
         $validate = Validator::make($input, $this->basicValidator);
         if ($validate->fails()) {
-            return DataStandard::getStandardData($validate->errors(), "参数输入错误", 10210);
+            return DataStandard::getStandardData($validate->errors(),config("validator.100"), 100);
         }
         $userService = new UserService();
         $userService->update($input, $userId);

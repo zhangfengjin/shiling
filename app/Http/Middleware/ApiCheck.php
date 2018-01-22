@@ -17,16 +17,15 @@ class ApiCheck
      */
     public function handle($request, Closure $next)
     {
-        $sign = $request->input('sign');//签名
         $token = $request->input('token');//登录token 用户唯一标识
         if (empty($token)) {
-            return DataStandard::printStandardData([],"验证失败", 123);
+            return DataStandard::printStandardData([], config("validator.112"), 112);
         }
         //todo
         if (true) {//Cache::has($token)
             return $next($request);
         } else {
-            return DataStandard::printStandardData([],"未登录", 124);
+            return DataStandard::printStandardData([], config("validator.113"), 113);
         }
     }
 }
