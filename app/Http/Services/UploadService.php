@@ -9,6 +9,7 @@
 namespace App\Http\Services;
 
 
+use App\Models\Attachment;
 use App\Utils\UploadHelper;
 
 class UploadService
@@ -20,6 +21,9 @@ class UploadService
      */
     public function uploadfile($action)
     {
+        if ($_FILES["file"]["size"] == 0) {
+            return false;
+        }
         header("Content-Type:text/html;charset=utf-8");
         date_default_timezone_set("Asia/chongqing");
         $filepath = base_path("config") . "/upload.json";
@@ -28,7 +32,7 @@ class UploadService
         switch (htmlspecialchars($action)) {
             case 'uploadimage' :
                 $config = array(
-                    "savePath" =>$initConfig ['imagePathFormat'],
+                    "savePath" => $initConfig ['imagePathFormat'],
                     "maxSize" => $initConfig ['imageMaxSize'],
                     "allowFiles" => $initConfig ['imageAllowFiles'],
                     "url" => $initConfig ['imagePathFormat']
@@ -38,7 +42,7 @@ class UploadService
             case 'uploadfile' :
             default :
                 $config = array(
-                    "savePath" =>$initConfig ['filePathFormat'],
+                    "savePath" => $initConfig ['filePathFormat'],
                     "maxSize" => $initConfig ['fileMaxSize'],
                     "allowFiles" => $initConfig ['fileAllowFiles']
                 );
@@ -62,6 +66,17 @@ class UploadService
          */
 
         /* 返回数据 */
-        return $up->getFileInfo();
+        $file = $up->getFileInfo();
+        $fieldpath = $file ['url'];
+        $position = substr($fieldpath, 0, strripos($fieldpath, '/') + 1);
+        $filename = substr($fieldpath, strripos($fieldpath, '/') + 1, strlen($fieldpath) - strripos($fieldpath, '/') - 1);
+        $attachment = new Attachment();
+        $attachment->diskposition = $position;
+        $attachment->filename = $filename;
+        $attachment->filetype = $file ['type'];
+        $attachment->filesize = $file ['size'];
+        $attachment->save();
+        $file["id"] = $attachment->id;
+        return $file;
     }
 }

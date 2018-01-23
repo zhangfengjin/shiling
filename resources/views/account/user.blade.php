@@ -104,9 +104,12 @@
             background-color: #fff;
             border-color: #ccc;
         }
-        #uploadcover{
+
+        #uploadcover {
             position: absolute;
-            margin-top: 45px;
+            margin-top: -45px;
+            width: 54px;
+            overflow: hidden;
         }
     </style>
     <script type="application/javascript">
@@ -144,8 +147,9 @@
                         "action='/user/import?action=uploadfile' " +
                         "enctype='multipart/form-data' method='POST' " +
                         "target='refresh_iframe'>" +
-                        "<button class='uploadImg' style='z-index: -1; cursor: pointer;' event='1' class='btn btn-default' >导出</button>" +
-                        "<input style='FILTER: alpha(opacity=0); opacity: 0; -moz-opacity: 0; -khtml-opacity: 0;' id='uploadcover' name='upfile' class='uploadImg' type='file' accept='.xlsx,.xls'>" +
+                        "<button id='uploadBtn' class='uploadImg' style='z-index: -1; cursor: pointer;' event='1' class='btn btn-default' >导入</button>" +
+                        "<input style='FILTER: alpha(opacity=0); opacity: 0; -moz-opacity: 0; -khtml-opacity: 0;' " +
+                        "id='uploadcover' name='file' class='uploadImg' type='file' accept='.xlsx,.xls'>" +
                         "<input name='_token' type='hidden' value=''>" +
                         "</form>" +
                         "<iframe id='refresh_iframe' name='refresh_iframe'style='display: none;'>上传成功" +
@@ -154,6 +158,7 @@
                     $("input[name='_token']").val($('meta[name="csrf-token"]').attr('content'));
                     $("#uploadcover").change(function () {// 上传资料封面
                         $('#uploadimg_form').submit();
+                        $("#uploadimg_form input").attr("disabled", "disabled");
                     });
                     $("#refresh_iframe").load(
                         function () {
@@ -161,10 +166,19 @@
                                 window.frames['refresh_iframe'].document.body)
                                 .html();
                             if (data != null && data != "") {
-                                console.log(111);
                                 data = CommonUtil.parseToJson(data);
-                                $("#datumCover").attr("src", data.url);// 更换上传的封面
-                                $("#datumCover").attr("iconid", data.attid);// 更换上传的封面id
+                                if (data.code == 0) {
+                                    alert("导入成功");
+                                    CommonUtil.redirect("/user");
+                                } else if (data.code != 601) {
+                                    var message = data.message;
+                                    $.each(data.data, function () {
+                                        message += "\r\n";
+                                        message += this;
+                                    });
+                                    alert(message);
+                                }
+                                $("#uploadimg_form input").removeAttr("disabled");
                             }
                         });
                 },

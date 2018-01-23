@@ -26,7 +26,11 @@ class UserService extends CommonService
      */
     public function uniqueEmail($email)
     {
-        return User::where("email", '=', $email)->count();
+        $where = [
+            "email" => $email,
+            "flag" => 0
+        ];
+        return User::where($where)->count();
     }
 
     /**
@@ -36,7 +40,11 @@ class UserService extends CommonService
      */
     public function uniqueTel($tel)
     {
-        return User::where("phone", '=', $tel)->count();
+        $where = [
+            "phone" => $tel,
+            "flag" => 0
+        ];
+        return User::where($where)->count();
     }
 
 
@@ -50,7 +58,11 @@ class UserService extends CommonService
      */
     public function resetPwd($account, $reqaccount, $password)
     {
-        $user = User::where($account, '=', $reqaccount)->first();
+        $where = [
+            "$account" => $reqaccount,
+            "flag" => 0
+        ];
+        $user = User::where($where)->first();
         $user->password = bcrypt($password);
         $user->save();
         return $user;
@@ -96,7 +108,11 @@ class UserService extends CommonService
      */
     public function update($input, $userId)
     {
-        $user = User::find($userId);
+        $where = [
+            "id" => $userId,
+            "flag" => 0
+        ];
+        $user = User::where($where)->find($userId);
         if ($user) {
             $user->name = $input["name"];
             $user->save();
@@ -110,7 +126,11 @@ class UserService extends CommonService
      */
     public function show($userId)
     {
-        $user = User::find($userId);
+        $where = [
+            "id" => $userId,
+            "flag" => 0
+        ];
+        $user = User::where($where)->find($userId);
         return $user;
     }
 
@@ -139,7 +159,7 @@ class UserService extends CommonService
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = User::whereRaw($where)->count();
+        $total = User::whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
             'u.id', 'u.name', 'u.phone', 'u.email'
@@ -151,6 +171,7 @@ class UserService extends CommonService
         $sSortDir = "asc";
         $rows = DB::table("users as u")
             ->join("roles as role", "role.id", "=", "u.role_id")
+            ->where("u.flag", 0)
             ->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
         foreach ($rows as $row) {
@@ -218,8 +239,12 @@ class UserService extends CommonService
         })->export('xlsx');
     }
 
-    public function import(Request $request)
+    /**
+     * @param $file
+     */
+    public function import($file)
     {
 
+        return true;
     }
 }

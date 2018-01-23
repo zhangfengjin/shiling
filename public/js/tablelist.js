@@ -370,6 +370,7 @@ TableList = function (me) {
                     fixedHeader: fixedHeader
                 });
                 if (toolbar) {
+                    $(".table_toolbar").css("cssText","overflow:hidden !important;");
                     $(".table_toolbar").children("div:first").append("<div class='btn-toolbar'></div>");
                     $.each(toolbar, function (key, obj) {
                         if (key == "custom") {
