@@ -11,7 +11,7 @@ return [
         "name" => "用户管理", "icon" => "cog", "href" => "", "childrens" =>
         [
             [
-                "name" => "用户列表", "href" => "/config/price"
+                "name" => "用户列表", "href" => "/user"
             ],
             [
                 "name" => "用户审核", "href" => "#"

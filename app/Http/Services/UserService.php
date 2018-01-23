@@ -113,6 +113,23 @@ class UserService extends CommonService
         return $user;
     }
 
+
+    /**
+     * @param $userIds
+     * @return bool
+     */
+    public function delete($userIds)
+    {
+        $ids = array_filter(explode(",", $userIds));
+        if ($userIds) {
+            $updateInfo = [
+                'flag' => 1
+            ];
+            User::whereIn("id", $ids)->update($updateInfo);
+        }
+        return true;
+    }
+
     /**
      * 获取列表
      * @return array
@@ -202,7 +219,6 @@ class UserService extends CommonService
 
     public function import()
     {
-
 
     }
 }

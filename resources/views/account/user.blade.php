@@ -105,7 +105,6 @@
             return me = {
                 _initOwn: function () {
                     $("#uploadcover").change(function() {// 上传资料封面
-                        alert(12);
                         $('#uploadimg_form').submit();
                     });
                     $("#refresh_iframe").load(
@@ -115,6 +114,7 @@
                                 .html();
                             // 若iframe携带返回数据，则显示在feedback中
                             if (data != null && data != "") {
+                                console.log(111);
                                 data = CommonUtil.parseToJson(data);
                                 $("#datumCover").attr("src", data.url);// 更换上传的封面
                                 $("#datumCover").attr("iconid", data.attid);// 更换上传的封面id

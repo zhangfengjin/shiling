@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -73,21 +74,21 @@ class UserController extends Controller
     public function update(Request $request, $userId)
     {
         $input = $request->all();
-        $input["role_id"] = 2;
         $userService = new UserService();
         $userService->update($input, $userId);
         return DataStandard::getStandardData();
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return array
      */
     public function destroy($id)
     {
         //
+        $userService = new UserService();
+        $userService->delete($id);
+        return DataStandard::getStandardData();
     }
 
 
