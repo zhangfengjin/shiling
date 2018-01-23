@@ -12,6 +12,7 @@ namespace App\Http\Services;
 use App\User;
 use App\Utils\DataStandard;
 use App\Utils\WyIMHelper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -217,7 +218,7 @@ class UserService extends CommonService
         })->export('xlsx');
     }
 
-    public function import()
+    public function import(Request $request)
     {
 
     }

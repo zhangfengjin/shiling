@@ -58,27 +58,14 @@
                                         </button>
                                     </div>
 
-                                    <li><label>封面</label>
-                                        <div>
-                                            <form id="uploadimg_form" style="float: left;"
-                                                  action="{{url('/user/import?action=uploadfile')}}"
-                                                  enctype="multipart/form-data" method="POST"
-                                                  target="refresh_iframe">
-                                                <input id="uploadcover" name="upfile" class="uploadImg"
-                                                       type="file"
-                                                       accept=".xlsx,.xls">
-                                                <input name="_token" type="hidden" value="{{csrf_token() }}">
-                                            </form>
-                                            <iframe id="refresh_iframe" name="refresh_iframe"
-                                                    style="display: none;">上传成功</iframe>
-                                        </div>
-                                    </li>
+
                                 </ul>
 
                             </div>
                         </form>
                     </div>
                 </div>
+
                 <div class="x_content">
                     <table id="put_in_account_table" class="table table-striped table-bordered bulk_action">
                     </table>
@@ -91,7 +78,37 @@
     <!-- bootstrap-daterangepicker -->
     <script src="{{url('js/plugins/moment/moment-with-locales.min.js')}}"></script> {{--日期处理 带有国际化语言的--}}
     <script src="{{url('js/plugins/daterangepicker/daterangepicker.js')}}"></script> {{--日期区间--}}
-
+    <style>
+        .uploadImg {
+            margin-right: 5px;
+            border-image: none;
+            overflow: hidden;
+            cursor: pointer;
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            margin-left: 5px;
+            color: #333;
+            background-color: #fff;
+            border-color: #ccc;
+        }
+        #uploadcover{
+            position: absolute;
+            margin-top: 45px;
+        }
+    </style>
     <script type="application/javascript">
         var userUrl = "/user";
         $(function () {
@@ -104,23 +121,6 @@
             var searchInfo;
             return me = {
                 _initOwn: function () {
-                    $("#uploadcover").change(function() {// 上传资料封面
-                        $('#uploadimg_form').submit();
-                    });
-                    $("#refresh_iframe").load(
-                        function() {
-                            var data = $(
-                                window.frames['refresh_iframe'].document.body)
-                                .html();
-                            // 若iframe携带返回数据，则显示在feedback中
-                            if (data != null && data != "") {
-                                console.log(111);
-                                data = CommonUtil.parseToJson(data);
-                                $("#datumCover").attr("src", data.url);// 更换上传的封面
-                                $("#datumCover").attr("iconid", data.attid);// 更换上传的封面id
-                            }
-                        });
-
                     $("#search").on("click", function () {
                         me._searchList();
                     });
@@ -137,6 +137,36 @@
                 init: function () {
                     me._initOwn();
                     me._createList();
+                },
+                _import: function (content) {
+                    $(content).append("<div style='float:left;'>" +
+                        "<form id='uploadimg_form' " +
+                        "action='/user/import?action=uploadfile' " +
+                        "enctype='multipart/form-data' method='POST' " +
+                        "target='refresh_iframe'>" +
+                        "<button class='uploadImg' style='z-index: -1; cursor: pointer;' event='1' class='btn btn-default' >导出</button>" +
+                        "<input style='FILTER: alpha(opacity=0); opacity: 0; -moz-opacity: 0; -khtml-opacity: 0;' id='uploadcover' name='upfile' class='uploadImg' type='file' accept='.xlsx,.xls'>" +
+                        "<input name='_token' type='hidden' value=''>" +
+                        "</form>" +
+                        "<iframe id='refresh_iframe' name='refresh_iframe'style='display: none;'>上传成功" +
+                        "</iframe>" +
+                        "</div>");
+                    $("input[name='_token']").val($('meta[name="csrf-token"]').attr('content'));
+                    $("#uploadcover").change(function () {// 上传资料封面
+                        $('#uploadimg_form').submit();
+                    });
+                    $("#refresh_iframe").load(
+                        function () {
+                            var data = $(
+                                window.frames['refresh_iframe'].document.body)
+                                .html();
+                            if (data != null && data != "") {
+                                console.log(111);
+                                data = CommonUtil.parseToJson(data);
+                                $("#datumCover").attr("src", data.url);// 更换上传的封面
+                                $("#datumCover").attr("iconid", data.attid);// 更换上传的封面id
+                            }
+                        });
                 },
                 _createList: function () {
                     var aoColumns = [{
@@ -164,6 +194,11 @@
                             "export": {
                                 "info": "导出", "func": function (ids) {
                                     location.href = CommonUtil.getRootPath() + userUrl + "/export?searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
+                                }
+                            },
+                            "custom": {
+                                "info": "导入", "func": function (content) {
+                                    me._import(content);
                                 }
                             }
                         },

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Http\Services\UploadService;
 use App\Http\Services\UserService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
@@ -115,6 +116,13 @@ class UserController extends Controller
      */
     public function import(Request $request)
     {
+        Log::info(123);
+        $action = $request->input('action');
+        $uploadService = new UploadService();
+        $file = $uploadService->uploadfile($action);
+        Log::info(123);
+        return json_encode($file);
+
         $userService = new UserService($request);
         $userService->import();
     }
