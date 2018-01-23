@@ -3,13 +3,11 @@
     <div id="detail" class="x_content detail_content">
         <form class="form-horizontal form-label-left">
             <div class="form-group">
-                <label class="control-label col-md-2 col-sm-2 col-xs-12">驳回原因</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
-                    <div class="checkbox">
-                        <label class="col-md-12 col-sm-12 col-xs-12">
-                            <textarea id="other" rows="4" class="form-control" placeholder="其他原因"></textarea>
-                        </label>
-                    </div>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12">微博uid</label>
+                <div class="col-md-8 col-sm-8 col-xs-8">
+                    <input id="user_id" type="text" class="form-control" placeholder="使用官方微博uid"
+                           required data-parsley-required-message="微博uid不允许为空"
+                           data-parsley-type="number">
                 </div>
             </div>
         </form>
@@ -243,6 +241,11 @@
                                     return params;
                                 },
                                 "func": me._refuse
+                            },
+                            "edit": {
+                                "display": 1,
+                                "info": "编辑",
+                                "func": me._edit
                             }
                         }
                     };
@@ -330,6 +333,29 @@
                                 TableList.optTable({
                                     "tableId": tableId,
                                     "url": userUrl + "/refuse/" + ids,
+                                    "type": "put",
+                                    "async": true,
+                                    "reqData": requestData,
+                                    "successfn": successfn,
+                                    "failfn": usable
+                                });
+                            };
+                            me._openlayer(refuseRequest);
+                        } else {
+                            layer.msg("选中的记录有审核未通过的客户");
+                        }
+                    }
+                },
+                _edit: function (ids, full, obj) {
+                    if (ids) {
+                        if (!me._judgeStatus(full, "未通过")) {
+                            var refuseRequest = function (requestData, successfn, usable) {
+                                var reason = [];
+                                reason.push($("#other").val());
+                                requestData.reason = reason;
+                                TableList.optTable({
+                                    "tableId": tableId,
+                                    "url": userUrl + "/" + ids,
                                     "type": "put",
                                     "async": true,
                                     "reqData": requestData,
