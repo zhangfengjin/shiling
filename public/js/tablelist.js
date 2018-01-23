@@ -513,16 +513,12 @@ TableList = function (me) {
                     offset: "50px",
                     btn: ['确定', '取消']
                 }, function () {
-                    delFunc(ids);
-                    parent.layer.msg('删除成功', {
-                        icon: 1,
-                        time: 800,
-                        offset: "50px"
+                    delFunc(ids,function(tableId){
+                        me.refresh(tableId);
                     });
                 });
             }
-        }
-        ,
+        },
         _optRecord: function (tableId, opts) {
             for (var op in opts) {
                 $("#" + tableId).off("click", "font[opt='" + op + "']");

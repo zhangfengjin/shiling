@@ -20,11 +20,15 @@ class DataStandard
      */
     public static function getListData($sEcho, $totalCount, $rows = [])
     {
+        if ($sEcho) {
+            return [
+                "sEcho" => $sEcho,
+                "iTotalRecords" => $totalCount,
+                "iTotalDisplayRecords" => $totalCount,
+                "aaData" => $rows
+            ];
+        }
         return [
-            "sEcho" => $sEcho,
-            "iTotalRecords" => $totalCount,
-            "iTotalDisplayRecords" => $totalCount,
-            "aaData" => $rows,
             "count" => $totalCount,
             "data" => $rows
         ];

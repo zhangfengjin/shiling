@@ -199,6 +199,9 @@
                         "aoColumns": aoColumns,
                         "order": [[0, "desc"]],
                         "toolbar": {
+                            "del": {
+                                "info": "删除", "func": me._del
+                            },
                             "pass": {
                                 "info": "批量通过", "func": me._egis
                             },
@@ -270,6 +273,30 @@
                         }
                     }
                     return mulStatus;
+                },
+                _del: function (ids, fn) {
+                    if (ids) {
+                        TableList.optTable({
+                            "tableId": tableId,
+                            "url": userUrl + "/" + ids,
+                            "type": "DELETE",
+                            "async": true,
+                            "successfn": function () {
+                                parent.layer.msg('删除成功', {
+                                    icon: 1,
+                                    time: 800,
+                                    offset: "50px"
+                                });
+                            },
+                            "failfn": function () {
+                                parent.layer.msg('删除失败', {
+                                    icon: 1,
+                                    time: 800,
+                                    offset: "50px"
+                                });
+                            }
+                        });
+                    }
                 },
                 _egis: function (ids, full, obj) {
                     if (ids) {
