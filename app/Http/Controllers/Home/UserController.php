@@ -111,7 +111,6 @@ class UserController extends Controller
     {
         $userService = new UserService($request);
         $userService->export();
-
     }
 
     /**

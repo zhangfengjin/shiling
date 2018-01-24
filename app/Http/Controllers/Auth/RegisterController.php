@@ -87,7 +87,7 @@ class RegisterController extends Controller
         'username' => 'required|max:60',
         'password' => 'required|min:6',
         'verify' => 'required|numeric|digits:6',
-        'subject'=>'required|numeric'
+        'subject'=>'required'
     ];
 
     public function register(Request $request)

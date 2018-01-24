@@ -82,23 +82,48 @@ class UserService extends CommonService
         } else {
             Log::info(json_encode($ret));
         }
-        $user = new User();
-        $keys = [
-            "phone" => "phone",
-            "email" => "email",
-            "username" => "name",
-            "subject" => "course_id",
-            "role_id" => "role_id"
-        ];
-        foreach ($keys as $key => $val) {
-            if (isset($input[$key])) {
-                $user->$val = $input[$key];
+        DB::beginTransaction();
+        try {
+            $user = new User();
+            $keys = [
+                "phone" => "phone",
+                "email" => "email",
+                "username" => "name",
+                "role_id" => "role_id"
+            ];
+            foreach ($keys as $key => $val) {
+                if (isset($input[$key])) {
+                    $user->$val = $input[$key];
+                }
             }
+            $user->password = bcrypt($input["password"]);
+            $user->im_token = $input["im_token"];
+            $user->save();
+            $userId = $user->id;
+            $subjects = [];
+            foreach ($input['subject'] as $subject) {
+                $subjects[] = [
+                    'user_id' => $userId, 'course_id' => $subject['subjectId']
+                ];
+            }
+            if (!empty($subjects)) {
+                DB::table('user_courses')->insert($subjects);
+            }
+            $grades = [];
+            foreach ($input['grade'] as $grade) {
+                $grades[] = [
+                    'user_id' => $userId, 'grade_id' => $grade['gradeId']
+                ];
+            }
+            if (!empty($subjects)) {
+                DB::table('user_grades')->insert($grades);
+            }
+            DB::commit();
+            return $user;
+        } catch (\Exception $ex) {
+            DB::rollback();
+            throw $ex;
         }
-        $user->password = bcrypt($input["password"]);
-        $user->im_token = $input["im_token"];
-        $user->save();
-        return $user;
     }
 
     /**
