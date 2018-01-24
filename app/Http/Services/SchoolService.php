@@ -15,11 +15,27 @@ use Illuminate\Support\Facades\DB;
 
 class SchoolService extends CommonService
 {
+    /**
+     * 获取学校枚举
+     * @return \Illuminate\Support\Collection
+     */
+    public function getSchoolEnum()
+    {
+        $select = [
+            'id', "name"
+        ];
+        return School::where("flag", 0)->get($select);
+    }
+
+    /**
+     * 获取列表
+     * @return array
+     */
     public function getList()
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = School::whereRaw($where)->count();
+        $total = School::whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
             'sch.id'
@@ -31,7 +47,8 @@ class SchoolService extends CommonService
         $sSortDir = "asc";
         $rows = DB::table("schools as sch")
             ->join("areas as area", "area.id", "=", "sch.area_id")
-            ->whereRaw($where)->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
+            ->where("flag", 0)->whereRaw($where)->orderBy($sortField, $sSortDir)
+            ->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
         foreach ($rows as $row) {
             $row->id = strval($row->id);

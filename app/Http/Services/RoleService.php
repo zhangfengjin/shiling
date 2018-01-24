@@ -16,6 +16,15 @@ use Illuminate\Support\Facades\DB;
 class RoleService extends CommonService
 {
     /**
+     * @return $this
+     */
+    public function getRoleEnum()
+    {
+        $select = ["id", "name"];
+        return Role::where("flag", 0)->get($select);
+    }
+
+    /**
      * 获取列表
      * @return array
      */
@@ -23,7 +32,7 @@ class RoleService extends CommonService
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = Role::whereRaw($where)->count();
+        $total = Role::whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
             'id', 'name'
@@ -31,7 +40,8 @@ class RoleService extends CommonService
         //获取查询结果
         $sortField = "id";
         $sSortDir = "asc";
-        $rows = Role::whereRaw($where)->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
+        $rows = Role::whereRaw($where)->where("flag", 0)
+            ->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
         foreach ($rows as $row) {
             $row->id = strval($row->id);

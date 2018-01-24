@@ -13,14 +13,14 @@ use Illuminate\Http\Request;
 
 class CommonService
 {
-    protected $user;
-    protected $eEcho;
-    protected $iDisplayStart;
-    protected $iDisplayLength;
+    protected $user = null;
+    protected $sEcho = 0;
+    protected $iDisplayStart = 0;
+    protected $iDisplayLength = 500;
     protected $searchs = [];
-    protected $allInput;
-    protected $sortField;
-    protected $sSortDir;
+    protected $allInput = [];
+    protected $sortField = "id";
+    protected $sSortDir = "asc";
 
     public function __construct(Request $request = null)
     {

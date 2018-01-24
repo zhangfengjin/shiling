@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Services\DictService;
+use App\Http\Services\RoleService;
+use App\Http\Services\SchoolService;
 use App\Http\Services\UploadService;
 use App\Http\Services\UserService;
 use App\Utils\DataStandard;
@@ -23,7 +25,25 @@ class UserController extends Controller
     public function index()
     {
         //
-        return view("account.user");
+        $roleService = new RoleService();
+        $roles = $roleService->getRoleEnum();//获取角色
+
+        $dictService = new DictService();
+        $titles = $dictService->getDictByType("user_title");//用户职级
+        $courses = $dictService->getDictByType("course");
+        $grades = $dictService->getDictByType("grade");
+
+        $schoolService = new SchoolService();
+        $schools = $schoolService->getSchoolEnum();
+
+        $pages = [
+            "roles" => $roles,
+            "titles" => $titles,
+            "courses" => $courses,
+            "grades" => $grades,
+            "schools" => $schools,
+        ];
+        return view("account.user")->with($pages);
     }
 
     /**
@@ -162,7 +182,7 @@ class UserController extends Controller
                     //年级
                     $dictGrades = $dictService->getDictByType("grade");
                     $grades = explode(";", trim($rows[$idx][$titles["grade"]]));
-                    $gradeIds=[];
+                    $gradeIds = [];
                     foreach ($grades as $grade) {
                         foreach ($dictGrades as $dict) {
                             if ($dict->value == $grade) {

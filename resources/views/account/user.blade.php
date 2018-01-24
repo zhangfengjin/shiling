@@ -3,11 +3,98 @@
     <div id="detail" class="x_content detail_content">
         <form class="form-horizontal form-label-left">
             <div class="form-group">
-                <label class="control-label col-md-2 col-sm-2 col-xs-12">微博uid</label>
-                <div class="col-md-8 col-sm-8 col-xs-8">
-                    <input id="user_id" type="text" class="form-control" placeholder="使用官方微博uid"
-                           required data-parsley-required-message="微博uid不允许为空"
-                           data-parsley-type="number">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">姓名</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="user_name" type="text" class="form-control" placeholder="姓名"
+                           required data-parsley-maxlength="60"
+                           data-parsley-maxlength-message="最长不允许超过60">
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">手机号</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="phone" type="text" class="form-control" placeholder="手机号"
+                           required data-parsley-required-message="手机号不允许为空"
+                           pattern="^1[3|4|5|7|8]\d{9}">
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">邮箱</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="email" type="email" class="form-control" placeholder="邮箱"
+                           required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">继教号</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="unum" type="text" class="form-control" placeholder="继教号">
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">年龄</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="age" type="text" class="form-control" placeholder="年龄">
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">工龄</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="seniority" type="text" class="form-control" placeholder="工龄">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">角色</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="role_id" class="form-control">
+                        @foreach($roles as $role)
+                            <option value="{{$role->id}}">{{$role->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">性别</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="sex" class="form-control">
+                        <option value="0">未知</option>
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                        <option value="3">中性</option>
+                    </select>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">职称</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="user_title" class="form-control">
+                        @foreach($titles as $title)
+                            <option value="{{$title->id}}">{{$title->value}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">学校</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="school" data-placeholder="学校"
+                            class="form-control chosen-select">
+                        @foreach($schools as $school)
+                            <option value="{{$school->id}}">{{$school->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">科目</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="course" data-placeholder="科目"
+                            class="form-control chosen-select" multiple>
+                        @foreach($courses as $course)
+                            <option value="{{$course->id}}">{{$course->value}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">教学年级</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="grade" data-placeholder="教学年级"
+                            class="form-control chosen-select" multiple>
+                        @foreach($grades as $grade)
+                            <option value="{{$grade->id}}">{{$grade->value}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">地址</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="user_id" type="text" class="form-control" placeholder="地址">
                 </div>
             </div>
         </form>
@@ -65,7 +152,7 @@
                 </div>
 
                 <div class="x_content">
-                    <table id="put_in_account_table" class="table table-striped table-bordered bulk_action">
+                    <table id="account_table" class="table table-striped table-bordered bulk_action">
                     </table>
                 </div>
             </div>
@@ -110,15 +197,16 @@
             overflow: hidden;
         }
     </style>
+    <div id="detail_mould"></div>
     <script type="application/javascript">
         var userUrl = "/user";
         $(function () {
-            PutInAccountUtil.init();
+            AccountUtil.init();
         });
-        PutInAccountUtil = function (me) {
+        AccountUtil = function (me) {
             var listUrl = userUrl + "/list";
             var lay = $("#detail").prop("outerHTML");
-            var tableId = "put_in_account_table";
+            var tableId = "account_table";
             var searchInfo;
             return me = {
                 _initOwn: function () {
@@ -348,32 +436,74 @@
                 },
                 _edit: function (ids, full, obj) {
                     if (ids) {
-                        if (!me._judgeStatus(full, "未通过")) {
-                            var refuseRequest = function (requestData, successfn, usable) {
-                                var reason = [];
-                                reason.push($("#other").val());
-                                requestData.reason = reason;
+                        TableList.controllerDisabled(obj);
+                        var fillData = function (data) {
+
+                        };
+                        var updateData = function (requestData, successfn, usable) {
+                            var parsl_s = $('#tab_special').parsley();
+                            var parsl_t = $('#tab_target').parsley();
+                            var parsl_f = $('#tab_finance').parsley();
+                            parsl_s.validate();
+                            parsl_t.validate();
+                            parsl_f.validate();
+                            if (true === parsl_s.isValid() &&
+                                true === parsl_t.isValid() &&
+                                true === parsl_f.isValid()) {
+                                requestData.finance = finance;
                                 TableList.optTable({
                                     "tableId": tableId,
                                     "url": userUrl + "/" + ids,
                                     "type": "put",
-                                    "async": true,
                                     "reqData": requestData,
                                     "successfn": successfn,
                                     "failfn": usable
                                 });
-                            };
-                            me._openlayer(refuseRequest);
-                        } else {
-                            layer.msg("选中的记录有审核未通过的客户");
-                        }
+                            }
+                        };
+                        CommonUtil.requestService(userUrl + "/" + ids, "", true, "get",
+                            function (response) {
+                                //从后台成功获取数据 拼写到前台页面
+                                //弹出层模式
+                                if (response.code == 0) {
+                                    me._openlayer(ids, 2, updateData);//打开表单；保存时回调updateData 将数据传输到后台
+                                    fillData(response.data);//根据从后台获取的数据填充到表单上
+                                }
+                                TableList.controllerRemoveDisabled(obj);
+                            }, function () {
+                                TableList.controllerRemoveDisabled(obj);
+                            });
                     }
                 },
                 _resetHtml: function () {
-                    $("input[name='reason']").not(":first").each(function () {
-                        $(this).iCheck("uncheck");
-                    })
-                    $("#other").val('');
+                    $(".parsley-error").removeClass("parsley-error");
+                    $("ul.parsley-errors-list").remove();
+                    $("#detail").remove();
+                    $("#detail_mould").append(lay);
+                    $("#user_id").val('');
+
+                    var config = {
+                        ".chosen-select": {},
+                        ".chosen-select-deselect": {
+                            allow_single_deselect: true
+                        },
+                        ".chosen-select-no-single": {
+                            disable_search_threshold: 10
+                        },
+                        ".chosen-select-no-results": {
+                            no_results_text: "Oops, nothing found!"
+                        },
+                        ".chosen-select-width": {
+                            width: "95%"
+                        }
+                    };
+                    for (var selector in config) {
+                        $(selector).chosen(config[selector])
+                    }
+                    $(".chosen-container").css({
+                        "width": $("#user_name").width() + "%",
+                        "height": 30
+                    });
                 },
                 _openlayer: function (yes) {
                     me._resetHtml();

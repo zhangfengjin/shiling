@@ -315,7 +315,7 @@
             searchText = this.get_search_text();
             escapedSearchText = searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
             regexAnchor = this.search_contains ? "" : "^";
-            regex = new RegExp(regexAnchor + escapedSearchText, 'i');
+            regex =new RegExp(escapedSearchText, 'i'); //new RegExp(regexAnchor + escapedSearchText, 'i');
             zregex = new RegExp(escapedSearchText, 'i');
             _ref = this.results_data;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
