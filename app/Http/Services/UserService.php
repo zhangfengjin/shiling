@@ -9,6 +9,8 @@
 namespace App\Http\Services;
 
 
+use App\Models\UserCourse;
+use App\Models\UserGrade;
 use App\User;
 use App\Utils\DataStandard;
 use App\Utils\WyIMHelper;
@@ -160,6 +162,12 @@ class UserService extends CommonService
             "flag" => 0
         ];
         $user = User::where($where)->find($userId);
+        $where = [
+            "user_id" => $userId,
+            "flag" => 0
+        ];
+        $user->courses = UserCourse::where($where)->distinct()->get(["course_id"]);
+        $user->grades = UserGrade::where($where)->distinct()->get(["grade_id"]);
         return $user;
     }
 

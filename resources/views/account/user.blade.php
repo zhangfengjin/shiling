@@ -1,6 +1,6 @@
 @extends('layouts.app_table')
 @section('tablecontent')
-    <div id="detail" class="x_content detail_content">
+    <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">姓名</label>
@@ -13,12 +13,12 @@
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <input id="phone" type="text" class="form-control" placeholder="手机号"
                            required data-parsley-required-message="手机号不允许为空"
-                           pattern="^1[3|4|5|7|8]\d{9}">
+                           pattern="^1[3|4|5|7|8]\d{9}" disabled>
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">邮箱</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <input id="email" type="email" class="form-control" placeholder="邮箱"
-                           required>
+                           required disabled>
                 </div>
             </div>
             <div class="form-group">
@@ -38,7 +38,7 @@
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">角色</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="role_id" class="form-control">
+                    <select id="role" class="form-control">
                         @foreach($roles as $role)
                             <option value="{{$role->id}}">{{$role->name}}</option>
                         @endforeach
@@ -353,18 +353,6 @@
                     };
                     TableList.search(tableId, listUrl, searchInfo);
                 },
-                _judgeStatus: function (full, status) {
-                    var mulStatus = false;
-                    if (full) {
-                        for (var row in full) {
-                            if (status == full[row].status) {
-                                mulStatus = true;
-                                break;
-                            }
-                        }
-                    }
-                    return mulStatus;
-                },
                 _del: function (ids, fn) {
                     if (ids) {
                         TableList.optTable({
@@ -438,28 +426,48 @@
                     if (ids) {
                         TableList.controllerDisabled(obj);
                         var fillData = function (data) {
-
+                            $("#user_name").val(data.name);
+                            $("#phone").val(data.phone);
+                            $("#email").val(data.email);
+                            $("#unum").val(data.unum);
+                            $("#age").val(data.age);
+                            $("#seniority").val(data.seniority);
+                            $("#role").val(data.role_id);
+                            $("#sex").val(data.sex);
+                            $("#user_title").val(data.user_title_id);
+                            $("#school").val(data.school_id);
+                            //$("#school option[value='" + data.school_id + "']").attr('selected', true);
+                            $.each(data.courses, function () {
+                                $("#course option[value='" + this.course_id + "']").attr('selected', true);
+                            });
+                            $.each(data.grades, function () {
+                                $("#grade option[value='" + this.grade_id + "']").attr('selected', true);
+                            });
+                            $("select").trigger("chosen:updated");
+                            $("#address").val(data.address);
                         };
                         var updateData = function (requestData, successfn, usable) {
-                            var parsl_s = $('#tab_special').parsley();
-                            var parsl_t = $('#tab_target').parsley();
-                            var parsl_f = $('#tab_finance').parsley();
-                            parsl_s.validate();
-                            parsl_t.validate();
-                            parsl_f.validate();
-                            if (true === parsl_s.isValid() &&
-                                true === parsl_t.isValid() &&
-                                true === parsl_f.isValid()) {
-                                requestData.finance = finance;
-                                TableList.optTable({
-                                    "tableId": tableId,
-                                    "url": userUrl + "/" + ids,
-                                    "type": "put",
-                                    "reqData": requestData,
-                                    "successfn": successfn,
-                                    "failfn": usable
-                                });
-                            }
+                            requestData.userName = $("#user_name").val();
+                            requestData.phone = $("#phone").val();
+                            requestData.email = $("#email").val();
+                            requestData.unum = $("#unum").val();
+                            requestData.age = $("#age").val();
+                            requestData.seniority = $("#seniority").val();
+                            requestData.roles = $("#role").val();
+                            requestData.sex = $("#sex").val();
+                            requestData.userTitle = $("#user_title").val();
+                            requestData.school = $("#school").val();
+                            requestData.courses = $("#courses").val();
+                            requestData.grades = $("#grade").val();
+                            requestData.address = $("#address").val();
+                            TableList.optTable({
+                                "tableId": tableId,
+                                "url": userUrl + "/" + ids,
+                                "type": "put",
+                                "reqData": requestData,
+                                "successfn": successfn,
+                                "failfn": usable
+                            });
                         };
                         CommonUtil.requestService(userUrl + "/" + ids, "", true, "get",
                             function (response) {
@@ -505,33 +513,40 @@
                         "height": 30
                     });
                 },
-                _openlayer: function (yes) {
+                _openlayer: function (id, type, yes) {
                     me._resetHtml();
                     var usable = function () {
                         btns.css("pointer-events", "");
                     };
-                    var height = $("#detail").height() + 120;
-                    var area = ["50%", "45%"];
+                    var area = ["50%", "60%"];
                     if (device.mobile()) {
                         area = ["80%", "70%"];
                     }
                     layer.open({
                         type: 1,
-                        title: "客户驳回",
+                        title: "用户信息",
                         scrollbar: false,
                         area: area, // 宽高
                         content: $("#detail"),
-                        btn: ['确定', '关闭'],
+                        btn: ['保存', '取消'],
                         yes: function (index, layero) {
                             btns = layero.children(".layui-layer-btn").children("a");
                             try {
-                                btns.css("pointer-events", "none");//按钮不可用
-                                yes({}, function () {
-                                    layer.closeAll();
-                                }, usable);
+                                btns.css("pointer-events", "none");
+                                var requestData = {};
+                                var parsl = $('#detail').parsley();
+                                parsl.validate();
+                                if (true === parsl.isValid()) {
+                                    yes(requestData, function () {
+                                        layer.close(index);
+                                    }, usable);
+                                } else {
+                                    usable();
+                                }
                             } catch (e) {
                                 usable();
                             }
+                        }, success: function () {
                         }
                     });
                 }
