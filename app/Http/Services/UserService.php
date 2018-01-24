@@ -100,23 +100,27 @@ class UserService extends CommonService
             $user->im_token = $input["im_token"];
             $user->save();
             $userId = $user->id;
-            $subjects = [];
-            foreach ($input['subject'] as $subject) {
-                $subjects[] = [
-                    'user_id' => $userId, 'course_id' => $subject['subjectId']
-                ];
+            if (isset($input['subject'])) {
+                $subjects = [];
+                foreach ($input['subject'] as $subject) {
+                    $subjects[] = [
+                        'user_id' => $userId, 'course_id' => $subject['subjectId']
+                    ];
+                }
+                if (!empty($subjects)) {
+                    DB::table('user_courses')->insert($subjects);
+                }
             }
-            if (!empty($subjects)) {
-                DB::table('user_courses')->insert($subjects);
-            }
-            $grades = [];
-            foreach ($input['grade'] as $grade) {
-                $grades[] = [
-                    'user_id' => $userId, 'grade_id' => $grade['gradeId']
-                ];
-            }
-            if (!empty($subjects)) {
-                DB::table('user_grades')->insert($grades);
+            if (isset($input['grade'])) {
+                $grades = [];
+                foreach ($input['grade'] as $grade) {
+                    $grades[] = [
+                        'user_id' => $userId, 'grade_id' => $grade['gradeId']
+                    ];
+                }
+                if (!empty($subjects)) {
+                    DB::table('user_grades')->insert($grades);
+                }
             }
             DB::commit();
             return $user;

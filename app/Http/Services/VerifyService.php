@@ -48,6 +48,9 @@ class VerifyService
      */
     public function codeValidate($code, $account, $minute = 10)
     {
+        if(env('LS_ENV')=="test"){
+            return "";
+        }
         $checkcode = Cache::get($account);
         $time = time();
         $msg = "";

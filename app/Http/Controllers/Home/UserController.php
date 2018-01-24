@@ -131,7 +131,8 @@ class UserController extends Controller
                 "username" => "姓名",
                 "phone" => "手机号",
                 "email" => "邮箱",
-                "subject" => "科目"
+                "subject" => "科目",
+                "grade" => "年级"
             ];
             $userService = new UserService();
             $len = count($rows);
@@ -148,13 +149,28 @@ class UserController extends Controller
                 }
                 $importFaileds = [];
                 for ($idx = 1; $idx < $len; $idx++) {
-                    $course_id = 0;
-                    foreach ($courses as $course) {
-                        if ($course->value == trim($rows[$idx][$titles["subject"]])) {
-                            $course_id = $course->id;
+                    //科目
+                    $courseIds = [];
+                    $subjects = explode(";", trim($rows[$idx][$titles["subject"]]));
+                    foreach ($subjects as $subject) {
+                        foreach ($courses as $course) {
+                            if ($course->value == $subject) {
+                                $courseIds[]["subjectId"] = $course->id;
+                            }
                         }
                     }
-                    if ($course_id) {
+                    //年级
+                    $dictGrades = $dictService->getDictByType("grade");
+                    $grades = explode(";", trim($rows[$idx][$titles["grade"]]));
+                    $gradeIds=[];
+                    foreach ($grades as $grade) {
+                        foreach ($dictGrades as $dict) {
+                            if ($dict->value == $grade) {
+                                $gradeIds[]["gradeId"] = $dict->id;
+                            }
+                        }
+                    }
+                    if ($courseIds) {
                         $input = [];
                         $userName = $rows[$idx][$titles["username"]];
                         $tel = $rows[$idx][$titles["phone"]];
@@ -179,11 +195,13 @@ class UserController extends Controller
                                 return DataStandard::getStandardData(["从第" . $idx . "行开始导入失败"], config("validator.115"), 115);
                             }
                         }
+                        $input["password"] = $password;
                         $input["username"] = $userName;
                         $input["account"] = $input["phone"] = $tel;
                         $input["email"] = $email;
-                        $input["course_id"] = $course_id;
-                        $input["password"] = $password;
+                        $input["subject"] = $courseIds;
+                        $input["subject"] = $courseIds;
+                        $input["grade"] = $gradeIds;
                         $input["role_id"] = $roleId;
                         $userService->create($input);
                     } else {
