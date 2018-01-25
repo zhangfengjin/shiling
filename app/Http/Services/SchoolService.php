@@ -35,7 +35,7 @@ class SchoolService extends CommonService
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = School::whereRaw($where)->where("flag", 0)->count();
+        $total = DB::table("schools as sch")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
             'sch.id'
@@ -47,7 +47,7 @@ class SchoolService extends CommonService
         $sSortDir = "asc";
         $rows = DB::table("schools as sch")
             ->join("areas as area", "area.id", "=", "sch.area_id")
-            ->where("flag", 0)->whereRaw($where)->orderBy($sortField, $sSortDir)
+            ->where("sch.flag", 0)->whereRaw($where)->orderBy($sortField, $sSortDir)
             ->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
         foreach ($rows as $row) {
@@ -68,10 +68,10 @@ class SchoolService extends CommonService
             return $sql;
         }
         $where = [];
-        $schoolName = isset($searchs["school_name"]) ? trim($searchs["school_name"])
-            : (isset($this->allInput["school_name"]) ? trim($this->allInput["school_name"]) : "");//合同号
+        $schoolName = isset($searchs["schoolName"]) ? trim($searchs["schoolName"])
+            : (isset($this->allInput["schoolName"]) ? trim($this->allInput["schoolName"]) : "");//合同号
         if (!empty($schoolName)) {
-            array_push($where, "name like '%$schoolName%'");
+            array_push($where, "sch.name like '%$schoolName%'");
         }
         $where = implode(" and ", $where);
         if (empty($where)) {

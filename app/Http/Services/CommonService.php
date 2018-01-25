@@ -26,9 +26,6 @@ class CommonService
     public function __construct(Request $request = null, $switch = false)
     {
         $this->switch = $switch;
-        if ($switch) {
-
-        }
         if ($request) {
             $this->user = $request->get("user");
             $this->sEcho = intval($request->input("sEcho"));//请求服务器次数 必须
@@ -45,6 +42,7 @@ class CommonService
     }
 
     /**
+     * 统一转换输出数据字段
      * @param $rows
      * @return array
      */

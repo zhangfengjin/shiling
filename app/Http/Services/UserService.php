@@ -237,17 +237,45 @@ class UserService extends CommonService
     public function show($userId)
     {
         $where = [
-            "id" => $userId,
-            "flag" => 0
+            "user.id" => $userId,
+            "user.flag" => 0
         ];
-        $user = User::where($where)->find($userId);
+        $select = [
+            "user.id", "user.name", "phone", "email", "role_id", "unum", "sex",
+            "age", "seniority", "user_title_id", "address", "school_id"
+        ];
+        $schoolName = DB::raw("sch.name as school_name");
+        $roleName = DB::raw("role.name as role_name");
+        $userTitleName = DB::raw("dict.value as user_title_name");
+        array_push($select, $schoolName, $roleName, $userTitleName);
+        $user = DB::table("users as user")
+            ->leftJoin("schools as sch", "sch.id", "=", "user.school_id")
+            ->leftJoin("roles as role", "role.id", "=", "user.role_id")
+            ->join("dicts as dict", "dict.id", "=", "user.user_title_id")
+            ->where($where)->get($select)->first();
         if ($user) {
             $where = [
                 "user_id" => $userId,
-                "flag" => 0
+                "user.flag" => 0
             ];
-            $user->courses = UserCourse::where($where)->distinct()->get(["course_id"]);
-            $user->grades = UserGrade::where($where)->distinct()->get(["grade_id"]);
+            //科目
+            $select = [
+                "course_id"
+            ];
+            $courseName = DB::raw("dict.value as course_name");
+            array_push($select, $courseName);
+            $user->courses = DB::table("user_courses as user")
+                ->join("dicts as dict", "dict.id", "=", "user.course_id")
+                ->where($where)->distinct()->get($select);
+            //年级
+            $select = [
+                "grade_id"
+            ];
+            $gradeName = DB::raw("dict.value as grade_name");
+            array_push($select, $gradeName);
+            $user->grades = DB::table("user_grades as user")
+                ->join("dicts as dict", "dict.id", "=", "user.grade_id")
+                ->where($where)->distinct()->get($select);
             return $user;
         }
         return [];
@@ -287,19 +315,19 @@ class UserService extends CommonService
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = User::whereRaw($where)->where("flag", 0)->count();
+        $total = DB::table("users as u")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
             'u.id', 'u.name', 'u.phone', 'u.email'
         ];
-        $roleName = DB::raw("role.name as role_name");
+        $roleName = DB::raw("role.name as roleName");
         array_push($select, $roleName);
         //获取查询结果
         $sortField = "id";
         $sSortDir = "asc";
         $rows = DB::table("users as u")
             ->join("roles as role", "role.id", "=", "u.role_id")
-            ->where("u.flag", 0)
+            ->whereRaw($where)->where("u.flag", 0)
             ->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
         foreach ($rows as $row) {
@@ -320,10 +348,10 @@ class UserService extends CommonService
             return $sql;
         }
         $where = [];
-        $roleName = isset($searchs["role_name"]) ? trim($searchs["role_name"])
-            : (isset($this->allInput["role_name"]) ? trim($this->allInput["role_name"]) : "");//合同号
-        if (!empty($roleName)) {
-            array_push($where, "name like '%$roleName%'");
+        $userName = isset($searchs["userName"]) ? trim($searchs["userName"])
+            : (isset($this->allInput["userName"]) ? trim($this->allInput["userName"]) : "");//合同号
+        if (!empty($userName)) {
+            array_push($where, "u.name like '%$userName%'");
         }
         $where = implode(" and ", $where);
         if (empty($where)) {

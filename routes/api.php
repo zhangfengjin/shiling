@@ -38,6 +38,7 @@ Route::group(['domain' => '',], function () {
 
                 Route::get("school/list", "SchoolController@getList");//学校列表
                 Route::get("role/list", "RoleController@getList");//角色列表
+                Route::get("usertitle/list", "UserTitleController@getList");//职级列表
 
 
                 Route::post("signin/code", "MeetController@signin");//二维码签到

@@ -61,8 +61,8 @@ class RoleService extends CommonService
             return $sql;
         }
         $where = [];
-        $roleName = isset($searchs["role_name"]) ? trim($searchs["role_name"])
-            : (isset($this->allInput["role_name"]) ? trim($this->allInput["role_name"]) : "");//合同号
+        $roleName = isset($searchs["roleName"]) ? trim($searchs["roleName"])
+            : (isset($this->allInput["roleName"]) ? trim($this->allInput["roleName"]) : "");//合同号
         if (!empty($roleName)) {
             array_push($where, "name like '%$roleName%'");
         }
