@@ -21,9 +21,14 @@ class CommonService
     protected $allInput = [];
     protected $sortField = "id";
     protected $sSortDir = "asc";
+    protected $switch;
 
-    public function __construct(Request $request = null)
+    public function __construct(Request $request = null, $switch = false)
     {
+        $this->switch = $switch;
+        if ($switch) {
+
+        }
         if ($request) {
             $this->user = $request->get("user");
             $this->sEcho = intval($request->input("sEcho"));//请求服务器次数 必须
@@ -37,5 +42,26 @@ class CommonService
                 $this->allInput = $request->all();
             }
         }
+    }
+
+    /**
+     * @param $rows
+     * @return array
+     */
+    public function switchOutKeys($rows)
+    {
+        if (!$this->switch) {
+            return $rows;
+        }
+        $switchKeys = config("keys.$this->switch");
+        $outRows = [];
+        foreach ($rows as $row) {
+            $outRow = [];
+            foreach ($switchKeys as $oldKey => $switchKey) {
+                $outRow[$switchKey] = $row->$oldKey;
+            }
+            $outRows[] = $outRow;
+        }
+        return $outRows;
     }
 }

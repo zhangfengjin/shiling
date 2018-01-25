@@ -15,7 +15,7 @@ class CourseController extends Controller
      */
     public function getList(Request $request)
     {
-        $dictService = new DictService();
+        $dictService = new DictService($request,"out.api.course");
         $list = $dictService->getDictByType("course");
         return DataStandard::printStandardData($list);
     }

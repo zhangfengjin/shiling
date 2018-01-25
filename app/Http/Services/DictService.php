@@ -24,6 +24,7 @@ class DictService extends CommonService
             "type" => $type,
             "flag" => 0
         ];
-        return Dict::where($where)->get();
+        $dict = Dict::where($where)->get();
+        return parent::switchOutKeys($dict);
     }
 }
