@@ -457,7 +457,7 @@
                             requestData.sex = $("#sex").val();
                             requestData.userTitle = $("#user_title").val();
                             requestData.school = $("#school").val();
-                            requestData.courses = $("#courses").val();
+                            requestData.courses = $("#course").val();
                             requestData.grades = $("#grade").val();
                             requestData.address = $("#address").val();
                             TableList.optTable({

@@ -145,8 +145,87 @@ class UserService extends CommonService
         ];
         $user = User::where($where)->find($userId);
         if ($user) {
-            $user->name = $input["name"];
-            $user->save();
+            DB::beginTransaction();
+            try {
+                $user->name = $input["userName"];
+                $user->unum = $input["unum"];
+                $user->age = $input["age"];
+                $user->seniority = $input["seniority"];
+                $user->role_id = $input["roles"];
+                $user->sex = $input["sex"];
+                $user->user_title_id = $input["userTitle"];
+                $user->school_id = $input["school"];
+                $user->save();
+
+                $linkWhere = [
+                    "user_id" => $userId,
+                    "flag" => 0
+                ];
+                //科目
+                $inputCourses = $input['courses'];
+                if (empty($inputCourses)) {
+                    UserCourse::where("user_id", $userId)->delete();
+                } else {
+                    $courses = UserCourse::where($linkWhere)->distinct()->get(["course_id"]);
+                    $delCourses = [];
+                    foreach ($courses as $course) {
+                        $courseId = $course->course_id;
+                        if (($key = array_search($courseId, $inputCourses)) === FALSE) {
+                            array_push($delCourses, $courseId);//需要删除的
+                        } else {
+                            array_splice($inputCourses, $key, 1); //原先存在且现在仍属于该科目的，不做处理，估删除
+                        }
+                    }
+                    if ($inputCourses) {//剩余的即为需要插入的
+                        $addCourses = [];
+                        foreach ($inputCourses as $courseId) {
+                            $addCourses[] = [
+                                "course_id" => $courseId,
+                                "user_id" => $userId
+                            ];
+                        }
+                        UserCourse::insert($addCourses);//插入原先不存在的科目
+                    }
+                    if ($delCourses) {//删除
+                        UserCourse::whereIn("course_id", $delCourses)->where("user_id", $userId)->delete();
+                    }
+                }
+
+                //年级
+                $inputGrades = $input['grades'];
+                if (empty($inputGrades)) {
+                    UserGrade::where("user_id", $userId)->delete();
+                } else {
+                    $grades = UserGrade::where($linkWhere)->distinct()->get(["grade_id"]);
+                    $delGrades = [];
+                    foreach ($grades as $grade) {
+                        $gradeId = $grade->grade_id;
+                        if (($key = array_search($gradeId, $inputGrades)) === FALSE) {
+                            array_push($delGrades, $gradeId);//需要删除的
+                        } else {
+                            array_splice($inputGrades, $key, 1); //原先存在且现在仍属于该科目的，不做处理，估删除
+                        }
+                    }
+                    if ($inputGrades) {//剩余的即为需要插入的
+                        $addGrades = [];
+                        foreach ($inputGrades as $gradeId) {
+                            $addGrades[] = [
+                                "grade_id" => $gradeId,
+                                "user_id" => $userId
+                            ];
+                        }
+                        UserGrade::insert($addGrades);//插入原先不存在的科目
+                    }
+                    if ($delGrades) {//删除
+                        UserGrade::whereIn("grade_id", $delGrades)->where("user_id", $userId)->delete();
+                    }
+                }
+
+                DB::commit();
+            } catch (\Exception $ex) {
+                DB::rollback();
+                throw $ex;
+            }
             return $user;
         }
     }
@@ -162,13 +241,16 @@ class UserService extends CommonService
             "flag" => 0
         ];
         $user = User::where($where)->find($userId);
-        $where = [
-            "user_id" => $userId,
-            "flag" => 0
-        ];
-        $user->courses = UserCourse::where($where)->distinct()->get(["course_id"]);
-        $user->grades = UserGrade::where($where)->distinct()->get(["grade_id"]);
-        return $user;
+        if ($user) {
+            $where = [
+                "user_id" => $userId,
+                "flag" => 0
+            ];
+            $user->courses = UserCourse::where($where)->distinct()->get(["course_id"]);
+            $user->grades = UserGrade::where($where)->distinct()->get(["grade_id"]);
+            return $user;
+        }
+        return [];
     }
 
 
@@ -183,7 +265,16 @@ class UserService extends CommonService
             $updateInfo = [
                 'flag' => 1
             ];
-            User::whereIn("id", $ids)->update($updateInfo);
+            DB::beginTransaction();
+            try {
+                User::whereIn("id", $ids)->update($updateInfo);
+                UserCourse::whereIn("id", $ids)->update($updateInfo);
+                UserGrade::whereIn("id", $ids)->update($updateInfo);
+                DB::commit();
+            } catch (\Exception $ex) {
+                DB::rollback();
+                throw $ex;
+            }
         }
         return true;
     }

@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     private $basicValidator = [
-        'username' => 'required|max:60',
-        'password' => 'required|min:6|max:20',
-        'email' => 'required|max:100',
+        'userName' => 'required|max:60'
     ];
 
     /**
