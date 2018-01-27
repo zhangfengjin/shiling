@@ -7,6 +7,7 @@ use App\Http\Services\RoleService;
 use App\Http\Services\SchoolService;
 use App\Http\Services\UploadService;
 use App\Http\Services\UserService;
+use App\Http\Services\VerifyService;
 use App\Utils\DataEnum;
 use App\Utils\DataStandard;
 use App\Utils\RegHelper;
@@ -114,6 +115,25 @@ class UserController extends Controller
         $userService = new UserService();
         $userService->delete($id);
         return DataStandard::getStandardData();
+    }
+
+    /**
+     * @param Request $request
+     * @param $userId
+     * @return array
+     */
+    public function stop(Request $request, $userId)
+    {
+        $code = $request->input('code');
+        $account = config('app.stop_tel');
+        $verifyService = new VerifyService();
+        $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
+        if (!$msg) { // 返回空字符串表示验证通过
+            $userService = new UserService();
+            $userService->delete($userId);
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config("validator.119"), 119);
     }
 
 

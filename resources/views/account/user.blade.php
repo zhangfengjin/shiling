@@ -324,34 +324,54 @@
                             }
                         },
                         "opt": {
-                            "check-square-o": {
+                            "del": {
                                 "display": 1,
-                                "info": "通过",
-                                "draw": function (full) {
-                                    var params = {};
-                                    if (full.status == "通过") {
-                                        params.disabled = true;
-                                    }
-                                    return params;
-                                },
-                                "func": me._egis
-                            },
-                            "remove": {
-                                "display": 1,
-                                "info": "驳回",
-                                "draw": function (full) {
-                                    var params = {};
-                                    if (full.status == "未通过") {
-                                        params.disabled = true;
-                                    }
-                                    return params;
-                                },
-                                "func": me._refuse
-                            },
-                            "edit": {
-                                "display": 1,
-                                "info": "编辑",
-                                "func": me._edit
+                                "info": "停用",
+                                "func": function (ids, fn) {
+                                    layer.confirm('给指定手机发送验证码？', {
+                                        btn: ['发送', '取消'] //按钮
+                                    }, function (index) {
+                                        CommonUtil.requestService('/verify/code?stop=1', "", true,
+                                            "get", function (data) {// 验证码已发送出去
+                                                if (data.code == 0) {
+                                                    layer.close(index);
+                                                    layer.prompt({title: '填写验证码', formType: 1}, function (text, index) {
+                                                        if (text != "") {
+                                                            TableList.optTable({
+                                                                "tableId": tableId,
+                                                                "url": userUrl + "/stop/" + ids,
+                                                                "type": "DELETE",
+                                                                "async": true,
+                                                                "successfn": function () {
+                                                                    layer.close(index);
+                                                                    parent.layer.msg('删除成功', {
+                                                                        icon: 1,
+                                                                        time: 800,
+                                                                        offset: "50px"
+                                                                    });
+                                                                },
+                                                                "failfn": function () {
+                                                                    layer.close(index);
+                                                                    parent.layer.msg('删除失败', {
+                                                                        icon: 1,
+                                                                        time: 800,
+                                                                        offset: "50px"
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                } else {
+                                                    layer.msg("验证码发送失败");
+                                                }
+                                            }, function (ex) {// 网络异常
+                                                layer.msg("验证码发送失败");
+                                            });
+
+                                    }, function () {
+                                    });
+
+                                }
                             }
                         }
                     };

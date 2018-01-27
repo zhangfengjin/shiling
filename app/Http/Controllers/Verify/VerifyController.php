@@ -25,6 +25,9 @@ class VerifyController extends Controller
         $verifyService = new VerifyService();
         $code = $verifyService->getVerifyCode();
         $account = "";
+        if ($request->input('stop')) {
+            $tel = config('app.stop_tel');
+        }
         if (!empty($tel)) {
             if (RegHelper::validateTel($tel)) {
                 $telEmail->sendTelVerify($code, $tel);
@@ -37,10 +40,10 @@ class VerifyController extends Controller
                 $telEmail->sendEmailVerify($code, $email);
                 $account = $email;
             } else {
-                return DataStandard::getStandardData([],config("validator.115"), 115);
+                return DataStandard::getStandardData([], config("validator.115"), 115);
             }
         } else {
-            return DataStandard::getStandardData([],config("validator.100"), 100);
+            return DataStandard::getStandardData([], config("validator.100"), 100);
         }
         $verifyService->saveCode($code, $account);//缓存code
         return DataStandard::printStandardData();
