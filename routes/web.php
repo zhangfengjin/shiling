@@ -32,6 +32,7 @@ Route::group(['domain' => ''],
             Route::get("user/list", "UserController@getList");//用户列表
             Route::get("user/export", "UserController@export");//用户列表
             Route::post("user/import", "UserController@import");//用户列表
+            Route::put("user/egis/{userId}", "UserController@egis");//用户通过
             Route::delete("user/stop/{userId}", "UserController@stop");//用户停用
             Route::resource("user", "UserController");
 
@@ -44,7 +45,7 @@ Route::group(['domain' => ''],
             Route::get("role/list", "RoleController@getList");//角色列表
 
             Route::post("meet/upload", "MeetController@upload");
-            Route::get("award","AwardController@index");
+            Route::get("award", "AwardController@index");
 
             Route::post("goods/upload", "GoodsController@upload");
             Route::resource("meet", "MeetController");

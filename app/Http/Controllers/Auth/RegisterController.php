@@ -87,7 +87,7 @@ class RegisterController extends Controller
         'username' => 'required|max:60',
         'password' => 'required|min:6',
         'verify' => 'required|numeric|digits:6',
-        'subject'=>'required'
+        'subject' => 'required'
     ];
 
     public function register(Request $request)
@@ -95,7 +95,7 @@ class RegisterController extends Controller
         $input = $request->all();
         $validate = Validator::make($input, $this->basicValidator);
         if ($validate->fails()) {
-            return DataStandard::getStandardData($validate->errors(),config("validator.100"), 100);
+            return DataStandard::getStandardData($validate->errors(), config("validator.100"), 100);
         }
         $code = $request->input('verify');
         $tel = $request->input('phone');
@@ -114,10 +114,10 @@ class RegisterController extends Controller
                 if (!empty($tel)) {
                     if (RegHelper::validateTel($tel)) {
                         if ($userService->uniqueTel($tel) > 0) {
-                            return DataStandard::getStandardData([],config("validator.117"),117);
+                            return DataStandard::getStandardData([], config("validator.117"), 117);
                         }
                     } else {
-                        return DataStandard::getStandardData([],config("validator.114"), 114);
+                        return DataStandard::getStandardData([], config("validator.114"), 114);
                     }
                 }
                 if (!empty($email)) {
@@ -126,11 +126,18 @@ class RegisterController extends Controller
                             return DataStandard::getStandardData([], config("validator.116"), 116);
                         }
                     } else {
-                        return DataStandard::getStandardData([],config("validator.115"), 115);
+                        return DataStandard::getStandardData([], config("validator.115"), 115);
                     }
                 }
                 $user = $request->all();
-                $user["role_id"] = 2;//普通教师 写死
+                $user["status"] = 0;
+                if (isset($user["role_id"]) && ($user["role_id"] == 2 || $user["role_id"] == 3)) {
+                    if ($user["role_id"] == 3) {//教研员
+                        $user["status"] = 1;
+                    }
+                } else {
+                    $user["role_id"] = 2;//普通教师 写死
+                }
                 $user["account"] = $account;
                 $user = $userService->create($user); // 注册
                 if ($user) {
@@ -143,7 +150,7 @@ class RegisterController extends Controller
             return DataStandard::getStandardData([], $msg, 123);
         }
 
-        return DataStandard::getStandardData([],config("validator.119"), 119);
+        return DataStandard::getStandardData([], config("validator.119"), 119);
     }
 
     /**

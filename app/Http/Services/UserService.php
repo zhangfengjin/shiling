@@ -98,7 +98,8 @@ class UserService extends CommonService
                 "seniority" => "seniority",
                 "user_title_id" => "user_title_id",
                 "school_id" => "school_id",
-                "address" => "address"
+                "address" => "address",
+                "status" => "status"
             ];
             foreach ($keys as $key => $val) {
                 if (isset($input[$key])) {
@@ -239,6 +240,19 @@ class UserService extends CommonService
     }
 
     /**
+     * @param $input
+     * @param $userId
+     */
+    public function egis($input, $userId)
+    {
+        $user = User::find($userId);
+        if ($user) {
+            $user->status = 0;
+            $user->save();
+        }
+    }
+
+    /**
      * @param $userId
      * @return mixed
      */
@@ -326,12 +340,12 @@ class UserService extends CommonService
         $total = DB::table("users as u")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
-            'u.id', 'u.name', 'u.phone', 'u.email','u.age','u.sex','u.unum',
+            'u.id', 'u.name', 'u.phone', 'u.email', 'u.age', 'u.sex', 'u.unum', 'u.status'
         ];
         $roleName = DB::raw("role.name as roleName");
         $schoolName = DB::raw("sch.name as schoolName");
         $userTitleName = DB::raw("dict.value as userTitleName");
-        array_push($select, $roleName,$schoolName,$userTitleName);
+        array_push($select, $roleName, $schoolName, $userTitleName);
         //获取查询结果
         $sortField = "id";
         $sSortDir = "asc";

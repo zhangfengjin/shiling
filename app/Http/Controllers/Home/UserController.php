@@ -122,6 +122,19 @@ class UserController extends Controller
      * @param $userId
      * @return array
      */
+    public function egis(Request $request, $userId)
+    {
+        $input = $request->all();
+        $userService = new UserService();
+        $userService->egis($input, $userId);
+        return DataStandard::getStandardData();
+    }
+
+    /**
+     * @param Request $request
+     * @param $userId
+     * @return array
+     */
     public function stop(Request $request, $userId)
     {
         $code = $request->input('code');

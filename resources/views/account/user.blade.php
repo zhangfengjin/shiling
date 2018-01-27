@@ -324,7 +324,19 @@
                             }
                         },
                         "opt": {
-                            "del": {
+                            "check-square-o": {
+                                "display": 1,
+                                "info": "通过",
+                                "draw": function (full) {
+                                    var params = {};
+                                    if (full.status == 0) {
+                                        params.disabled = true;
+                                    }
+                                    return params;
+                                },
+                                "func": me._egis
+                            },
+                            "stop": {
                                 "display": 1,
                                 "info": "停用",
                                 "func": function (ids, fn) {
@@ -418,23 +430,19 @@
                 _egis: function (ids, full, obj) {
                     if (ids) {
                         TableList.controllerDisabled(obj);
-                        if (!me._judgeStatus(full, "通过")) {
-                            TableList.optTable({
-                                "tableId": tableId,
-                                "url": userUrl + "/egis/" + ids,
-                                "type": "put",
-                                "async": true,
-                                "successfn": function () {
-                                    TableList.controllerRemoveDisabled(obj);
-                                },
-                                "failfn": function () {
-                                    TableList.controllerRemoveDisabled(obj);
-                                }
-                            });
-                        } else {
-                            TableList.controllerRemoveDisabled(obj);
-                            layer.msg("选中的记录有审核通过的客户");
-                        }
+                        TableList.optTable({
+                            "tableId": tableId,
+                            "url": userUrl + "/egis/" + ids,
+                            "type": "put",
+                            "async": true,
+                            "successfn": function () {
+                                TableList.controllerRemoveDisabled(obj);
+                            },
+                            "failfn": function () {
+                                TableList.controllerRemoveDisabled(obj);
+                            }
+                        });
+
                     }
                 },
                 _refuse: function (ids, full, obj) {
