@@ -326,15 +326,19 @@ class UserService extends CommonService
         $total = DB::table("users as u")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
-            'u.id', 'u.name', 'u.phone', 'u.email'
+            'u.id', 'u.name', 'u.phone', 'u.email','u.age','u.sex','u.unum',
         ];
         $roleName = DB::raw("role.name as roleName");
-        array_push($select, $roleName);
+        $schoolName = DB::raw("sch.name as schoolName");
+        $userTitleName = DB::raw("dict.value as userTitleName");
+        array_push($select, $roleName,$schoolName,$userTitleName);
         //获取查询结果
         $sortField = "id";
         $sSortDir = "asc";
         $rows = DB::table("users as u")
             ->join("roles as role", "role.id", "=", "u.role_id")
+            ->leftJoin("schools as sch", "sch.id", "=", "u.school_id")
+            ->leftJoin("dicts as dict", "dict.id", "=", "u.user_title_id")
             ->whereRaw($where)->where("u.flag", 0)
             ->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);

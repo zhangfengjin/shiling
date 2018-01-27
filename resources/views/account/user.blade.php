@@ -275,6 +275,24 @@
                     }, {
                         "sTitle": "姓名",
                         "data": "name"
+                    }, {
+                        "sTitle": "手机号",
+                        "data": "phone"
+                    }, {
+                        "sTitle": "邮箱",
+                        "data": "email"
+                    }, {
+                        "sTitle": "继教号",
+                        "data": "unum"
+                    }, {
+                        "sTitle": "角色",
+                        "data": "roleName"
+                    }, {
+                        "sTitle": "学校",
+                        "data": "schoolName"
+                    }, {
+                        "sTitle": "职称",
+                        "data": "userTitleName"
                     }];
                     var oSetting = {
                         "tableId": tableId,
