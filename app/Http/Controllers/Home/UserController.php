@@ -209,8 +209,10 @@ class UserController extends Controller
                     $sexName = $rows[$idx][$titles["sex"]];
                     $sexId = 0;
                     if (!empty($sexName)) {
-                        if (($key = array_search($sexName, $sexs)) === FALSE) {
-                            $sexId = $key;
+                        foreach ($sexs as $key => $sex) {
+                            if ($sex == $sexName) {
+                                $sexId = $key;
+                            }
                         }
                     }
 
