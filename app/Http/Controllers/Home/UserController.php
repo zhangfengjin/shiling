@@ -7,6 +7,7 @@ use App\Http\Services\RoleService;
 use App\Http\Services\SchoolService;
 use App\Http\Services\UploadService;
 use App\Http\Services\UserService;
+use App\Utils\DataEnum;
 use App\Utils\DataStandard;
 use App\Utils\RegHelper;
 use Illuminate\Http\Request;
@@ -152,24 +153,80 @@ class UserController extends Controller
                 "phone" => "手机号",
                 "email" => "邮箱",
                 "subject" => "科目",
-                "grade" => "年级"
+                "grade" => "年级",
+                "unum" => "继教号",
+                "age" => "年龄",
+                "seniority" => "工龄",
+                "role" => "角色",
+                "sex" => "性别",
+                "user_title" => "职级",
+                "school" => "学校",
+                "address" => "地址"
             ];
             $userService = new UserService();
             $len = count($rows);
             if ($len >= 2) {
+                $roleService = new RoleService();
+                $roles = $roleService->getRoleEnum();
                 $dictService = new DictService();
                 $courses = $dictService->getDictByType("course");
-                $idx = 0;
+                $schoolService = new SchoolService();
+                $schools = $schoolService->getSchoolEnum();
+                $sexs = DataEnum::getSex();
+                $userTitles = $dictService->getDictByType("user_title");
                 foreach ($titles as $key => &$title) {
-                    if (!isset($rows[0][$idx]) || $title != $rows[0][$idx]) {
+                    if (($key = array_search($title, $rows[0])) === FALSE) {
                         return DataStandard::getStandardData([], config("validator.603"), 603);
                     }
-                    $title = $idx;
-                    $idx++;
+                    $title = $key;
                 }
                 $importFaileds = [];
                 for ($idx = 1; $idx < $len; $idx++) {
-                    //科目
+                    //学校
+                    $schoolName = $rows[$idx][$titles["school"]];
+                    $schoolId = 0;
+                    if (!empty($schoolName)) {
+                        foreach ($schools as $school) {
+                            if ($school->name == $schoolName) {
+                                $schoolId = $school->id;
+                            }
+                        }
+                    }
+                    $age = $rows[$idx][$titles["age"]];
+                    $seniority = $rows[$idx][$titles["seniority"]];
+                    $address = $rows[$idx][$titles["address"]];
+                    $unum = $rows[$idx][$titles["unum"]];
+                    $userTitleName = $rows[$idx][$titles["user_title"]];
+                    $userTitleId = 0;
+                    if (!empty($userTitleName)) {
+                        foreach ($userTitles as $userTitle) {
+                            if ($userTitle->value == $userTitleName) {
+                                $userTitleId = $userTitle->id;
+                            }
+                        }
+                    }
+                    //性别
+                    $sexName = $rows[$idx][$titles["sex"]];
+                    $sexId = 0;
+                    if (!empty($sexName)) {
+                        if (($key = array_search($sexName, $sexs)) === FALSE) {
+                            $sexId = $key;
+                        }
+                    }
+
+                    //组织角色
+                    $roleId = 2;//通过导入的用户 角色默认为普通老师
+                    $roleName = $rows[$idx][$titles["role"]];
+                    if (empty($roleName)) {
+                        return DataStandard::getStandardData(["从第" . $idx . "行开始导入失败"], config("validator.605"), 605);
+                    } else {
+                        foreach ($roles as $role) {
+                            if ($role->name == $rows[$idx][$titles["role"]]) {
+                                $roleId = $role->id;
+                            }
+                        }
+                    }
+                    //组织科目
                     $courseIds = [];
                     $subjects = explode(";", trim($rows[$idx][$titles["subject"]]));
                     foreach ($subjects as $subject) {
@@ -179,7 +236,7 @@ class UserController extends Controller
                             }
                         }
                     }
-                    //年级
+                    //组织年级
                     $dictGrades = $dictService->getDictByType("grade");
                     $grades = explode(";", trim($rows[$idx][$titles["grade"]]));
                     $gradeIds = [];
@@ -196,7 +253,6 @@ class UserController extends Controller
                         $tel = $rows[$idx][$titles["phone"]];
                         $email = $rows[$idx][$titles["email"]];
                         $password = 111111;//密码默认为111111
-                        $roleId = 2;//通过导入的用户 角色统统为普通老师
                         if (!empty($tel)) {
                             if (RegHelper::validateTel($tel)) {
                                 if ($userService->uniqueTel($tel) > 0) {
@@ -223,6 +279,13 @@ class UserController extends Controller
                         $input["subject"] = $courseIds;
                         $input["grade"] = $gradeIds;
                         $input["role_id"] = $roleId;
+                        $input["sex"] = $sexId;
+                        $input["age"] = $age;
+                        $input["seniority"] = $seniority;
+                        $input["user_title_id"] = $userTitleId;
+                        $input["address"] = $address;
+                        $input["school_id"] = $schoolId;
+                        $input["unum"] = $unum;
                         $userService->create($input);
                     } else {
                         return DataStandard::getStandardData(["从第" . $idx . "行开始导入失败"], config("validator.604"), 604);

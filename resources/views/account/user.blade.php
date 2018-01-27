@@ -93,8 +93,8 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">地址</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="user_id" type="text" class="form-control" placeholder="地址">
+                <div class="col-md-10 col-sm-10 col-xs-12">
+                    <input id="address" type="text" class="form-control" placeholder="地址">
                 </div>
             </div>
         </form>

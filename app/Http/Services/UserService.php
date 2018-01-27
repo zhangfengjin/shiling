@@ -91,7 +91,14 @@ class UserService extends CommonService
                 "phone" => "phone",
                 "email" => "email",
                 "username" => "name",
-                "role_id" => "role_id"
+                "role_id" => "role_id",
+                "unum" => "unum",
+                "age" => "age",
+                "sex" => "sex",
+                "seniority" => "seniority",
+                "user_title_id" => "user_title_id",
+                "school_id" => "school_id",
+                "address" => "address"
             ];
             foreach ($keys as $key => $val) {
                 if (isset($input[$key])) {
@@ -155,6 +162,7 @@ class UserService extends CommonService
                 $user->sex = $input["sex"];
                 $user->user_title_id = $input["userTitle"];
                 $user->school_id = $input["school"];
+                $user->address = $input["address"];
                 $user->save();
 
                 $linkWhere = [
