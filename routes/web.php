@@ -18,11 +18,13 @@ Route::group(['domain' => ''],
         Route::group(["namespace" => 'Auth', 'prefix' => 'auth'], function () {
             Route::get("/register", "RegisterController@index");
             Route::get("/login", "LoginController@index");
+            Route::get("/logout", "LoginController@logout");
             Route::get("/reset", "ResetPasswordController@index");
 
             Route::post("/register", "RegisterController@register");
             Route::post("/login", "LoginController@login");
             Route::post("/reset", "ResetPasswordController@reset");
+
         });
 
         Route::group(['namespace' => 'Home', 'middleware' => ['login', 'auth2']], function () {
