@@ -12,9 +12,9 @@
                             <input id="password" type="password" class="input pwd"
                                    placeholder="密码" value="">
                         </p>
-                        <p class="t-right">
+                        {{--<p class="t-right">
                             <a href="{{ url('/auth/reset') }}">忘记密码？</a>
-                        </p>
+                        </p>--}}
                         <a id="sublogin" class="button button-login"> 登 录 </a>
                     </div>
                 </div>
