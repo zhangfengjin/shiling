@@ -27,7 +27,8 @@
             function postLogin() {
                 var data = {
                     "phone": $("#account").val(),
-                    "password": $("#password").val()
+                    "password": $("#password").val(),
+                    "bs": "1"
                 };
                 CommonUtil.requestService('/auth/login', data, true, "post",
                     function (data) {

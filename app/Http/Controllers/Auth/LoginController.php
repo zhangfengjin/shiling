@@ -79,7 +79,7 @@ class LoginController extends Controller
         $input = $request->all();
         $validate = Validator::make($input, $this->basicValidator);
         if ($validate->fails()) {
-            return DataStandard::getStandardData($validate->errors(),  config("validator.100"), 100);
+            return DataStandard::getStandardData($validate->errors(), config("validator.100"), 100);
         }
         $account = $request->input('phone');
         $login = false;
@@ -98,6 +98,9 @@ class LoginController extends Controller
         }
         if ($login) {
             $credentials ["password"] = $request->input('password');
+            if (!empty($request->input("bs"))) {
+                $credentials["role_id"] = 1;//后台登录 只允许管理员
+            }
             if ($this->guard()->attempt($credentials, true)) {
                 $user = Auth::user();
                 $token = empty($user->im_token) ? DataStandard::getToken($user->id) : $user->im_token;

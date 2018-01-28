@@ -147,7 +147,7 @@ class RegisterController extends Controller
                 $user["account"] = $account;
                 $user = $userService->create($user); // 注册
                 if ($user) {
-                    $this->guard()->login($user); // 登录
+                    //$this->guard()->login($user); // 登录
                     $token = empty($user['im_token']) ? DataStandard::getToken($user->id) : $user['im_token'];
                     Cache::put($token, $token, 60 * 24 * 365);
                     return DataStandard::getStandardData(["token" => $token]);

@@ -100,7 +100,7 @@
             }
 
             init();
-            function postLogin() {
+            function postRegister() {
                 var data = {
                     "username": $("#username").val(),
                     "password": $("#password").val(),
@@ -120,7 +120,7 @@
                         courses.push(course);
                     });
                     data.subject = courses;
-                    CommonUtil.requestService('/auth/register', data, true, "get",
+                    CommonUtil.requestService('/auth/register', data, true, "post",
                         function (data) {
                             CommonUtil.redirect();
                         }, function (ex) {
@@ -186,7 +186,7 @@
 
             /* 注册提交 */
             $("#register").bind("click", function () {
-                postLogin();
+                postRegister();
             });
         });
     </script>
