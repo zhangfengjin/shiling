@@ -273,7 +273,7 @@ class UserService extends CommonService
         $user = DB::table("users as user")
             ->leftJoin("schools as sch", "sch.id", "=", "user.school_id")
             ->leftJoin("roles as role", "role.id", "=", "user.role_id")
-            ->join("dicts as dict", "dict.id", "=", "user.user_title_id")
+            ->leftJoin("dicts as dict", "dict.id", "=", "user.user_title_id")
             ->where($where)->get($select)->first();
         if ($user) {
             $where = [

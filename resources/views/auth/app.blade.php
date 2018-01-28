@@ -9,11 +9,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" charset="utf-8"/>
     <link href="{{URL::asset('css/plugins/bootstrap/bootstrap.min.css')}}"
           rel="stylesheet"/>
+
     <link href="{{URL::asset('css/auth_custom.css')}}" rel="stylesheet"/>
     <link href="{{URL::asset('css/auth_login.css')}}" rel="stylesheet"/>
+    <!-- Chosen 下拉--搜索、多选-->
+    <link href="{{url('css/plugins/chosen/chosen.css')}}" rel="stylesheet">
 
     <script src="{{url('js/plugins/jquery/jquery.min.js')}}"></script>
     <script src="{{url('js/plugins/jquery.cookie/jquery.cookie.js')}}"></script>
+    <!-- Chosen 下拉-->
+    <script src="{{url('js/plugins/chosen/chosen.jquery.js')}}"></script>
     {{--表单校验--}}
     <script src="{{url('js/plugins/parsleyjs/parsley.min.js')}}"></script>
     <script src="{{url('js/plugins/parsleyjs/i18n/zh_cn.js')}}"></script>
@@ -28,7 +33,7 @@
                     src="{{url('/images/homeimgs/logo.png')}}" alt="">--}} <span
                     id="homeNavigate">会员登录</span>
         </a> @if(empty($user))<span class="header-span"> 您还没有登录账号？<a
-                    href="{{ url('/register') }}" class="register">点击注册</a>
+                    href="{{ url('/auth/register') }}" class="register">点击注册</a>
 			</span> @endif
     </div>
 </div>

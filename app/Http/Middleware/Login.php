@@ -36,10 +36,11 @@ class Login
         if ($this->guard()->guest()) {
             return redirect()->guest('auth/login');
         }
+        $userInfo = Auth::user();
         $user = [
             "user" => [
-                "uid" => 123,
-                "userName" => "zfj",
+                "uid" => $userInfo->id,
+                "userName" => $userInfo->name,
                 "avatar" => ""
             ]
         ];

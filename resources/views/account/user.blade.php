@@ -384,6 +384,11 @@
                                     });
 
                                 }
+                            },
+                            "edit": {
+                                "display": 1,
+                                "info": "编辑",
+                                "func": me._edit
                             }
                         }
                     };

@@ -104,6 +104,7 @@ class LoginController extends Controller
                 Cache::put($token, $token, 60 * 24 * 365);
                 return DataStandard::getStandardData(["token" => $token]);
             }
+            return DataStandard::getStandardData([], config("validator.124"), 124);
         }
         return DataStandard::getStandardData([], config("validator.120"), 120);
     }

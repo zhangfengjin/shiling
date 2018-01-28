@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Services\DictService;
 use App\Http\Services\UserService;
 use App\Http\Services\VerifyService;
 use App\User;
@@ -49,7 +50,12 @@ class RegisterController extends Controller
 
     public function index()
     {
-        return view("auth.register");
+        $dictService = new DictService();
+        $courses = $dictService->getDictByType("course");
+        $pages = [
+            "courses" => $courses
+        ];
+        return view("auth.register")->with($pages);
     }
 
     /**

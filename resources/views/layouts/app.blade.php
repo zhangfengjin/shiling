@@ -99,7 +99,7 @@
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                <li><a href="http://account.weibo.com/set/index" target="_blank"> 个人信息</a></li>
+                                {{--<li><a href="http://account.weibo.com/set/index" target="_blank"> 个人信息</a></li>--}}
                                 <li><a href="{{url('/auth/logout')}}"> 退出</a></li>
                             </ul>
                         </li>
