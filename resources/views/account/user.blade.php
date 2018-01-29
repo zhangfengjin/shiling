@@ -302,12 +302,12 @@
                             "del": {
                                 "info": "删除", "func": me._del
                             },
-                            "pass": {
+                            /*"pass": {
                                 "info": "批量通过", "func": me._egis
                             },
                             "refuse": {
                                 "info": "批量驳回", "func": me._refuse
-                            },
+                            },*/
                             "export": {
                                 "info": "导出", "func": function (ids) {
                                     location.href = CommonUtil.getRootPath() + userUrl + "/export?searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");

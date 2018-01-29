@@ -12,6 +12,7 @@ namespace App\Http\Services;
 use App\Models\UserCourse;
 use App\Models\UserGrade;
 use App\User;
+use App\Utils\DataEnum;
 use App\Utils\DataStandard;
 use App\Utils\WyIMHelper;
 use Illuminate\Http\Request;
@@ -430,20 +431,31 @@ class UserService extends CommonService
         $where = $this->getSearchWhere($this->searchs);
         //要查询的字段
         $select = [
-            'ID', 'name'
+            'u.name', 'u.phone', 'u.email', 'u.age', 'u.sex', 'u.unum'
         ];
+        $roleName = DB::raw("role.name as roleName");
+        $schoolName = DB::raw("sch.name as schoolName");
+        $userTitleName = DB::raw("dict.value as userTitleName");
+        $statusName = DB::raw("case when (u.flag=0 and u.status=0) then '启用' when (u.flag=0 and u.status=1) then '待审核' else '已停用' end status");
+        array_push($select, $roleName, $schoolName, $userTitleName, $statusName);
         //获取查询结果
-        $sortField = "id";
-        $sSortDir = "asc";//DB::table(" as pdb")
-        $rows = User::whereRaw($where)->orderBy($sortField, $sSortDir)
-            ->get($select)->toArray();
-        foreach ($rows as & $row) {
-
-        }
+        $sortField = "u.id";
+        $sSortDir = "asc";
+        $rows = DB::table("users as u")
+            ->join("roles as role", "role.id", "=", "u.role_id")
+            ->leftJoin("schools as sch", "sch.id", "=", "u.school_id")
+            ->leftJoin("dicts as dict", "dict.id", "=", "u.user_title_id")
+            ->whereRaw($where)
+            ->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
+            ->skip($this->iDisplayStart)->get($select)->toArray();
         //导出Excel的表头
         $title = [
-            'id', '姓名'
+            '姓名', '手机号', '邮箱', '年龄', '性别', '继教号', '角色', '学校', '职级', '状态'
         ];
+        foreach ($rows as $row) {
+            $row->sex = DataEnum::getSex($row->sex);
+        }
+        $rows = json_decode(json_encode($rows), true);
         array_unshift($rows, $title);
         $excelName = "User_List_" . date("Y-m-d-H-i-s");
         Excel::create($excelName, function ($excel) use ($rows) {
