@@ -41,10 +41,11 @@ class SchoolService extends CommonService
         $total = DB::table("schools as sch")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
-            'sch.id'
+            'sch.id', 'province_name', 'city_name', 'area_name'
         ];
-        $schoolName = DB::raw("CONCAT(name,'(',province_name,'-',city_name,'-',area_name,')') as name");
-        array_push($select, $schoolName);
+        $name = DB::raw("CONCAT(name,'(',province_name,'-',city_name,'-',area_name,')') as name");
+        $schoolName = DB::raw("name as school_name");
+        array_push($select, $name, $schoolName);
         //获取查询结果
         $sortField = "sch.id";
         $sSortDir = "asc";
@@ -57,6 +58,11 @@ class SchoolService extends CommonService
             $row->id = strval($row->id);
         }
         return DataStandard::getListData($this->sEcho, $total, $rows);
+    }
+
+    public function update($input, $schoolId)
+    {
+
     }
 
     /**

@@ -38,6 +38,12 @@ Route::group(['domain' => ''],
             Route::delete("user/stop/{userId}", "UserController@stop");//用户停用
             Route::resource("user", "UserController");
 
+            Route::get("school", "SchoolController@index");
+            Route::get("school/list", "SchoolController@getList");
+            Route::post("school/import", "SchoolController@import");
+            Route::get("school/{schoolId}", "SchoolController@show");
+            Route::put("school/{schoolId}", "SchoolController@update");
+
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });

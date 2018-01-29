@@ -12,9 +12,14 @@ return [
         [
             [
                 "name" => "用户列表", "href" => "/user"
-            ],
+            ]
+        ]
+    ],
+    [
+        "name" => "学校管理", "icon" => "cog", "href" => "", "childrens" =>
+        [
             [
-                "name" => "用户审核", "href" => "#"
+                "name" => "学校列表", "href" => "/school"
             ]
         ]
     ]
