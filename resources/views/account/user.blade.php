@@ -39,6 +39,7 @@
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">角色</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <select id="role" class="form-control">
+                        <option value=""></option>
                         @foreach($roles as $role)
                             <option value="{{$role->id}}">{{$role->name}}</option>
                         @endforeach
@@ -56,6 +57,7 @@
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">职称</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <select id="user_title" class="form-control">
+                        <option value=""></option>
                         @foreach($titles as $title)
                             <option value="{{$title->id}}">{{$title->value}}</option>
                         @endforeach

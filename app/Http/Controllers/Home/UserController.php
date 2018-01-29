@@ -193,8 +193,11 @@ class UserController extends Controller
                 "role" => "角色",
                 "sex" => "性别",
                 "user_title" => "职级",
+                "address" => "地址",
                 "school" => "学校",
-                "address" => "地址"
+                "province" => "省",
+                "city" => "市",
+                "area" => "县区"
             ];
             $userService = new UserService();
             $len = count($rows);
@@ -217,10 +220,17 @@ class UserController extends Controller
                 for ($idx = 1; $idx < $len; $idx++) {
                     //学校
                     $schoolName = $rows[$idx][$titles["school"]];
+                    $province = $rows[$idx][$titles["province"]];
+                    $city = $rows[$idx][$titles["city"]];
+                    $area = $rows[$idx][$titles["area"]];
                     $schoolId = 0;
                     if (!empty($schoolName)) {
                         foreach ($schools as $school) {
-                            if ($school->name == $schoolName) {
+                            if ($school->name == $schoolName &&
+                                $school->province_name == $province &&
+                                $school->city_name == $city &&
+                                $school->area_name == $area
+                            ) {
                                 $schoolId = $school->id;
                             }
                         }

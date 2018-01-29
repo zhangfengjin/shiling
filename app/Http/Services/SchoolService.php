@@ -22,9 +22,12 @@ class SchoolService extends CommonService
     public function getSchoolEnum()
     {
         $select = [
-            'id', "name"
+            'sch.id', "sch.name", "province_name", "city_name", "area_name"
         ];
-        return School::where("flag", 0)->get($select);
+        $schools = DB::table("schools as sch")
+            ->join("areas as area", "area.id", "=", "sch.area_id")
+            ->where("sch.flag", 0)->get($select);
+        return $schools;
     }
 
     /**
