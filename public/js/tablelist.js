@@ -103,6 +103,7 @@ TableList = function (me) {
                                             case "启用":
                                             case "通过":
                                             case "在投放":
+                                            case "正常":
                                                 className = "status rsuccess";
                                                 break;
                                             case "未通过":
@@ -111,6 +112,7 @@ TableList = function (me) {
                                             case "异常":
                                             case "已删除":
                                             case "离职":
+                                            case "已停用":
                                                 className = "status rerror";
                                                 break;
                                             case "待审核":

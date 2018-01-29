@@ -156,6 +156,7 @@ class UserService extends CommonService
             DB::beginTransaction();
             try {
                 $user->name = $input["userName"];
+                /*$user->email = $input["email"];*/
                 $user->unum = $input["unum"];
                 $user->age = $input["age"];
                 $user->seniority = $input["seniority"];
@@ -340,20 +341,22 @@ class UserService extends CommonService
         $total = DB::table("users as u")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
-            'u.id', 'u.name', 'u.phone', 'u.email', 'u.age', 'u.sex', 'u.unum', 'u.status'
+            'u.id', 'u.name', 'u.phone', 'u.email', 'u.age', 'u.sex', 'u.unum'
         ];
         $roleName = DB::raw("role.name as roleName");
         $schoolName = DB::raw("sch.name as schoolName");
         $userTitleName = DB::raw("dict.value as userTitleName");
-        array_push($select, $roleName, $schoolName, $userTitleName);
+        $statusName = DB::raw("case when (u.flag=0 and u.status=0) then '启用' when (u.flag=0 and u.status=1) then '待审核' else '已停用' end status");
+        array_push($select, $roleName, $schoolName, $userTitleName, $statusName);
         //获取查询结果
         $sortField = "id";
         $sSortDir = "asc";
+        //->where("u.flag", 0)
         $rows = DB::table("users as u")
             ->join("roles as role", "role.id", "=", "u.role_id")
             ->leftJoin("schools as sch", "sch.id", "=", "u.school_id")
             ->leftJoin("dicts as dict", "dict.id", "=", "u.user_title_id")
-            ->whereRaw($where)->where("u.flag", 0)
+            ->whereRaw($where)
             ->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
         foreach ($rows as $row) {

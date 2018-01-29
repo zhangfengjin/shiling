@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\VerifyService;
 use App\Utils\DataStandard;
 use App\Utils\RegHelper;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -98,9 +99,19 @@ class LoginController extends Controller
         }
         if ($login) {
             $credentials ["password"] = $request->input('password');
+            $bsLimit = [1, 4, 5];//
+            $bs = false;
             if (!empty($request->input("bs"))) {
-                $credentials["role_id"] = 1;//后台登录 只允许管理员
+                $code = $request->input('verify');
+                $verifyService = new VerifyService();
+                $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
+                if ($msg) {
+                    return DataStandard::getStandardDatagetStandardData([], $msg, 123);
+                }
+                $credentials["role_id"] = $bsLimit;//后台登录 只允许管理员
+                $bs = true;
             }
+            $credentials["flag"] = 0;
             if ($this->guard()->attempt($credentials, true)) {
                 $user = Auth::user();
                 $token = empty($user->im_token) ? DataStandard::getToken($user->id) : $user->im_token;

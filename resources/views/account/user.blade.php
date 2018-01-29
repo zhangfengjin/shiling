@@ -13,7 +13,7 @@
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     <input id="phone" type="text" class="form-control" placeholder="手机号"
                            required data-parsley-required-message="手机号不允许为空"
-                           pattern="^1[3|4|5|7|8]\d{9}" disabled>
+                           pattern="^1\d{10}" disabled>
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">邮箱</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
@@ -293,6 +293,10 @@
                     }, {
                         "sTitle": "职称",
                         "data": "userTitleName"
+                    }, {
+                        "sTitle": "状态",
+                        "data": "status",
+                        "columnType": "custom"
                     }];
                     var oSetting = {
                         "tableId": tableId,

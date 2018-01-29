@@ -1,4 +1,13 @@
 @extends('auth.app') @section('content')
+    <style type="text/css">
+        .security-btn {
+            height: 30px;
+        }
+
+        .input-no-icon {
+            background-image: none !important;
+        }
+    </style>
     <div class="container">
         <div class="wrapper clearfix">
             <div class="login">
@@ -11,6 +20,10 @@
                         <p>
                             <input id="password" type="password" class="input pwd"
                                    placeholder="密码" value="">
+                        </p>
+                        <p>
+                            <input type="text" id="code" class="input short-input input-no-icon"><a id="sendCheckCode"
+                                                                                                    class="security-btn">验证码</a>
                         </p>
                         {{--<p class="t-right">
                             <a href="{{ url('/auth/reset') }}">忘记密码？</a>
