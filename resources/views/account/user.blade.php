@@ -111,41 +111,33 @@
                             <div class="form-group">
                                 <ul class="col-md-12 col-sm-12 col-xs-12">
                                     <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">DSP ID</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_dsp_id"></li>
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">手机号</label>
+                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_phone"></li>
                                     <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">广告主ID</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_client_id"></li>
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">邮箱</label>
+                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_email"></li>
                                     <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">投放账号ID</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_uid"></li>
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">姓名</label>
+                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_user_name"></li>
                                     <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">DSP名称</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_dsp_name"></li>
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">继教号</label>
+                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_unum"></li>
                                     <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">广告主名称</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_client_name"></li>
-                                    <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">审核人</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_audit_name" type="text">
-                                    </li>
-                                    <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">审核状态</label>
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">状态</label>
                                         <select class="col-md-7 col-sm-8 col-xs-12" id="search_status">
                                             <option value=""></option>
-
+                                            <option value="1">启用</option>
+                                            <option value="2">待审核</option>
+                                            <option value="3">已停用</option>
                                         </select></li>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
                                         <button id="search" type="button" class="btn btn-round btn-default search_btn">
                                             查询
                                         </button>
                                         <button id="reset" type="button" class="btn btn-round btn-default search_btn">重置
                                         </button>
                                     </div>
-
-
                                 </ul>
-
                             </div>
                         </form>
                     </div>
@@ -214,12 +206,10 @@
                         me._searchList();
                     });
                     $("#reset").on("click", function () {
-                        $("#search_dsp_id").val('');
-                        $("#search_dsp_name").val('');
-                        $("#search_client_id").val('');
-                        $("#search_client_name").val('');
-                        $("#search_uid").val('');
-                        $("#search_audit_name").val('');
+                        $("#search_phone").val('');
+                        $("#search_email").val('');
+                        $("#search_user_name").val('');
+                        $("#search_unum").val('');
                         $("#search_status").val('');
                     });
                 },
@@ -333,7 +323,7 @@
                                 "info": "通过",
                                 "draw": function (full) {
                                     var params = {};
-                                    if (full.status == 0) {
+                                    if (full.status != "待审核") {
                                         params.disabled = true;
                                     }
                                     return params;
@@ -343,6 +333,13 @@
                             "stop": {
                                 "display": 1,
                                 "info": "停用",
+                                "draw": function (full) {
+                                    var params = {};
+                                    if (full.status == "已停用") {
+                                        params.disabled = true;
+                                    }
+                                    return params;
+                                },
                                 "func": function (ids, fn) {
                                     layer.confirm('给指定手机发送验证码？', {
                                         btn: ['发送', '取消'] //按钮
@@ -401,12 +398,10 @@
                 _searchList: function () {
                     searchInfo = {
                         "searchs": {
-                            "dsp_id": $("#search_dsp_id").val(),
-                            "dsp_name": $("#search_dsp_name").val(),
-                            "client_id": $("#search_client_id").val(),
-                            "client_name": $("#search_client_name").val(),
-                            "uid": $("#search_uid").val(),
-                            "audit_name": $("#search_audit_name").val(),
+                            "phone": $("#search_phone").val(),
+                            "email": $("#search_email").val(),
+                            "userName": $("#search_user_name").val(),
+                            "unum": $("#search_unum").val(),
                             "status": $("#search_status").val()
                         }
                     };

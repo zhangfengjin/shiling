@@ -338,7 +338,7 @@ class UserService extends CommonService
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = DB::table("users as u")->whereRaw($where)->where("flag", 0)->count();
+        $total = DB::table("users as u")->whereRaw($where)->count();
         //要查询的字段
         $select = [
             'u.id', 'u.name', 'u.phone', 'u.email', 'u.age', 'u.sex', 'u.unum'
@@ -378,9 +378,40 @@ class UserService extends CommonService
         }
         $where = [];
         $userName = isset($searchs["userName"]) ? trim($searchs["userName"])
-            : (isset($this->allInput["userName"]) ? trim($this->allInput["userName"]) : "");//合同号
+            : (isset($this->allInput["userName"]) ? trim($this->allInput["userName"]) : "");//姓名
+        $phone = isset($searchs["phone"]) ? trim($searchs["phone"])
+            : (isset($this->allInput["phone"]) ? trim($this->allInput["phone"]) : "");//phone
+        $email = isset($searchs["email"]) ? trim($searchs["email"])
+            : (isset($this->allInput["email"]) ? trim($this->allInput["email"]) : "");
+        $unum = isset($searchs["unum"]) ? trim($searchs["unum"])
+            : (isset($this->allInput["unum"]) ? trim($this->allInput["unum"]) : "");//继教号
+        $status = isset($searchs["status"]) ? trim($searchs["status"])
+            : (isset($this->allInput["status"]) ? trim($this->allInput["status"]) : "");//status
         if (!empty($userName)) {
             array_push($where, "u.name like '%$userName%'");
+        }
+        if (!empty($phone)) {
+            array_push($where, "u.phone like '%$phone%'");
+        }
+        if (!empty($email)) {
+            array_push($where, "u.email like '%$email%'");
+        }
+        if (!empty($unum)) {
+            array_push($where, "u.unum like '%$unum%'");
+        }
+        if (!empty($status)) {
+            switch ($status) {
+                case 1://启用
+                    array_push($where, "u.status = 0 and u.flag=0");
+                    break;
+                case 2://待审核
+                    array_push($where, "u.status = 1 and u.flag=0");
+                    break;
+                case 3:
+                    //已停用
+                    array_push($where, "u.flag=1");
+                    break;
+            }
         }
         $where = implode(" and ", $where);
         if (empty($where)) {
