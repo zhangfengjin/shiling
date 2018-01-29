@@ -228,6 +228,9 @@
                         "aoColumns": aoColumns,
                         "order": [[0, "desc"]],
                         "toolbar": {
+                            "add": {
+                                "info": "新建", "func": me._add
+                            },
                             "custom": {
                                 "info": "导入", "func": function (content) {
                                     me._import(content);
@@ -255,6 +258,18 @@
                         }
                     };
                     TableList.search(tableId, listUrl, searchInfo);
+                },
+                _add: function () {
+                    me._openlayer(0, 1, function (requestData, successfn, usable) {
+                        TableList.optTable({
+                            "tableId": tableId,
+                            "url": dspUrl + "/store",
+                            "type": "post",
+                            "reqData": requestData,
+                            "successfn": successfn,
+                            "failfn": usable
+                        });
+                    });
                 },
                 _edit: function (ids, full, obj) {
                     if (ids) {
