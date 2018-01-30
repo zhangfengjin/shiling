@@ -8,6 +8,7 @@ use App\Http\Services\UploadService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SchoolController extends Controller
@@ -43,7 +44,7 @@ class SchoolController extends Controller
         if ($school) {
             return DataStandard::getStandardData();
         }
-        return DataStandard::getStandardData([], config('validator.620'), 620);
+        return DataStandard::getStandardData([], config('validator.621'), 621);
     }
 
     public function update(Request $request, $schoolId)
@@ -79,10 +80,43 @@ class SchoolController extends Controller
                 "area" => "县区"
             ];
             $schoolService = new SchoolService();
+            $areaService = new AreaService();
+            $areas = $areaService->getArea();
             $len = count($rows);
             if ($len >= 2) {
+                foreach ($titles as $key => &$title) {
+                    if (($key = array_search($title, $rows[0])) === FALSE) {
+                        return DataStandard::getStandardData([], config("validator.603"), 603);
+                    }
+                    $title = $key;
+                }
                 for ($idx = 1; $idx < $len; $idx++) {
-
+                    $schoolName = $rows[$idx][$titles["school"]];
+                    $province = $rows[$idx][$titles["province"]];
+                    $city = $rows[$idx][$titles["city"]];
+                    $area = $rows[$idx][$titles["area"]];
+                    $areaId = 0;
+                    foreach ($areas as $val) {
+                        if ($val->area_name == $area &&
+                            $val->province_name == $province &&
+                            $val->city_name == $city
+                        ) {
+                            $areaId = $val->id;
+                            break;
+                        }
+                    }
+                    if ($areaId) {
+                        $input["schoolName"] = $schoolName;
+                        $input["area_id"] = $areaId;
+                        $schoolService = new SchoolService();
+                        $school = $schoolService->create($input);
+                        if ($school) {
+                            continue;
+                        }
+                        return DataStandard::getStandardData([], config('validator.621'), 621);
+                    }
+                    Log::info($areaId);
+                    return DataStandard::getStandardData(["从第" . $idx . "行开始导入失败"], config("validator.622"), 622);
                 }
             }
         }
