@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Http\Services\AreaService;
 use App\Http\Services\SchoolService;
 use App\Http\Services\UploadService;
 use App\Utils\DataStandard;
@@ -14,7 +15,16 @@ class SchoolController extends Controller
     //
     public function index()
     {
-        return view("schools.school");
+        $areaService = new AreaService();
+        $provinces = $areaService->getArea("province");
+        $cities = $areaService->getArea("city");
+        $areas = $areaService->getArea();
+        $pages = [
+            "provinces" => $provinces,
+            "cities" => $cities,
+            "areas" => $areas
+        ];
+        return view("schools.school")->with($pages);
     }
 
     public function update(Request $request, $schoolId)
