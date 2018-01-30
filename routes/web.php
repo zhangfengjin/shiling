@@ -43,6 +43,7 @@ Route::group(['domain' => ''],
             Route::post("school/import", "SchoolController@import");
             Route::get("school/{schoolId}", "SchoolController@show");
             Route::put("school/{schoolId}", "SchoolController@update");
+            Route::post("school", "SchoolController@store");
 
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");

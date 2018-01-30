@@ -62,7 +62,30 @@ class SchoolService extends CommonService
 
     public function update($input, $schoolId)
     {
+        $school = School::find($schoolId);
+        $school->area_id = $input["area_id"];
+        $school->name = $input["schoolName"];
+        $school->save();
+        return true;
+    }
 
+    public function create($input)
+    {
+        $areaId = $input["area_id"];
+        $schoolName = $input["schoolName"];
+        $where = [
+            "area_id" => $areaId,
+            "name" => $schoolName,
+        ];
+        $school = School::where($where)->count();
+        if (!$school) {
+            $school = new School();
+            $school->area_id = $areaId;
+            $school->name = $schoolName;
+            $school->save();
+            return $school;
+        }
+        return false;
     }
 
     /**

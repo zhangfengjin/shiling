@@ -27,6 +27,17 @@ class SchoolController extends Controller
         return view("schools.school")->with($pages);
     }
 
+    public function store(Request $request)
+    {
+        $input = $request->all();
+        $schoolService = new SchoolService();
+        $school = $schoolService->create($input);
+        if ($school) {
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config('validator.620'), 620);
+    }
+
     public function update(Request $request, $schoolId)
     {
         $input = $request->all();

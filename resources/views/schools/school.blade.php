@@ -5,7 +5,7 @@
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">省</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="province" class="form-control">
+                    <select id="province" class="form-control" required>
                         <option value=""></option>
                         @foreach($provinces as $province)
                             <option value="{{$province->province_code}}">{{$province->province_name}}</option>
@@ -14,7 +14,7 @@
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">市</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="city" class="form-control">
+                    <select id="city" class="form-control" required>
                         <option value=""></option>
                         @foreach($cities as $city)
                             <option parent="{{$city->province_code}}"
@@ -24,19 +24,19 @@
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">县区</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="area" class="form-control">
+                    <select id="area" class="form-control" required>
                         <option value=""></option>
                         @foreach($areas as $area)
                             <option parent="{{$area->city_code}}"
-                                    value="{{$area->area_code}}">{{$area->area_name}}</option>
+                                    value="{{$area->id}}">{{$area->area_name}}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">学校</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="school_name" type="text" class="form-control" placeholder="学校">
+                <div class="col-md-10 col-sm-10 col-xs-12">
+                    <input id="school_name" type="text" class="form-control" placeholder="学校" required>
                 </div>
             </div>
         </form>
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="x_content">
-                    <table id="account_table" class="table table-striped table-bordered bulk_action">
+                    <table id="school_table" class="table table-striped table-bordered bulk_action">
                     </table>
                 </div>
             </div>
@@ -123,7 +123,7 @@
         AccountUtil = function (me) {
             var listUrl = schoolUrl + "/list";
             var lay = $("#detail").prop("outerHTML");
-            var tableId = "account_table";
+            var tableId = "school_table";
             var searchInfo;
             var provinces = [];  //定义数组
             return me = {
@@ -276,7 +276,7 @@
                     me._openlayer(0, 1, function (requestData, successfn, usable) {
                         TableList.optTable({
                             "tableId": tableId,
-                            "url": dspUrl + "/store",
+                            "url": schoolUrl,
                             "type": "post",
                             "reqData": requestData,
                             "successfn": successfn,
@@ -405,7 +405,6 @@
                                     if (cityValue == cities[idx2].name) {
                                         var areas = cities[idx2].value.value;
                                         for (var idx3 in areas) {
-                                            var areaParentValue = areas[idx3].name;
                                             $("#area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
                                         }
                                     }
@@ -438,6 +437,8 @@
                                 var parsl = $('#detail').parsley();
                                 parsl.validate();
                                 if (true === parsl.isValid()) {
+                                    requestData.schoolName = $("#school_name").val();
+                                    requestData.area_id = $("#area").val();
                                     yes(requestData, function () {
                                         layer.close(index);
                                     }, usable);
