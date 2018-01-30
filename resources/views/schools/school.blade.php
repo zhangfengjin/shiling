@@ -3,8 +3,8 @@
     <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">省</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
+                <label class="control-label col-md-2 col-sm-2 col-xs-12">省</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
                     <select id="province" class="form-control" required>
                         <option value=""></option>
                         @foreach($provinces as $province)
@@ -12,8 +12,10 @@
                         @endforeach
                     </select>
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">市</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2 col-sm-2 col-xs-12">市</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
                     <select id="city" class="form-control" required>
                         <option value=""></option>
                         @foreach($cities as $city)
@@ -22,8 +24,10 @@
                         @endforeach
                     </select>
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">县区</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2 col-sm-2 col-xs-12">县区</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
                     <select id="area" class="form-control" required>
                         <option value=""></option>
                         @foreach($areas as $area)
@@ -34,8 +38,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">学校</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
+                <label class="control-label col-md-2 col-sm-2 col-xs-12">学校</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
                     <input id="school_name" type="text" class="form-control" placeholder="学校" required>
                 </div>
             </div>
@@ -175,8 +179,6 @@
                             });
                         }
                     });
-                    console.log(provinces);
-
                 },
                 _import: function (content) {
                     $(content).append("<div style='float:left;'>" +
@@ -288,40 +290,14 @@
                     if (ids) {
                         TableList.controllerDisabled(obj);
                         var fillData = function (data) {
+                            $("#province").val(data.province_code);
+                            $('#province').trigger('change');
+                            $("#city").val(data.city_code);
+                            $('#city').trigger('change');
+                            $("#area").val(data.area_id);
                             $("#school_name").val(data.name);
-                            $("#phone").val(data.phone);
-                            $("#email").val(data.email);
-                            $("#unum").val(data.unum);
-                            $("#age").val(data.age);
-                            $("#seniority").val(data.seniority);
-                            $("#role").val(data.role_id);
-                            $("#sex").val(data.sex);
-                            $("#user_title").val(data.user_title_id);
-                            $("#school").val(data.school_id);
-                            //$("#school option[value='" + data.school_id + "']").attr('selected', true);
-                            $.each(data.courses, function () {
-                                $("#course option[value='" + this.course_id + "']").attr('selected', true);
-                            });
-                            $.each(data.grades, function () {
-                                $("#grade option[value='" + this.grade_id + "']").attr('selected', true);
-                            });
-                            $("select").trigger("chosen:updated");
-                            $("#address").val(data.address);
                         };
                         var updateData = function (requestData, successfn, usable) {
-                            requestData.schoolName = $("#school_name").val();
-                            requestData.phone = $("#phone").val();
-                            requestData.email = $("#email").val();
-                            requestData.unum = $("#unum").val();
-                            requestData.age = $("#age").val();
-                            requestData.seniority = $("#seniority").val();
-                            requestData.roles = $("#role").val();
-                            requestData.sex = $("#sex").val();
-                            requestData.userTitle = $("#user_title").val();
-                            requestData.school = $("#school").val();
-                            requestData.courses = $("#course").val();
-                            requestData.grades = $("#grade").val();
-                            requestData.address = $("#address").val();
                             TableList.optTable({
                                 "tableId": tableId,
                                 "url": schoolUrl + "/" + ids,
@@ -350,8 +326,6 @@
                     $("ul.parsley-errors-list").remove();
                     $("#detail").remove();
                     $("#detail_mould").append(lay);
-                    $("#user_id").val('');
-
                     var config = {
                         ".chosen-select": {},
                         ".chosen-select-deselect": {
@@ -418,13 +392,13 @@
                     var usable = function () {
                         btns.css("pointer-events", "");
                     };
-                    var area = ["50%", "60%"];
+                    var area = ["400px", "400px"];
                     if (device.mobile()) {
                         area = ["80%", "70%"];
                     }
                     layer.open({
                         type: 1,
-                        title: "用户信息",
+                        title: "学校信息",
                         scrollbar: false,
                         area: area, // 宽高
                         content: $("#detail"),

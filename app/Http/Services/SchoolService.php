@@ -60,6 +60,19 @@ class SchoolService extends CommonService
         return DataStandard::getListData($this->sEcho, $total, $rows);
     }
 
+
+    public function show($schoolId)
+    {
+        $select = [
+            "sch.name", "province_code", "city_code", "area_id"
+        ];
+        $school = DB::table("schools as sch")
+            ->join("areas as area", "area.id", "=", "sch.area_id")
+            ->where("sch.flag", 0)->where('sch.id', $schoolId)
+            ->get($select)->first();
+        return $school;
+    }
+
     public function update($input, $schoolId)
     {
         $school = School::find($schoolId);

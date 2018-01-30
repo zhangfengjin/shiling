@@ -27,6 +27,14 @@ class SchoolController extends Controller
         return view("schools.school")->with($pages);
     }
 
+
+    public function show(Request $request, $schoolId)
+    {
+        $schoolService = new SchoolService();
+        $school = $schoolService->show($schoolId);
+        return DataStandard::getStandardData($school);
+    }
+
     public function store(Request $request)
     {
         $input = $request->all();
