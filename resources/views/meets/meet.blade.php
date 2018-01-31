@@ -41,36 +41,62 @@
     <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">姓名</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议名称</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="user_name" type="text" class="form-control" placeholder="姓名"
-                           required data-parsley-maxlength="60"
-                           data-parsley-maxlength-message="最长不允许超过60">
+                    <input id="unum" type="text" class="form-control" placeholder="会议名称">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">手机号</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">主讲人</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="phone" type="text" class="form-control" placeholder="手机号"
-                           required data-parsley-required-message="手机号不允许为空"
-                           pattern="^1\d{10}" disabled>
+                    <input id="age" type="text" class="form-control" placeholder="主讲人">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">邮箱</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">人数限制</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="email" type="email" class="form-control" placeholder="邮箱"
-                           required disabled>
+                    <input id="seniority" type="text" class="form-control" placeholder="人数限制">
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">继教号</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议时间段</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="unum" type="text" class="form-control" placeholder="继教号">
+                    <input id="unum" type="text" class="form-control" placeholder="会议名称">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">年龄</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">主讲人</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="age" type="text" class="form-control" placeholder="年龄">
+                    <input id="age" type="text" class="form-control" placeholder="主讲人">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">工龄</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">人数限制</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="seniority" type="text" class="form-control" placeholder="工龄">
+                    <input id="seniority" type="text" class="form-control" placeholder="人数限制">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">省</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="province" class="form-control" required>
+                        <option value=""></option>
+                        @foreach($provinces as $province)
+                            <option value="{{$province->province_code}}">{{$province->province_name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">市</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="city" class="form-control" required>
+                        <option value=""></option>
+                        @foreach($cities as $city)
+                            <option parent="{{$city->province_code}}"
+                                    value="{{$city->city_code}}">{{$city->city_name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">县区</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="area" class="form-control" required>
+                        <option value=""></option>
+                        @foreach($areas as $area)
+                            <option parent="{{$area->city_code}}"
+                                    value="{{$area->id}}">{{$area->area_name}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="form-group">
