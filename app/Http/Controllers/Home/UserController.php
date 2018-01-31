@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
-class UserController extends Controller
+class UserController extends HomeController
 {
 
     /**
@@ -112,9 +112,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
-        $userService = new UserService();
-        $userService->delete($id);
-        return DataStandard::getStandardData();
+        if (parent::validateAuth()) {
+            $userService = new UserService();
+            $userService->delete($id);
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config('validator.301'), 301);
     }
 
     /**
@@ -137,16 +140,19 @@ class UserController extends Controller
      */
     public function stop(Request $request, $userId)
     {
-        $code = $request->input('code');
-        $account = config('app.stop_tel');
-        $verifyService = new VerifyService();
-        $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
-        if (!$msg) { // 返回空字符串表示验证通过
-            $userService = new UserService();
-            $userService->delete($userId);
-            return DataStandard::getStandardData();
+        if (parent::validateAuth()) {
+            $code = $request->input('code');
+            $account = config('app.stop_tel');
+            $verifyService = new VerifyService();
+            $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
+            if (!$msg) { // 返回空字符串表示验证通过
+                $userService = new UserService();
+                $userService->delete($userId);
+                return DataStandard::getStandardData();
+            }
+            return DataStandard::getStandardData([], config("validator.119"), 119);
         }
-        return DataStandard::getStandardData([], config("validator.119"), 119);
+        return DataStandard::getStandardData([], config('validator.301'), 301);
     }
 
 
@@ -163,8 +169,11 @@ class UserController extends Controller
      */
     public function export(Request $request)
     {
-        $userService = new UserService($request);
-        $userService->export();
+        if (parent::validateAuth()) {
+            $userService = new UserService($request);
+            $userService->export();
+        }
+        return DataStandard::getStandardData([], config('validator.301'), 301);
     }
 
     /**

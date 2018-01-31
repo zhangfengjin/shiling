@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
-class SchoolController extends Controller
+class SchoolController extends HomeController
 {
     //
     public function index()

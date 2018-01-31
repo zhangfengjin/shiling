@@ -7,7 +7,7 @@ use App\Utils\DataStandard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class MeetController extends Controller
+class MeetController extends HomeController
 {
     /**
      * Display a listing of the resource.

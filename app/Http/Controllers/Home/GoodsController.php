@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 
-class GoodsController extends Controller
+class GoodsController extends HomeController
 {
     /**
      * Display a listing of the resource.
