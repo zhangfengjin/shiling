@@ -22,5 +22,13 @@ return [
                 "name" => "学校列表", "href" => "/school"
             ]
         ]
+    ],
+    [
+        "name" => "角色管理", "icon" => "cog", "href" => "", "childrens" =>
+        [
+            [
+                "name" => "角色列表", "href" => "/role"
+            ]
+        ]
     ]
 ];

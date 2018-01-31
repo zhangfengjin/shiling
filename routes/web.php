@@ -45,13 +45,13 @@ Route::group(['domain' => ''],
             Route::put("school/{schoolId}", "SchoolController@update");
             Route::post("school", "SchoolController@store");
 
+            Route::get("role", "RoleController@index");
+            Route::get("role/list", "RoleController@getList");//角色列表
+
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });
             Route::post("signin/code", "MeetController@signin");//二维码签到
-
-            Route::get("school/list", "SchoolController@getList");//学校列表
-            Route::get("role/list", "RoleController@getList");//角色列表
 
             Route::post("meet/upload", "MeetController@upload");
             Route::get("award", "AwardController@index");

@@ -32,15 +32,19 @@ class RoleService extends CommonService
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = Role::whereRaw($where)->where("flag", 0)->count();
+        $total = DB::table("roles as role")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
-            'id', 'name'
+            'role.id', 'role.name', 'role.created_at'
         ];
+        $creator = DB::raw("u.name as creator");
+        array_push($select, $creator);
         //获取查询结果
         $sortField = "id";
         $sSortDir = "asc";
-        $rows = Role::whereRaw($where)->where("flag", 0)
+        $rows = DB::table("roles as role")
+            ->leftJoin("users as u", 'u.id', '=', 'role.creator')
+            ->whereRaw($where)->where("role.flag", 0)
             ->orderBy($sortField, $sSortDir)->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
         foreach ($rows as $row) {
@@ -64,7 +68,7 @@ class RoleService extends CommonService
         $roleName = isset($searchs["roleName"]) ? trim($searchs["roleName"])
             : (isset($this->allInput["roleName"]) ? trim($this->allInput["roleName"]) : "");//合同号
         if (!empty($roleName)) {
-            array_push($where, "name like '%$roleName%'");
+            array_push($where, "role.name like '%$roleName%'");
         }
         $where = implode(" and ", $where);
         if (empty($where)) {
