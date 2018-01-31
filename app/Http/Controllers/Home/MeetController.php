@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Http\Services\MeetService;
 use App\Http\Services\UploadService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
@@ -97,5 +98,13 @@ class MeetController extends HomeController
         $action = $_GET ['action'];
         $file = $upload->uploadfile($action);
         return json_encode($file);
+    }
+
+
+    public function getList(Request $request)
+    {
+        $meetService = new MeetService($request);
+        $list = $meetService->getList();
+        return DataStandard::printStandardData($list);
     }
 }

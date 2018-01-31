@@ -32,4 +32,9 @@ class MeetService
         }
         return true;
     }
+
+    public function getList()
+    {
+        
+    }
 }

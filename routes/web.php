@@ -48,17 +48,18 @@ Route::group(['domain' => ''],
             Route::get("role", "RoleController@index");
             Route::get("role/list", "RoleController@getList");//角色列表
 
+            Route::post("meet/upload", "MeetController@upload");
+            Route::resource("meet/list", "MeetController@getList");
+            Route::resource("meet", "MeetController");
+            Route::get("award", "AwardController@index");//摇奖
+
+            Route::post("goods/upload", "GoodsController@upload");
+            Route::resource("goods", "GoodsController");
+
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });
             Route::post("signin/code", "MeetController@signin");//二维码签到
-
-            Route::post("meet/upload", "MeetController@upload");
-            Route::get("award", "AwardController@index");
-
-            Route::post("goods/upload", "GoodsController@upload");
-            Route::resource("meet", "MeetController");
-            Route::resource("goods", "GoodsController");
         });
     }
 );
