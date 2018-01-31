@@ -43,29 +43,29 @@
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">会议名称</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="unum" type="text" class="form-control" placeholder="会议名称">
+                    <input id="meet_name" type="text" class="form-control" placeholder="会议名称">
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">主讲人</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="age" type="text" class="form-control" placeholder="主讲人">
+                    <input id="keynote_speaker" type="text" class="form-control" placeholder="主讲人">
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">人数限制</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="seniority" type="text" class="form-control" placeholder="人数限制">
+                    <input id="limit_count" type="text" class="form-control" placeholder="人数限制">
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议时间段</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议开始时间</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="unum" type="text" class="form-control" placeholder="会议名称">
+                    <input id="begin_time" type="text" class="form-control" placeholder="会议开始时间">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">主讲人</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议结束时间</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="age" type="text" class="form-control" placeholder="主讲人">
+                    <input id="end_time" type="text" class="form-control" placeholder="会议结束时间">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">人数限制</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">参会对象</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="seniority" type="text" class="form-control" placeholder="人数限制">
+                    <input id="to_object" type="text" class="form-control" placeholder="人数限制">
                 </div>
             </div>
             <div class="form-group">
@@ -100,67 +100,15 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">角色</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="role" class="form-control">
-                        <option value=""></option>
-                        @foreach($roles as $role)
-                            <option value="{{$role->id}}">{{$role->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">性别</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="sex" class="form-control">
-                        <option value="0">未知</option>
-                        <option value="1">男</option>
-                        <option value="2">女</option>
-                        <option value="3">中性</option>
-                    </select>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">职称</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="user_title" class="form-control">
-                        <option value=""></option>
-                        @foreach($titles as $title)
-                            <option value="{{$title->id}}">{{$title->value}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">学校</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="school" data-placeholder="学校"
-                            class="form-control chosen-select">
-                        @foreach($schools as $school)
-                            <option value="{{$school->id}}">{{$school->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">科目</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="course" data-placeholder="科目"
-                            class="form-control chosen-select" multiple>
-                        @foreach($courses as $course)
-                            <option value="{{$course->id}}">{{$course->value}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">教学年级</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="grade" data-placeholder="教学年级"
-                            class="form-control chosen-select" multiple>
-                        @foreach($grades as $grade)
-                            <option value="{{$grade->id}}">{{$grade->value}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">地址</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">详细地址</label>
                 <div class="col-md-10 col-sm-10 col-xs-12">
-                    <input id="address" type="text" class="form-control" placeholder="地址">
+                    <textarea id="addr" rows="3" class="form-control" placeholder="详细地址"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议详情</label>
+                <div class="col-md-10 col-sm-10 col-xs-12">
+                    <input id="abstract" type="text" class="form-control" placeholder="会议详情">
                 </div>
             </div>
         </form>
@@ -184,7 +132,7 @@
                                         <input class="col-md-7 col-sm-8 col-xs-12" id="search_email"></li>
                                     <li class="col-md-4 col-sm-6 col-xs-12">
                                         <label class="control-label col-md-5 col-sm-4 col-xs-12">姓名</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_user_name"></li>
+                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_meet_name"></li>
                                     <li class="col-md-4 col-sm-6 col-xs-12">
                                         <label class="control-label col-md-5 col-sm-4 col-xs-12">继教号</label>
                                         <input class="col-md-7 col-sm-8 col-xs-12" id="search_unum"></li>
@@ -210,7 +158,7 @@
                 </div>
 
                 <div class="x_content">
-                    <table id="account_table" class="table table-striped table-bordered bulk_action">
+                    <table id="meet_table" class="table table-striped table-bordered bulk_action">
                     </table>
                 </div>
             </div>
@@ -221,50 +169,17 @@
     <!-- bootstrap-daterangepicker -->
     <script src="{{url('js/plugins/moment/moment-with-locales.min.js')}}"></script> {{--日期处理 带有国际化语言的--}}
     <script src="{{url('js/plugins/daterangepicker/daterangepicker.js')}}"></script> {{--日期区间--}}
-    <style>
-        .uploadImg {
-            margin-right: 5px;
-            border-image: none;
-            overflow: hidden;
-            cursor: pointer;
-            padding: 6px 12px;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.42857143;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: middle;
-            -ms-touch-action: manipulation;
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            background-image: none;
-            border: 1px solid transparent;
-            margin-left: 5px;
-            color: #333;
-            background-color: #fff;
-            border-color: #ccc;
-        }
 
-        #uploadcover {
-            position: absolute;
-            margin-top: -45px;
-            width: 54px;
-            overflow: hidden;
-        }
-    </style>
     <div id="detail_mould"></div>
     <script type="application/javascript">
-        var userUrl = "/user";
+        var meetUrl = "/meet";
         $(function () {
             AccountUtil.init();
         });
         AccountUtil = function (me) {
-            var listUrl = userUrl + "/list";
+            var listUrl = meetUrl + "/list";
             var lay = $("#detail").prop("outerHTML");
-            var tableId = "account_table";
+            var tableId = "meet_table";
             var searchInfo;
             return me = {
                 _initOwn: function () {
@@ -274,7 +189,7 @@
                     $("#reset").on("click", function () {
                         $("#search_phone").val('');
                         $("#search_email").val('');
-                        $("#search_user_name").val('');
+                        $("#search_meet_name").val('');
                         $("#search_unum").val('');
                         $("#search_status").val('');
                     });
@@ -284,65 +199,27 @@
                     me._createList();
                 },
                 _import: function (content) {
-                    $(content).append("<div style='float:left;'>" +
-                        "<form id='uploadimg_form' " +
-                        "action='/user/import?action=uploadfile' " +
-                        "enctype='multipart/form-data' method='POST' " +
-                        "target='refresh_iframe'>" +
-                        "<button id='uploadBtn' class='uploadImg' style='z-index: -1; cursor: pointer;' event='1' class='btn btn-default' >导入</button>" +
-                        "<input style='FILTER: alpha(opacity=0); opacity: 0; -moz-opacity: 0; -khtml-opacity: 0;' " +
-                        "id='uploadcover' name='file' class='uploadImg' type='file' accept='.xlsx,.xls'>" +
-                        "<input name='_token' type='hidden' value=''>" +
-                        "</form>" +
-                        "<iframe id='refresh_iframe' name='refresh_iframe'style='display: none;'>上传成功" +
-                        "</iframe>" +
-                        "</div>");
-                    $("input[name='_token']").val($('meta[name="csrf-token"]').attr('content'));
-                    $("#uploadcover").change(function () {// 上传资料封面
-                        $('#uploadimg_form').submit();
-                        $("#uploadimg_form input").attr("disabled", "disabled");
-                    });
-                    $("#refresh_iframe").load(
-                        function () {
-                            var data = $(
-                                window.frames['refresh_iframe'].document.body)
-                                .html();
-                            if (data != null && data != "") {
-                                data = CommonUtil.parseToJson(data);
-                                if (data.code == 0) {
-                                    alert("导入成功");
-                                    CommonUtil.redirect("/user");
-                                } else if (data.code != 601) {
-                                    var message = data.message;
-                                    $.each(data.data, function () {
-                                        message += "\r\n";
-                                        message += this;
-                                    });
-                                    alert(message);
-                                }
-                                $("#uploadimg_form input").removeAttr("disabled");
-                            }
-                        });
+
                 },
                 _createList: function () {
                     var aoColumns = [{
                         "sTitle": "",
                         "data": "id"
                     }, {
-                        "sTitle": "姓名",
+                        "sTitle": "会议名称",
                         "data": "name"
                     }, {
-                        "sTitle": "手机号",
-                        "data": "phone"
+                        "sTitle": "主讲人",
+                        "data": "keynote_speaker"
                     }, {
-                        "sTitle": "邮箱",
-                        "data": "email"
+                        "sTitle": "开始时间",
+                        "data": "begin_time"
                     }, {
-                        "sTitle": "继教号",
-                        "data": "unum"
+                        "sTitle": "结束时间",
+                        "data": "end_time"
                     }, {
-                        "sTitle": "角色",
-                        "data": "roleName"
+                        "sTitle": "限制人数",
+                        "data": "limit_count"
                     }, {
                         "sTitle": "学校",
                         "data": "schoolName"
@@ -374,7 +251,7 @@
                              },*/
                             "export": {
                                 "info": "导出", "func": function (ids) {
-                                    location.href = CommonUtil.getRootPath() + userUrl + "/export?searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
+                                    location.href = CommonUtil.getRootPath() + meetUrl + "/export?searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
                                 }
                             },
                             "custom": {
@@ -418,7 +295,7 @@
                                                         if (text != "") {
                                                             TableList.optTable({
                                                                 "tableId": tableId,
-                                                                "url": userUrl + "/stop/" + ids,
+                                                                "url": meetUrl + "/stop/" + ids,
                                                                 "type": "DELETE",
                                                                 "async": true,
                                                                 "successfn": function () {
@@ -466,7 +343,7 @@
                         "searchs": {
                             "phone": $("#search_phone").val(),
                             "email": $("#search_email").val(),
-                            "userName": $("#search_user_name").val(),
+                            "meetName": $("#search_meet_name").val(),
                             "unum": $("#search_unum").val(),
                             "status": $("#search_status").val()
                         }
@@ -477,7 +354,7 @@
                     if (ids) {
                         TableList.optTable({
                             "tableId": tableId,
-                            "url": userUrl + "/" + ids,
+                            "url": meetUrl + "/" + ids,
                             "type": "DELETE",
                             "async": true,
                             "successfn": function () {
@@ -502,7 +379,7 @@
                         TableList.controllerDisabled(obj);
                         TableList.optTable({
                             "tableId": tableId,
-                            "url": userUrl + "/egis/" + ids,
+                            "url": meetUrl + "/egis/" + ids,
                             "type": "put",
                             "async": true,
                             "successfn": function () {
@@ -524,7 +401,7 @@
                                 requestData.reason = reason;
                                 TableList.optTable({
                                     "tableId": tableId,
-                                    "url": userUrl + "/refuse/" + ids,
+                                    "url": meetUrl + "/refuse/" + ids,
                                     "type": "put",
                                     "async": true,
                                     "reqData": requestData,
@@ -542,7 +419,7 @@
                     if (ids) {
                         TableList.controllerDisabled(obj);
                         var fillData = function (data) {
-                            $("#user_name").val(data.name);
+                            $("#umeet_name").val(data.name);
                             $("#phone").val(data.phone);
                             $("#email").val(data.email);
                             $("#unum").val(data.unum);
@@ -563,7 +440,7 @@
                             $("#address").val(data.address);
                         };
                         var updateData = function (requestData, successfn, usable) {
-                            requestData.userName = $("#user_name").val();
+                            requestData.meetName = $("#meet_name").val();
                             requestData.phone = $("#phone").val();
                             requestData.email = $("#email").val();
                             requestData.unum = $("#unum").val();
@@ -578,14 +455,14 @@
                             requestData.address = $("#address").val();
                             TableList.optTable({
                                 "tableId": tableId,
-                                "url": userUrl + "/" + ids,
+                                "url": meetUrl + "/" + ids,
                                 "type": "put",
                                 "reqData": requestData,
                                 "successfn": successfn,
                                 "failfn": usable
                             });
                         };
-                        CommonUtil.requestService(userUrl + "/" + ids, "", true, "get",
+                        CommonUtil.requestService(meetUrl + "/" + ids, "", true, "get",
                             function (response) {
                                 //从后台成功获取数据 拼写到前台页面
                                 //弹出层模式
@@ -604,7 +481,6 @@
                     $("ul.parsley-errors-list").remove();
                     $("#detail").remove();
                     $("#detail_mould").append(lay);
-                    $("#user_id").val('');
 
                     var config = {
                         ".chosen-select": {},
@@ -625,7 +501,7 @@
                         $(selector).chosen(config[selector])
                     }
                     $(".chosen-container").css({
-                        "width": $("#user_name").width() + "%",
+                        "width": $("#meet_name").width() + "%",
                         "height": 30
                     });
                 },

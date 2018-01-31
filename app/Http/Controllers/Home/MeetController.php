@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Http\Services\AreaService;
 use App\Http\Services\MeetService;
 use App\Http\Services\UploadService;
 use App\Utils\DataStandard;
@@ -11,14 +12,21 @@ use App\Http\Controllers\Controller;
 class MeetController extends HomeController
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return
      */
     public function index()
     {
         //
-        return view("meets.meet");
+        $areaService = new AreaService();
+        $provinces = $areaService->getArea("province");
+        $cities = $areaService->getArea("city");
+        $areas = $areaService->getArea();
+        $pages = [
+            "provinces" => $provinces,
+            "cities" => $cities,
+            "areas" => $areas
+        ];
+        return view("meets.meet")->with($pages);
     }
 
     /**
