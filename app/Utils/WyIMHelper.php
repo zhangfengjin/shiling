@@ -12,8 +12,8 @@ namespace App\Utils;
 class WyIMHelper
 {
     const   HEX_DIGITS = "xyu782xas1abcdef";
-    private $AppKey = '65a0fc1cbede0d7529600ae2cee36515_test';                //开发者平台分配的AppKey
-    private $AppSecret = '76d9ce7f9eca';             //开发者平台分配的AppSecret,可刷新
+    private $AppKey; //'65a0fc1cbede0d7529600ae2cee36515';                //开发者平台分配的AppKey
+    private $AppSecret;// = '76d9ce7f9eca';             //开发者平台分配的AppSecret,可刷新
     private $Nonce;                    //随机数（最大长度128个字符）
     private $CurTime;                //当前UTC时间戳，从1970年1月1日0点0 分0 秒开始到现在的秒数(String)
     private $CheckSum;                //SHA1(AppSecret + Nonce + CurTime),三个参数拼接的字符串，进行SHA1哈希计算，转化成16进制字符(String，小写)
@@ -25,6 +25,8 @@ class WyIMHelper
      */
     public function __construct($RequestType = 'curl')
     {
+        $this->AppKey = config('app.wy.appkey');
+        $this->AppSecret = config('app.wy.secret');
         $this->RequestType = $RequestType;
     }
 
