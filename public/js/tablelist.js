@@ -118,6 +118,7 @@ TableList = function (me) {
                                             case "待审核":
                                             case "待投放":
                                             case "暂停":
+                                            case "已取消":
                                                 className = "status";
                                                 break;
                                             default:

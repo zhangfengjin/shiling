@@ -45,12 +45,12 @@ class MeetService extends CommonService
             'meet.id', 'meet.name', 'meet.addr', 'meet.begin_time', 'meet.end_time',
             'meet.keynote_speaker', 'meet.limit_count', 'meet.to_object'
         ];
-        $status = DB::raw("case when status=1 then '已取消' else '正常' end status");
+        $status = DB::raw("case when meet.status=1 then '已取消' else '正常' end status");
         $areaName = DB::raw("CONCAT(province_name,'-',city_name,'-',area_name) as area_name");
         $userName = DB::raw("u.name as user_name");
         array_push($select, $status, $areaName, $userName);
         //获取查询结果
-        $sortField = "sch.id";
+        $sortField = "meet.id";
         $sSortDir = "asc";
         $rows = DB::table("meets as meet")
             ->join("areas as area", "area.id", "=", "meet.area_id")

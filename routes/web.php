@@ -49,7 +49,7 @@ Route::group(['domain' => ''],
             Route::get("role/list", "RoleController@getList");//角色列表
 
             Route::post("meet/upload", "MeetController@upload");
-            Route::resource("meet/list", "MeetController@getList");
+            Route::get("meet/list", "MeetController@getList");
             Route::resource("meet", "MeetController");
             Route::get("award", "AwardController@index");//摇奖
 

@@ -106,9 +106,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议详情</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12"></label>
                 <div class="col-md-10 col-sm-10 col-xs-12">
-                    <input id="abstract" type="text" class="form-control" placeholder="会议详情">
+                    <textarea id="abstract" rows="3" class="form-control" placeholder="会议详情"></textarea>
                 </div>
             </div>
         </form>
@@ -240,94 +240,22 @@
                         "aoColumns": aoColumns,
                         "order": [[0, "desc"]],
                         "toolbar": {
-                            "del": {
-                                "info": "删除", "func": me._del
-                            },
-                            /*"pass": {
-                             "info": "批量通过", "func": me._egis
-                             },
-                             "refuse": {
-                             "info": "批量驳回", "func": me._refuse
-                             },*/
-                            "export": {
-                                "info": "导出", "func": function (ids) {
-                                    location.href = CommonUtil.getRootPath() + meetUrl + "/export?searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
-                                }
-                            },
-                            "custom": {
-                                "info": "导入", "func": function (content) {
-                                    me._import(content);
-                                }
+                            "add": {
+                                "info": "新建", "func": me._add
                             }
                         },
                         "opt": {
                             "check-square-o": {
                                 "display": 1,
-                                "info": "通过",
+                                "info": "取消会议",
                                 "draw": function (full) {
                                     var params = {};
-                                    if (full.status != "待审核") {
+                                    if (full.status != "已取消") {
                                         params.disabled = true;
                                     }
                                     return params;
                                 },
-                                "func": me._egis
-                            },
-                            "stop": {
-                                "display": 1,
-                                "info": "停用",
-                                "draw": function (full) {
-                                    var params = {};
-                                    if (full.status == "已停用") {
-                                        params.disabled = true;
-                                    }
-                                    return params;
-                                },
-                                "func": function (ids, fn) {
-                                    layer.confirm('给指定手机发送验证码？', {
-                                        btn: ['发送', '取消'] //按钮
-                                    }, function (index) {
-                                        CommonUtil.requestService('/verify/code?stop=1', "", true,
-                                            "get", function (data) {// 验证码已发送出去
-                                                if (data.code == 0) {
-                                                    layer.close(index);
-                                                    layer.prompt({title: '填写验证码', formType: 1}, function (text, index) {
-                                                        if (text != "") {
-                                                            TableList.optTable({
-                                                                "tableId": tableId,
-                                                                "url": meetUrl + "/stop/" + ids,
-                                                                "type": "DELETE",
-                                                                "async": true,
-                                                                "successfn": function () {
-                                                                    layer.close(index);
-                                                                    parent.layer.msg('删除成功', {
-                                                                        icon: 1,
-                                                                        time: 800,
-                                                                        offset: "50px"
-                                                                    });
-                                                                },
-                                                                "failfn": function () {
-                                                                    layer.close(index);
-                                                                    parent.layer.msg('删除失败', {
-                                                                        icon: 1,
-                                                                        time: 800,
-                                                                        offset: "50px"
-                                                                    });
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                } else {
-                                                    layer.msg("验证码发送失败");
-                                                }
-                                            }, function (ex) {// 网络异常
-                                                layer.msg("验证码发送失败");
-                                            });
-
-                                    }, function () {
-                                    });
-
-                                }
+                                "func": me._cancel
                             },
                             "edit": {
                                 "display": 1,
@@ -350,7 +278,7 @@
                     };
                     TableList.search(tableId, listUrl, searchInfo);
                 },
-                _del: function (ids, fn) {
+                _cancel: function (ids, fn) {
                     if (ids) {
                         TableList.optTable({
                             "tableId": tableId,
@@ -374,46 +302,17 @@
                         });
                     }
                 },
-                _egis: function (ids, full, obj) {
-                    if (ids) {
-                        TableList.controllerDisabled(obj);
+                _add: function () {
+                    me._openlayer(0, 1, function (requestData, successfn, usable) {
                         TableList.optTable({
                             "tableId": tableId,
-                            "url": meetUrl + "/egis/" + ids,
-                            "type": "put",
-                            "async": true,
-                            "successfn": function () {
-                                TableList.controllerRemoveDisabled(obj);
-                            },
-                            "failfn": function () {
-                                TableList.controllerRemoveDisabled(obj);
-                            }
+                            "url": schoolUrl,
+                            "type": "post",
+                            "reqData": requestData,
+                            "successfn": successfn,
+                            "failfn": usable
                         });
-
-                    }
-                },
-                _refuse: function (ids, full, obj) {
-                    if (ids) {
-                        if (!me._judgeStatus(full, "未通过")) {
-                            var refuseRequest = function (requestData, successfn, usable) {
-                                var reason = [];
-                                reason.push($("#other").val());
-                                requestData.reason = reason;
-                                TableList.optTable({
-                                    "tableId": tableId,
-                                    "url": meetUrl + "/refuse/" + ids,
-                                    "type": "put",
-                                    "async": true,
-                                    "reqData": requestData,
-                                    "successfn": successfn,
-                                    "failfn": usable
-                                });
-                            };
-                            me._openlayer(refuseRequest);
-                        } else {
-                            layer.msg("选中的记录有审核未通过的客户");
-                        }
-                    }
+                    });
                 },
                 _edit: function (ids, full, obj) {
                     if (ids) {
@@ -510,13 +409,13 @@
                     var usable = function () {
                         btns.css("pointer-events", "");
                     };
-                    var area = ["50%", "60%"];
+                    var area = ["80%", "60%"];
                     if (device.mobile()) {
                         area = ["80%", "70%"];
                     }
                     layer.open({
                         type: 1,
-                        title: "用户信息",
+                        title: "会议信息",
                         scrollbar: false,
                         area: area, // 宽高
                         content: $("#detail"),
@@ -525,7 +424,17 @@
                             btns = layero.children(".layui-layer-btn").children("a");
                             try {
                                 btns.css("pointer-events", "none");
-                                var requestData = {};
+                                var requestData = {
+                                    "meetName": $("#meet_name").val(),
+                                    "keynote_speaker": $("#keynote_speaker").val(),
+                                    "limit_count": $("#limit_count").val(),
+                                    "begin_time": $("#begin_time").val(),
+                                    "end_time": $("#end_time").val(),
+                                    "to_object": $("#to_object").val(),
+                                    "area_id": $("#area").val(),
+                                    "addr": $("#addr").val(),
+                                    "abstract": $("#abstract").val()
+                                };
                                 var parsl = $('#detail').parsley();
                                 parsl.validate();
                                 if (true === parsl.isValid()) {
