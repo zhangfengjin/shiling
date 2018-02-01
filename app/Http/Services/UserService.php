@@ -84,6 +84,10 @@ class UserService extends CommonService
             $input['im_token'] = $ret["info"]["token"];
         } else {
             Log::info(json_encode($ret));
+            if ($ret["code"] == 414) {
+                $ret = $wyIM->updateUserToken($input['account']);
+                $input['im_token'] = $ret["info"]["token"];
+            }
         }
         DB::beginTransaction();
         try {
