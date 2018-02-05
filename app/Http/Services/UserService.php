@@ -323,6 +323,7 @@ class UserService extends CommonService
             ];
             DB::beginTransaction();
             try {
+                Log::info($ids);
                 User::whereIn("id", $ids)->update($updateInfo);
                 UserCourse::whereIn("id", $ids)->update($updateInfo);
                 UserGrade::whereIn("id", $ids)->update($updateInfo);
