@@ -332,7 +332,6 @@ class UserService extends CommonService
                 throw $ex;
             }
         }
-        Log::info($ids);
         return true;
     }
 

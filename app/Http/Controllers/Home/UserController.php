@@ -150,7 +150,7 @@ class UserController extends HomeController
                 $userService->delete($userId);
                 return DataStandard::getStandardData();
             }
-            return DataStandard::getStandardData([], config("validator.119"), 119);
+            return DataStandard::getStandardData([$msg], config("validator.119"), 119);
         }
         return DataStandard::getStandardData([], config('validator.301'), 301);
     }
