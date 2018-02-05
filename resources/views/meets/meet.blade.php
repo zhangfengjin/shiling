@@ -56,12 +56,20 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">会议开始时间</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="begin_time" type="text" class="form-control" placeholder="会议开始时间">
+                <div class="col-md-3 col-sm-3 col-xs-12 xdisplay_inputx form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="begin_time"
+                           placeholder="会议开始时间" aria-describedby="inputSuccess2Status">
+                    <span class="fa fa-calendar-o form-control-feedback left"
+                          aria-hidden="true"></span>
+                    <span id="inputSuccess2Status" class="sr-only">(success)</span>
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">会议结束时间</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="end_time" type="text" class="form-control" placeholder="会议结束时间">
+                <div class="col-md-3 col-sm-3 col-xs-12 xdisplay_inputx form-group has-feedback">
+                    <input type="text" class="form-control has-feedback-left" id="end_time"
+                           placeholder="会议结束时间" aria-describedby="inputSuccess2Status">
+                    <span class="fa fa-calendar-o form-control-feedback left"
+                          aria-hidden="true"></span>
+                    <span id="inputSuccess2Status" class="sr-only">(success)</span>
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">参会对象</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
@@ -375,12 +383,34 @@
                             });
                     }
                 },
+                _daterangepicker: function () {
+                    var timeOptions = {
+                        "singleDatePicker": true,
+                        "timePicker": true,
+                        "timePicker24Hour": true,
+                        "locale": {
+                            "format": 'YYYY-MM-DD hh:mm'
+                        },
+                        "startDate": moment()
+                    };
+                    console.log(moment());
+                    moment.locale("zh-cn");
+                    var beginTime = $('#begin_time');
+                    beginTime.daterangepicker(timeOptions, function (start, end, label) {
+                        beginTime.attr("begin_time", start.format('YYYY-MM-DD hh:mm'));
+                    });
+                    //beginTime.attr("begin_time", date);
+                    var endTime = $('#end_time');
+                    endTime.daterangepicker(timeOptions, function (start, end, label) {
+                        endTime.attr("time_time", start.format('YYYY-MM-DD hh:mm'));
+                    });
+                    //endTime.attr("end_time", date);
+                },
                 _resetHtml: function () {
                     $(".parsley-error").removeClass("parsley-error");
                     $("ul.parsley-errors-list").remove();
                     $("#detail").remove();
                     $("#detail_mould").append(lay);
-
                     var config = {
                         ".chosen-select": {},
                         ".chosen-select-deselect": {
@@ -403,6 +433,7 @@
                         "width": $("#meet_name").width() + "%",
                         "height": 30
                     });
+                    me._daterangepicker();
                 },
                 _openlayer: function (id, type, yes) {
                     me._resetHtml();

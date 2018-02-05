@@ -22,7 +22,7 @@ class ApiCheck
             return DataStandard::printStandardData([], config("validator.112"), 112);
         }
         //todo
-        if (true) {//Cache::has($token)
+        if (Cache::has($token)) {//Cache::has($token)
             return $next($request);
         } else {
             return DataStandard::printStandardData([], config("validator.113"), 113);
