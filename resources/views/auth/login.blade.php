@@ -37,18 +37,92 @@
     </div>
     <script type="application/javascript">
         $(function () {
+            function isEmail(str) {
+                var patrn = /^[A-Za-z0-9]+([-_.][A-Za-z0-9]+)*@([A-Za-z0-9]+[-.])+[A-Za-z0-9]{2,5}$/;
+                return patrn.test(str);
+            }
+
+            // 是否为电话号码
+            function isTel(str) {
+                var patrn = /^1\d{10}$/;
+                return patrn.test(str);
+            }
+
             function postLogin() {
                 var data = {
-                    "phone": $("#account").val(),
                     "password": $("#password").val(),
-                    "bs": "1"
+                    "bs": "1",
+                    "verify": $("#code").val()
                 };
-                CommonUtil.requestService('/auth/login', data, true, "post",
-                    function (data) {
-                        CommonUtil.redirect();
-                    }, function (ex) {
-                    });
+                var account = $("#account").val();
+                if (isEmail(account) || isTel(account)) {
+                    if (isEmail(account)) {
+                        data.email = account;
+                    } else {
+                        data.phone = account;
+                    }
+                    CommonUtil.requestService('/auth/login', data, true, "post",
+                        function (data) {
+                            CommonUtil.redirect();
+                        }, function (ex) {
+                        });
+                }
             }
+
+            var Verify = function (util) {
+                var codeTimer;
+                return util = {
+                    setCCSending: function () {
+                        $("#sendCheckCode").attr("disabled", "disabled");// 不可用
+                        $("#sendCheckCode").css("pointer-events", "none");
+                        $("#sendCheckCode").html("发送中...");
+                    },
+                    setCCDisabled: function (timeMark) {
+                        $("#sendCheckCode").attr("disabled", "disabled");// 不可用
+                        $("#sendCheckCode").css("pointer-events", "none");
+                        $("#sendCheckCode").html(timeMark + "秒获取");
+                    },
+                    removeCCDisabled: function () {
+                        clearInterval(codeTimer);
+                        $("#sendCheckCode").removeAttr("disabled");// 移除不可用属性
+                        $("#sendCheckCode").css("pointer-events", "inherit");
+                        $("#sendCheckCode").html("验证码");
+                    },
+                    codeTimer: function (timeMark) {
+                        codeTimer = setInterval(function () {
+                            if (timeMark < 0) {
+                                util.removeCCDisabled();
+                                return true;
+                            }
+                            util.setCCDisabled(timeMark);
+                            timeMark--;
+                        }, 1000);
+                    },
+                    sendCheckCode: function () {
+                        var account = $("#account").val();
+                        if (isEmail(account) || isTel(account)) {
+                            data = {};
+                            if (isEmail(account)) {
+                                data.email = account;
+                            } else {
+                                data.phone = account;
+                            }
+                            util.setCCSending();
+                            CommonUtil.requestService('/verify/code', data, true,
+                                "get", function (data) {// 验证码已发送出去
+                                    var timeMark = 120;
+                                    util.codeTimer(timeMark);// 计时开始服务器发送验证码
+                                }, function (ex) {// 网络异常
+                                    util.removeCCDisabled();
+                                });
+                        }
+                    }
+                };
+            }();
+
+            $("#sendCheckCode").bind("click", function () {
+                Verify.sendCheckCode();
+            });
 
             /* 登录提交 */
             $("#sublogin").bind("click", function () {
