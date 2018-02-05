@@ -106,7 +106,7 @@ class LoginController extends Controller
                 $verifyService = new VerifyService();
                 $msg = $verifyService->codeValidate($code, $account); // 验证手机邮箱验证码
                 if ($msg) {
-                    return DataStandard::getStandardDatagetStandardData([], $msg, 123);
+                    return DataStandard::getStandardData([], $msg, 123);
                 }
                 $credentials["role_id"] = $bsLimit;//后台登录 只允许管理员
                 $bs = true;
