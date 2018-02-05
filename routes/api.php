@@ -22,6 +22,7 @@ Route::group(['domain' => '',], function () {
         Route::group(["namespace" => 'Auth', 'prefix' => 'auth'], function () {
             Route::post("/register", "RegisterController@register");
             Route::post("/login", "LoginController@login");
+            Route::get("/logout", "LoginController@logout");
             Route::post("/reset", "ResetPasswordController@reset");
         });
 

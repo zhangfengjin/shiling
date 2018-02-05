@@ -123,5 +123,24 @@ class LoginController extends Controller
         return DataStandard::getStandardData([], config("validator.120"), 120);
     }
 
+    public function logout(Request $request)
+    {
+        $user = Auth::user();
+        $bs = false;
+        if (!empty($request->input("bs"))) {
+            $token = empty($user->im_token) ? DataStandard::getToken($user->id) : $user->im_token;
+            $bs = true;
+        } else {
+            $token = $request->input('token');
+        }
+        Cache::forget($token);
+        $this->guard()->logout();
+        if ($bs) {
+            $request->session()->invalidate();
+            return redirect('/');
+        }
+        return DataStandard::getStandardData();
+    }
+
 
 }
