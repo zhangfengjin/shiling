@@ -299,9 +299,9 @@
                         "aoColumns": aoColumns,
                         "order": [[0, "desc"]],
                         "toolbar": {
-                            "del": {
+                            /*"del": {
                                 "info": "删除", "func": me._del
-                            },
+                            },*/
                             /*"pass": {
                              "info": "批量通过", "func": me._egis
                              },
