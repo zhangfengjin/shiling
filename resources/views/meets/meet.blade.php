@@ -384,27 +384,27 @@
                     }
                 },
                 _daterangepicker: function () {
+                    var date = moment().format('YYYY-MM-DD HH:mm');
                     var timeOptions = {
                         "singleDatePicker": true,
                         "timePicker": true,
                         "timePicker24Hour": true,
                         "locale": {
-                            "format": 'YYYY-MM-DD hh:mm'
+                            "format": 'YYYY-MM-DD HH:mm'
                         },
-                        "startDate": moment()
+                        startDate: date
                     };
-                    console.log(moment());
                     moment.locale("zh-cn");
                     var beginTime = $('#begin_time');
                     beginTime.daterangepicker(timeOptions, function (start, end, label) {
-                        beginTime.attr("begin_time", start.format('YYYY-MM-DD hh:mm'));
+                        beginTime.attr("begin_time", start.format('YYYY-MM-DD HH:mm'));
                     });
-                    //beginTime.attr("begin_time", date);
+                    beginTime.attr("begin_time", date);
                     var endTime = $('#end_time');
                     endTime.daterangepicker(timeOptions, function (start, end, label) {
-                        endTime.attr("time_time", start.format('YYYY-MM-DD hh:mm'));
+                        endTime.attr("time_time", start.format('YYYY-MM-DD HH:mm'));
                     });
-                    //endTime.attr("end_time", date);
+                    endTime.attr("end_time", date);
                 },
                 _resetHtml: function () {
                     $(".parsley-error").removeClass("parsley-error");

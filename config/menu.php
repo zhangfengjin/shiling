@@ -31,12 +31,12 @@ return [
             ]
         ]
     ],
-    /*[
+    [
         "name" => "会议管理", "icon" => "cog", "href" => "", "childrens" =>
         [
             [
                 "name" => "会议列表", "href" => "/meet"
             ]
         ]
-    ]*/
+    ]
 ];
