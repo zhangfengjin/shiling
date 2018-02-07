@@ -22,7 +22,7 @@ class Api
             return DataStandard::printStandardData([], config("validator.110"), 110);
         }
         //校验
-        $appKey = $request->input('appKey');//appkey
+        $appKey = $request->header('appKey');//appkey
         $appKeys = config("app.app_key");
         if (empty($appKey) || !isset($appKeys[$appKey])) {
             return DataStandard::printStandardData([], config("validator.111"), 111);

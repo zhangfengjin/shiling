@@ -120,7 +120,7 @@ class LoginController extends Controller
             }
             return DataStandard::getStandardData([], config("validator.124"), 124);
         }
-        return DataStandard::getStandardData([], config("validator.120"), 120);
+        return DataStandard::getStandardData([], config("validator.125"), 125);
     }
 
     public function logout(Request $request)
