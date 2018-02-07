@@ -314,7 +314,7 @@
                     me._openlayer(0, 1, function (requestData, successfn, usable) {
                         TableList.optTable({
                             "tableId": tableId,
-                            "url": schoolUrl,
+                            "url": meetUrl,
                             "type": "post",
                             "reqData": requestData,
                             "successfn": successfn,
@@ -326,7 +326,7 @@
                     if (ids) {
                         TableList.controllerDisabled(obj);
                         var fillData = function (data) {
-                            $("#umeet_name").val(data.name);
+                            $("#meet_name").val(data.name);
                             $("#phone").val(data.phone);
                             $("#email").val(data.email);
                             $("#unum").val(data.unum);
@@ -347,19 +347,6 @@
                             $("#address").val(data.address);
                         };
                         var updateData = function (requestData, successfn, usable) {
-                            requestData.meetName = $("#meet_name").val();
-                            requestData.phone = $("#phone").val();
-                            requestData.email = $("#email").val();
-                            requestData.unum = $("#unum").val();
-                            requestData.age = $("#age").val();
-                            requestData.seniority = $("#seniority").val();
-                            requestData.roles = $("#role").val();
-                            requestData.sex = $("#sex").val();
-                            requestData.userTitle = $("#user_title").val();
-                            requestData.school = $("#school").val();
-                            requestData.courses = $("#course").val();
-                            requestData.grades = $("#grade").val();
-                            requestData.address = $("#address").val();
                             TableList.optTable({
                                 "tableId": tableId,
                                 "url": meetUrl + "/" + ids,
@@ -459,12 +446,13 @@
                                     "meetName": $("#meet_name").val(),
                                     "keynote_speaker": $("#keynote_speaker").val(),
                                     "limit_count": $("#limit_count").val(),
-                                    "begin_time": $("#begin_time").val(),
-                                    "end_time": $("#end_time").val(),
+                                    "begin_time": $("#begin_time").attr("begin_time"),
+                                    "end_time": $("#end_time").attr("end_time"),
                                     "to_object": $("#to_object").val(),
                                     "area_id": $("#area").val(),
                                     "addr": $("#addr").val(),
-                                    "abstract": $("#abstract").val()
+                                    "abstract": $("#abstract").val(),
+                                    "keynote_speaker_id": 0
                                 };
                                 var parsl = $('#detail').parsley();
                                 parsl.validate();

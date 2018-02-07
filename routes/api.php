@@ -33,6 +33,11 @@ Route::group(['domain' => '',], function () {
                 Route::get("user/list", "UserController@getList");//用户列表
                 Route::get("user/{userId}", "UserController@show");//获取用户信息
                 Route::put("user/{userId}", "UserController@update");//更新用户信息
+
+
+                Route::post("signin/code/{meetId}", "MeetController@signin");//二维码签到
+                Route::get("meet/list", "MeetController@getList");//会议列表
+
                 Route::group(['prefix' => 'pay'], function () {
                     Route::post("unifiedorder", "PayController@unifiedorder");
                 });
@@ -41,8 +46,6 @@ Route::group(['domain' => '',], function () {
                 Route::get("role/list", "RoleController@getList");//角色列表
                 Route::get("usertitle/list", "UserTitleController@getList");//职级列表
 
-
-                Route::post("signin/code", "MeetController@signin");//二维码签到
             });
 
         });

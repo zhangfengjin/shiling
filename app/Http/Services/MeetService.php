@@ -9,27 +9,39 @@
 namespace App\Http\Services;
 
 
+use App\Models\Meet;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class MeetService extends CommonService
 {
-    public function store()
+    public function create($input)
     {
-        if ($this->qrcode()) {
-
-        }
+        $meet = new Meet();
+        $meet->name = $input['meetName'];
+        $meet->keynote_speaker = $input['keynote_speaker'];
+        $meet->limit_count = $input['limit_count'];
+        $meet->begin_time = $input['begin_time'];
+        $meet->end_time = $input['end_time'];
+        $meet->to_object = $input['to_object'];
+        $meet->area_id = $input['area_id'];
+        $meet->addr = $input['addr'];
+        $meet->abstract = $input['abstract'];
+        $meet->keynote_speaker_id = 0;//主讲人封面id
+        $meet->save();
+        $this->qrcode($meet->id);//生成签到二维码
+        return true;
     }
 
     /**
      * 生成签到二维码
      */
-    private function qrcode()
+    private function qrcode($meetId)
     {
         $codeImg = config('app.qrcode.path');
         if (!file_exists($codeImg)) {
-            $sign = config('app.qrcode.sign');
+            $sign = config('app.qrcode.sign') . "/$meetId";
             QrCode::format('png')->size(300)->generate($sign, $codeImg);
         }
         return true;

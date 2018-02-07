@@ -39,15 +39,16 @@ class MeetController extends HomeController
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $meetService = new MeetService();
+        $meet = $meetService->create($input);
+        if ($meet) {
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config('validator.621'), 621);
     }
 
     /**
