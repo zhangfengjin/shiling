@@ -8,7 +8,7 @@
     </script>
     <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/webuploader.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/style.css')}}"/>
-    <div class="row">
+    <div class="row" style="display: none;">
         <div id="wrapper">
             <div id="container">
                 <!--头部，相册选择和格式选择-->
@@ -43,15 +43,18 @@
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">会议名称</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="meet_name" type="text" class="form-control" placeholder="会议名称">
+                    <input id="meet_name" type="text" class="form-control" placeholder="会议名称"
+                           required data-parsley-maxlength="50">
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">主讲人</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="keynote_speaker" type="text" class="form-control" placeholder="主讲人">
+                    <input id="keynote_speaker" type="text" class="form-control" placeholder="主讲人"
+                           required data-parsley-maxlength="100">
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">人数限制</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="limit_count" type="text" class="form-control" placeholder="人数限制">
+                    <input id="limit_count" type="text" class="form-control" placeholder="人数限制"
+                           required data-parsley-type="number">
                 </div>
             </div>
             <div class="form-group">
@@ -114,13 +117,27 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12"></label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议详情</label>
                 <div class="col-md-10 col-sm-10 col-xs-12">
                     <textarea id="abstract" rows="3" class="form-control" placeholder="会议详情"></textarea>
                 </div>
             </div>
         </form>
     </div>
+
+    <div id="detail_reason" class="x_content detail_content" data-parsley-validate>
+        <form class="form-horizontal form-label-left">
+            <div class="form-group checkbox">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <label class="col-md-12 col-sm-12 col-xs-12">
+                        <textarea id="reason" rows="3" class="form-control" placeholder="取消原因"
+                                  required data-parsley-maxlength="20"></textarea>
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
@@ -189,6 +206,7 @@
             var lay = $("#detail").prop("outerHTML");
             var tableId = "meet_table";
             var searchInfo;
+            var provinces = [];  //定义数组
             return me = {
                 _initOwn: function () {
                     $("#search").on("click", function () {
@@ -204,7 +222,44 @@
                 },
                 init: function () {
                     me._initOwn();
+                    me._ddl();
                     me._createList();
+                },
+                _ddl: function () {
+                    $("#province option").each(function () {  //遍历所有option
+                        var province = $(this).val();
+                        if (province != "") {
+                            var cities = [];
+                            $("#city option[parent='" + province + "']").each(function () {  //遍历所有option
+                                var city = $(this).val();
+                                if (city != "") {
+                                    var cityName = $(this).text();
+                                    var areas = [];
+                                    $("#area option[parent='" + city + "']").each(function () {  //遍历所有option
+                                        var area = $(this).val();
+                                        if (area != "") {
+                                            var areaName = $(this).text();
+                                            areas.push({
+                                                "name": area,
+                                                "value": areaName
+                                            });
+                                        }
+                                    });
+                                    city2 = [];
+                                    city2.name = city;
+                                    city2.value = {
+                                        "name": cityName,
+                                        "value": areas
+                                    };
+                                    cities.push(city2);
+                                }
+                            });
+                            provinces.push({
+                                "name": province,
+                                "value": cities
+                            });
+                        }
+                    });
                 },
                 _import: function (content) {
 
@@ -229,11 +284,14 @@
                         "sTitle": "限制人数",
                         "data": "limit_count"
                     }, {
-                        "sTitle": "学校",
-                        "data": "schoolName"
+                        "sTitle": "针对人群",
+                        "data": "to_object"
                     }, {
-                        "sTitle": "职称",
-                        "data": "userTitleName"
+                        "sTitle": "区域",
+                        "data": "pca_name"
+                    }, {
+                        "sTitle": "详细地址",
+                        "data": "addr"
                     }, {
                         "sTitle": "状态",
                         "data": "status",
@@ -258,7 +316,7 @@
                                 "info": "取消会议",
                                 "draw": function (full) {
                                     var params = {};
-                                    if (full.status != "已取消") {
+                                    if (full.status == "已取消") {
                                         params.disabled = true;
                                     }
                                     return params;
@@ -288,26 +346,60 @@
                 },
                 _cancel: function (ids, fn) {
                     if (ids) {
-                        TableList.optTable({
-                            "tableId": tableId,
-                            "url": meetUrl + "/" + ids,
-                            "type": "DELETE",
-                            "async": true,
-                            "successfn": function () {
-                                parent.layer.msg('删除成功', {
-                                    icon: 1,
-                                    time: 800,
-                                    offset: "50px"
-                                });
-                            },
-                            "failfn": function () {
-                                parent.layer.msg('删除失败', {
-                                    icon: 1,
-                                    time: 800,
-                                    offset: "50px"
-                                });
+                        var cancelRequest = function (requestData, successfn, usable) {
+                            requestData.reason = $("#reason").val();
+                            TableList.optTable({
+                                "tableId": tableId,
+                                "url": meetUrl + "/cancel/" + ids,
+                                "type": "DELETE",
+                                "async": true,
+                                "successfn": function () {
+                                    parent.layer.msg('取消成功', {
+                                        icon: 1,
+                                        time: 800,
+                                        offset: "50px"
+                                    });
+                                },
+                                "failfn": function () {
+                                    parent.layer.msg('取消失败', {
+                                        icon: 1,
+                                        time: 800,
+                                        offset: "50px"
+                                    });
+                                }
+                            });
+                        };
+                        var usable = function () {
+                            btns.css("pointer-events", "");
+                        };
+                        $("#reason").val('');
+                        layer.open({
+                            type: 1,
+                            title: "会议取消原因",
+                            scrollbar: false,
+                            area: ["300px", "200px"], // 宽高
+                            content: $("#detail_reason"),
+                            btn: ['保存', '取消'],
+                            yes: function (index, layero) {
+                                btns = layero.children(".layui-layer-btn").children("a");
+                                try {
+                                    btns.css("pointer-events", "none");
+                                    var parsl = $('#detail_reason').parsley();
+                                    parsl.validate();
+                                    if (true === parsl.isValid()) {
+                                        cancelRequest({}, function () {
+                                            layer.close(index);
+                                        }, usable);
+                                    } else {
+                                        usable();
+                                    }
+                                } catch (e) {
+                                    usable();
+                                }
+                            }, success: function () {
                             }
                         });
+
                     }
                 },
                 _add: function () {
@@ -326,25 +418,22 @@
                     if (ids) {
                         TableList.controllerDisabled(obj);
                         var fillData = function (data) {
-                            $("#meet_name").val(data.name);
-                            $("#phone").val(data.phone);
-                            $("#email").val(data.email);
-                            $("#unum").val(data.unum);
-                            $("#age").val(data.age);
-                            $("#seniority").val(data.seniority);
-                            $("#role").val(data.role_id);
-                            $("#sex").val(data.sex);
-                            $("#user_title").val(data.user_title_id);
-                            $("#school").val(data.school_id);
-                            //$("#school option[value='" + data.school_id + "']").attr('selected', true);
-                            $.each(data.courses, function () {
-                                $("#course option[value='" + this.course_id + "']").attr('selected', true);
-                            });
-                            $.each(data.grades, function () {
-                                $("#grade option[value='" + this.grade_id + "']").attr('selected', true);
-                            });
-                            $("select").trigger("chosen:updated");
-                            $("#address").val(data.address);
+                            $("#meet_name").val(data.meet_name);
+                            $("#keynote_speaker").val(data.keynote_speaker);
+                            $("#limit_count").val(data.limit_count);
+                            $("#begin_time").attr("begin_time", data.begin_time);
+                            $('#begin_time').val(data.begin_time);
+                            $("#end_time").attr("end_time", data.end_time);
+                            $('#end_time').val(data.end_time);
+                            $("#to_object").val(data.to_object);
+                            $("#addr").val(data.addr);
+                            $("#abstract").val(data.abstract);
+                            $("#province").val(data.province_code);
+                            $('#province').trigger('change');
+                            $("#city").val(data.city_code);
+                            $('#city').trigger('change');
+                            $("#area").val(data.area_id);
+                            $('#area').trigger('change');
                         };
                         var updateData = function (requestData, successfn, usable) {
                             TableList.optTable({
@@ -371,6 +460,8 @@
                     }
                 },
                 _daterangepicker: function () {
+                    moment.locale("zh-cn");
+                    var beginTime = $('#begin_time');
                     var date = moment().format('YYYY-MM-DD HH:mm');
                     var timeOptions = {
                         "singleDatePicker": true,
@@ -381,17 +472,23 @@
                         },
                         startDate: date
                     };
-                    moment.locale("zh-cn");
-                    var beginTime = $('#begin_time');
+                    if (beginTime.attr("begin_time") == undefined || beginTime.attr("begin_time") == "") {
+                        beginTime.attr("begin_time", date);
+                    } else {
+                        timeOptions.startDate = beginTime.attr("begin_time");
+                    }
                     beginTime.daterangepicker(timeOptions, function (start, end, label) {
                         beginTime.attr("begin_time", start.format('YYYY-MM-DD HH:mm'));
                     });
-                    beginTime.attr("begin_time", date);
                     var endTime = $('#end_time');
+                    if (endTime.attr("begin_time") == undefined || endTime.attr("begin_time") == "") {
+                        endTime.attr("begin_time", date);
+                    } else {
+                        timeOptions.startDate = endTime.attr("begin_time");
+                    }
                     endTime.daterangepicker(timeOptions, function (start, end, label) {
                         endTime.attr("time_time", start.format('YYYY-MM-DD HH:mm'));
                     });
-                    endTime.attr("end_time", date);
                 },
                 _resetHtml: function () {
                     $(".parsley-error").removeClass("parsley-error");
@@ -421,6 +518,44 @@
                         "height": 30
                     });
                     me._daterangepicker();
+                    $("#province").change(function () {
+                        var province = $(this).val();
+                        for (var idx in provinces) {
+                            var pro = provinces[idx];
+                            if (pro.name == province) {
+                                $("#city").empty();
+                                $("#area").empty();
+                                var cities = pro.value;
+                                for (var idx2 in cities) {
+                                    var cityValue = cities[idx2].name;
+                                    $("#city").append("<option parent='" + province + "' value='" + cityValue + "'>" + cities[idx2].value.name + "</option>");
+                                    var areas = cities[idx2].value.value;
+                                    for (var idx3 in areas) {
+                                        $("#area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    $("#city").change(function () {
+                        $("#area").empty();
+                        var cityValue = $(this).val();
+                        var province = $("#city option[value='" + cityValue + "']").attr('parent');
+                        for (var idx in provinces) {
+                            var pro = provinces[idx];
+                            if (pro.name == province) {
+                                var cities = pro.value;
+                                for (var idx2 in cities) {
+                                    if (cityValue == cities[idx2].name) {
+                                        var areas = cities[idx2].value.value;
+                                        for (var idx3 in areas) {
+                                            $("#area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
                 },
                 _openlayer: function (id, type, yes) {
                     me._resetHtml();

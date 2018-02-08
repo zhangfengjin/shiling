@@ -43,7 +43,7 @@ class MeetController extends HomeController
     public function store(Request $request)
     {
         $input = $request->all();
-        $meetService = new MeetService();
+        $meetService = new MeetService($request);
         $meet = $meetService->create($input);
         if ($meet) {
             return DataStandard::getStandardData();
@@ -52,14 +52,15 @@ class MeetController extends HomeController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $meetId
+     * @return array
      */
-    public function show($id)
+    public function show(Request $request, $meetId)
     {
-        //
+        $meetService = new MeetService($request);
+        $meet = $meetService->show($meetId);
+        return DataStandard::getStandardData($meet);
     }
 
     /**
@@ -73,16 +74,15 @@ class MeetController extends HomeController
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        $meetService = new MeetService($request);
+        $ret = $meetService->update($input,$id);
+        if ($ret) {
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config('validator.621'), 621);
     }
 
     /**
@@ -94,6 +94,16 @@ class MeetController extends HomeController
     public function destroy($id)
     {
         //
+    }
+
+    public function cancel(Request $request, $meetId)
+    {
+        $meetService = new MeetService($request);
+        $ret = $meetService->cancel($meetId);
+        if ($ret) {
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config('validator.701'), 701);
     }
 
     /**

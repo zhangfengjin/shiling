@@ -29,8 +29,32 @@ class MeetService extends CommonService
         $meet->addr = $input['addr'];
         $meet->abstract = $input['abstract'];
         $meet->keynote_speaker_id = 0;//主讲人封面id
+        $meet->creator = $this->user['uid'];
         $meet->save();
         $this->qrcode($meet->id);//生成签到二维码
+        return true;
+    }
+
+    /**
+     * @param $input
+     * @param $meetId
+     * @return bool
+     */
+    public function update($input, $meetId)
+    {
+        $meet = Meet::find($meetId);
+        $meet->name = $input['meetName'];
+        $meet->keynote_speaker = $input['keynote_speaker'];
+        $meet->limit_count = $input['limit_count'];
+        $meet->begin_time = $input['begin_time'];
+        $meet->end_time = $input['end_time'];
+        $meet->to_object = $input['to_object'];
+        $meet->area_id = $input['area_id'];
+        $meet->addr = $input['addr'];
+        $meet->abstract = $input['abstract'];
+        $meet->keynote_speaker_id = 0;//主讲人封面id
+        $meet->modifier = $this->user['uid'];
+        $meet->save();
         return true;
     }
 
@@ -39,7 +63,7 @@ class MeetService extends CommonService
      */
     private function qrcode($meetId)
     {
-        $codeImg = config('app.qrcode.path');
+        $codeImg = config('app.qrcode.path') . $meetId . ".png";
         if (!file_exists($codeImg)) {
             $sign = config('app.qrcode.sign') . "/$meetId";
             QrCode::format('png')->size(300)->generate($sign, $codeImg);
@@ -47,6 +71,10 @@ class MeetService extends CommonService
         return true;
     }
 
+    /**
+     * 会议列表
+     * @return array
+     */
     public function getList()
     {
         $where = $this->getSearchWhere($this->searchs);
@@ -58,15 +86,15 @@ class MeetService extends CommonService
             'meet.keynote_speaker', 'meet.limit_count', 'meet.to_object'
         ];
         $status = DB::raw("case when meet.status=1 then '已取消' else '正常' end status");
-        $areaName = DB::raw("CONCAT(province_name,'-',city_name,'-',area_name) as area_name");
+        $areaName = DB::raw("CONCAT(province_name,'-',city_name,'-',area_name) as pca_name");
         $userName = DB::raw("u.name as user_name");
         array_push($select, $status, $areaName, $userName);
         //获取查询结果
         $sortField = "meet.id";
         $sSortDir = "asc";
         $rows = DB::table("meets as meet")
-            ->join("areas as area", "area.id", "=", "meet.area_id")
-            ->join("users as u", 'u.id', '=', 'meet.creator')
+            ->leftJoin("areas as area", "area.id", "=", "meet.area_id")
+            ->leftJoin("users as u", 'u.id', '=', 'meet.creator')
             ->where("meet.flag", 0)->whereRaw($where)
             ->orderBy($sortField, $sSortDir)
             ->take($this->iDisplayLength)
@@ -75,6 +103,43 @@ class MeetService extends CommonService
             $row->id = strval($row->id);
         }
         return DataStandard::getListData($this->sEcho, $total, $rows);
+    }
+
+    /**
+     * @param $meetId
+     * @return mixed
+     */
+    public function show($meetId)
+    {
+        $select = [
+            'meet.id', 'meet.addr', 'meet.begin_time', 'meet.end_time', 'meet.keynote_speaker',
+            'meet.limit_count', 'meet.to_object', 'meet.creator', 'meet.abstract', 'meet.area_id',
+            'area.area_name', 'area.province_code', 'area.province_name', 'area.city_code', 'area.city_name'
+        ];
+        $creatorName = DB::RAW("u.name as creator_name");
+        $meetName = DB::RAW("meet.name as meet_name");
+        array_push($select, $creatorName, $meetName);
+        $meet = DB::table("meets as meet")
+            ->leftJoin("users as u", 'u.id', '=', 'meet.creator')
+            ->leftJoin("areas as area", 'area.id', '=', 'meet.area_id')
+            ->where("meet.id", $meetId)->get($select)->first();
+        return $meet;
+    }
+
+    /**
+     * 取消会议
+     * @param $meetId
+     * @return bool
+     */
+    public function cancel($meetId)
+    {
+        $meet = Meet::find($meetId);
+        if ($meet) {
+            $meet->status = 1;
+            $meet->save();
+            return true;
+        }
+        return false;
     }
 
     /**
