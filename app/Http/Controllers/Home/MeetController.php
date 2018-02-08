@@ -78,7 +78,7 @@ class MeetController extends HomeController
     {
         $input = $request->all();
         $meetService = new MeetService($request);
-        $ret = $meetService->update($input,$id);
+        $ret = $meetService->update($input, $id);
         if ($ret) {
             return DataStandard::getStandardData();
         }
@@ -104,6 +104,20 @@ class MeetController extends HomeController
             return DataStandard::getStandardData();
         }
         return DataStandard::getStandardData([], config('validator.701'), 701);
+    }
+
+    /**
+     * 通知
+     * @param Request $request
+     * @param $meetId
+     * @return array
+     */
+    public function notify(Request $request, $meetId)
+    {
+        $input = $request->all();
+        $meetService = new MeetService($request);
+        $meetService->notify($input, $meetId);
+        return DataStandard::getStandardData();
     }
 
     /**

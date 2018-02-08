@@ -9,9 +9,12 @@
 namespace App\Http\Services;
 
 
+use App\Jobs\NotifyJob;
 use App\Models\Meet;
+use App\Models\MeetNotify;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class MeetService extends CommonService
@@ -140,6 +143,16 @@ class MeetService extends CommonService
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param $input
+     * @param $meetId
+     */
+    public function notify($input, $meetId)
+    {
+        $input["meetId"] = $meetId;
+        dispatch((new NotifyJob($input))->onQueue("meet_notify"));
     }
 
     /**

@@ -127,10 +127,39 @@
 
     <div id="detail_reason" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
-            <div class="form-group checkbox">
+            <div class="form-group">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <label class="col-md-12 col-sm-12 col-xs-12">
                         <textarea id="reason" rows="3" class="form-control" placeholder="取消原因"
+                                  required data-parsley-maxlength="20"></textarea>
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="detail_notify" class="x_content detail_content" data-parsley-validate>
+        <form class="form-horizontal form-label-left">
+            <div class="form-group">
+                <div class="col-md-12 col-sm-12 col-xs-12 checkbox">
+                    <div class="checkbox">
+                        <label class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="checkbox" class="flat"
+                                   name="send_sms" id="send_sms" value="1"
+                                   checked> 短信通知&nbsp;&nbsp;
+                        </label>
+                        <label class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="checkbox" class="flat"
+                                   name="send_email" id="send_email"
+                                   value="2" checked> 邮件通知&nbsp;&nbsp;
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <label class="col-md-12 col-sm-12 col-xs-12">
+                        <textarea id="notify_content" rows="3" class="form-control" placeholder="通知内容"
                                   required data-parsley-maxlength="20"></textarea>
                     </label>
                 </div>
@@ -311,6 +340,16 @@
                             }
                         },
                         "opt": {
+                            "edit": {
+                                "display": 1,
+                                "info": "编辑",
+                                "func": me._edit
+                            },
+                            "comment": {
+                                "display": 1,
+                                "info": "通知",
+                                "func": me._notify
+                            },
                             "check-square-o": {
                                 "display": 1,
                                 "info": "取消会议",
@@ -323,11 +362,18 @@
                                 },
                                 "func": me._cancel
                             },
-                            "edit": {
+                            "money": {
                                 "display": 1,
-                                "info": "编辑",
-                                "func": me._edit
-                            }
+                                "info": "退款",
+                                "draw": function (full) {
+                                    var params = {};
+                                    if (full.status != "已取消") {
+                                        params.disabled = true;
+                                    }
+                                    return params;
+                                },
+                                "func": me._refund
+                            },
                         }
                     };
                     TableList.datatable(oSetting);
@@ -343,6 +389,123 @@
                         }
                     };
                     TableList.search(tableId, listUrl, searchInfo);
+                },
+                _add: function () {
+                    me._openlayer(0, 1, function (requestData, successfn, usable) {
+                        TableList.optTable({
+                            "tableId": tableId,
+                            "url": meetUrl,
+                            "type": "post",
+                            "reqData": requestData,
+                            "successfn": successfn,
+                            "failfn": usable
+                        });
+                    });
+                },
+                _edit: function (ids, full, obj) {
+                    if (ids) {
+                        TableList.controllerDisabled(obj);
+                        var fillData = function (data) {
+                            $("#meet_name").val(data.meet_name);
+                            $("#keynote_speaker").val(data.keynote_speaker);
+                            $("#limit_count").val(data.limit_count);
+                            $("#begin_time").attr("begin_time", data.begin_time);
+                            $('#begin_time').val(data.begin_time);
+                            $("#end_time").attr("end_time", data.end_time);
+                            $('#end_time').val(data.end_time);
+                            $("#to_object").val(data.to_object);
+                            $("#addr").val(data.addr);
+                            $("#abstract").val(data.abstract);
+                            $("#province").val(data.province_code);
+                            $('#province').trigger('change');
+                            $("#city").val(data.city_code);
+                            $('#city').trigger('change');
+                            $("#area").val(data.area_id);
+                            $('#area').trigger('change');
+                        };
+                        var updateData = function (requestData, successfn, usable) {
+                            TableList.optTable({
+                                "tableId": tableId,
+                                "url": meetUrl + "/" + ids,
+                                "type": "put",
+                                "reqData": requestData,
+                                "successfn": successfn,
+                                "failfn": usable
+                            });
+                        };
+                        CommonUtil.requestService(meetUrl + "/" + ids, "", true, "get",
+                            function (response) {
+                                //从后台成功获取数据 拼写到前台页面
+                                //弹出层模式
+                                if (response.code == 0) {
+                                    me._openlayer(ids, 2, updateData);//打开表单；保存时回调updateData 将数据传输到后台
+                                    fillData(response.data);//根据从后台获取的数据填充到表单上
+                                }
+                                TableList.controllerRemoveDisabled(obj);
+                            }, function () {
+                                TableList.controllerRemoveDisabled(obj);
+                            });
+                    }
+                },
+                _notify: function (ids, full, obj) {
+                    var notifyRequest = function (requestData, successfn, usable) {
+                        TableList.optTable({
+                            "tableId": tableId,
+                            "url": meetUrl + "/notify/" + ids,
+                            "type": "PUT",
+                            "async": true,
+                            "reqData": requestData,
+                            "successfn": function () {
+                                parent.layer.msg('通知成功', {
+                                    icon: 1,
+                                    time: 800,
+                                    offset: "50px"
+                                });
+                            },
+                            "failfn": function () {
+                                parent.layer.msg('通知失败', {
+                                    icon: 1,
+                                    time: 800,
+                                    offset: "50px"
+                                });
+                            }
+                        });
+                    };
+                    var usable = function () {
+                        btns.css("pointer-events", "");
+                    };
+                    $("#notify_content").val('');
+                    layer.open({
+                        type: 1,
+                        title: "通知参会人员",
+                        scrollbar: false,
+                        area: ["300px", "250px"], // 宽高
+                        content: $("#detail_notify"),
+                        btn: ['通知', '取消'],
+                        yes: function (index, layero) {
+                            btns = layero.children(".layui-layer-btn").children("a");
+                            try {
+                                btns.css("pointer-events", "none");
+                                var parsl = $('#detail_notify').parsley();
+                                parsl.validate();
+                                if (true === parsl.isValid()) {
+                                    var requestData = {
+                                        "send_sms": $("#send_sms")[0].checked ? 1 : 0,
+                                        "send_email": $("#send_email")[0].checked ? 1 : 0,
+                                        "notify_content": $("#notify_content").val()
+                                    };
+                                    notifyRequest(requestData, function () {
+                                        layer.close(index);
+                                    }, usable);
+                                } else {
+                                    usable();
+                                }
+                            } catch (e) {
+                                usable();
+                            }
+                        }, success: function () {
+                        }
+                    });
                 },
                 _cancel: function (ids, fn) {
                     if (ids) {
@@ -400,63 +563,6 @@
                             }
                         });
 
-                    }
-                },
-                _add: function () {
-                    me._openlayer(0, 1, function (requestData, successfn, usable) {
-                        TableList.optTable({
-                            "tableId": tableId,
-                            "url": meetUrl,
-                            "type": "post",
-                            "reqData": requestData,
-                            "successfn": successfn,
-                            "failfn": usable
-                        });
-                    });
-                },
-                _edit: function (ids, full, obj) {
-                    if (ids) {
-                        TableList.controllerDisabled(obj);
-                        var fillData = function (data) {
-                            $("#meet_name").val(data.meet_name);
-                            $("#keynote_speaker").val(data.keynote_speaker);
-                            $("#limit_count").val(data.limit_count);
-                            $("#begin_time").attr("begin_time", data.begin_time);
-                            $('#begin_time').val(data.begin_time);
-                            $("#end_time").attr("end_time", data.end_time);
-                            $('#end_time').val(data.end_time);
-                            $("#to_object").val(data.to_object);
-                            $("#addr").val(data.addr);
-                            $("#abstract").val(data.abstract);
-                            $("#province").val(data.province_code);
-                            $('#province').trigger('change');
-                            $("#city").val(data.city_code);
-                            $('#city').trigger('change');
-                            $("#area").val(data.area_id);
-                            $('#area').trigger('change');
-                        };
-                        var updateData = function (requestData, successfn, usable) {
-                            TableList.optTable({
-                                "tableId": tableId,
-                                "url": meetUrl + "/" + ids,
-                                "type": "put",
-                                "reqData": requestData,
-                                "successfn": successfn,
-                                "failfn": usable
-                            });
-                        };
-                        CommonUtil.requestService(meetUrl + "/" + ids, "", true, "get",
-                            function (response) {
-                                //从后台成功获取数据 拼写到前台页面
-                                //弹出层模式
-                                if (response.code == 0) {
-                                    me._openlayer(ids, 2, updateData);//打开表单；保存时回调updateData 将数据传输到后台
-                                    fillData(response.data);//根据从后台获取的数据填充到表单上
-                                }
-                                TableList.controllerRemoveDisabled(obj);
-                            }, function () {
-                                TableList.controllerRemoveDisabled(obj);
-                            });
                     }
                 },
                 _daterangepicker: function () {
