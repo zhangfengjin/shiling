@@ -98,6 +98,6 @@ class MeetUserController extends HomeController
     public function export(Request $request)
     {
         $meetService = new MeetUserService($request);
-        $meetService->export();
+        $meetService->export($request['type']);
     }
 }

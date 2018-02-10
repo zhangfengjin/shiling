@@ -1,2 +1,4 @@
 框架修改文件
 Illuminate\Auth\EloquentUserProvider.php 实现attempt中whereIn
+
+composer require phpoffice/phpword

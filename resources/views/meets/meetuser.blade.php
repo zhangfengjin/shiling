@@ -89,6 +89,20 @@
                                     <li class="col-md-4 col-sm-6 col-xs-12">
                                         <label class="control-label col-md-5 col-sm-4 col-xs-12">会议名称</label>
                                         <input class="col-md-7 col-sm-8 col-xs-12" id="search_meet_name"></li>
+                                    <li class="col-md-4 col-sm-6 col-xs-12">
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">状态</label>
+                                        <div class="col-md-7 col-sm-8 col-xs-12">
+                                            <select class="form-control" id="search_status">
+                                                <option value=""></option>
+                                                <option value="0">已报名</option>
+                                                <option value="1">已付款</option>
+                                                <option value="2">退款中</option>
+                                                <option value="3">已退款</option>
+                                                <option value="4">已签到</option>
+                                            </select>
+                                        </div>
+
+                                    </li>
                                     <div class="col-md-3 col-sm-6 col-xs-12">
                                         <button id="search" type="button" class="btn btn-round btn-default search_btn">
                                             查询
@@ -265,7 +279,7 @@
                                 "info": "批量修改状态", "func": me._batchStatus
                             },
                             "export": {
-                                "info": "导出", "func": function (ids) {
+                                "info": "导出EXCEL", "func": function (ids) {
                                     if (initMeetId != undefined &&
                                         initMeetId != "undefined" &&
                                         initMeetId != "" && !searchInfo) {
@@ -275,7 +289,21 @@
                                             }
                                         }
                                     }
-                                    location.href = CommonUtil.getRootPath() + meetUrl + "/export?searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
+                                    location.href = CommonUtil.getRootPath() + meetUrl + "/export?type=excel&searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
+                                }
+                            },
+                            "export2": {
+                                "info": "导出WORD", "func": function (ids) {
+                                    if (initMeetId != undefined &&
+                                        initMeetId != "undefined" &&
+                                        initMeetId != "" && !searchInfo) {
+                                        searchInfo = {
+                                            "searchs": {
+                                                "meetId": initMeetId
+                                            }
+                                        }
+                                    }
+                                    location.href = CommonUtil.getRootPath() + meetUrl + "/export?type=word&searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
                                 }
                             }
                         },
@@ -295,6 +323,7 @@
                         "searchs": {
                             "area_id": $("#search_area").val(),
                             "meet_name": $("#search_meet_name").val(),
+                            "status": $("#search_status").val()
                         }
                     };
                     if (initMeetId != undefined && initMeetId != "undefined" && initMeetId != "") {

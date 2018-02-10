@@ -11,8 +11,11 @@ namespace App\Http\Services;
 
 use App\Models\MeetUser;
 use App\Utils\DataStandard;
+use App\Utils\HttpHelper;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\PhpWord;
 
 class MeetUserService extends CommonService
 {
@@ -103,11 +106,10 @@ class MeetUserService extends CommonService
     }
 
 
-    public function export()
+    public function export($type)
     {
         //构建查询条件
         $where = $this->getSearchWhere($this->searchs);
-        //要查询的字段
         //要查询的字段
         $select = [
             'u.name', 'u.phone', 'u.email',
@@ -133,6 +135,18 @@ class MeetUserService extends CommonService
         $title = [
             '姓名', '手机号', '邮箱', '状态', '会议名称'
         ];
+        switch ($type) {
+            case "excel":
+                $this->exportExcel($rows, $title);
+                break;
+            case "word":
+                $this->exportWord($rows, $title);
+                break;
+        }
+    }
+
+    private function exportExcel($rows, $title)
+    {
         $rows = json_decode(json_encode($rows), true);
         array_unshift($rows, $title);
         $excelName = "MeetUser_List_" . date("Y-m-d-H-i-s");
@@ -141,6 +155,47 @@ class MeetUserService extends CommonService
                 $sheet->rows($rows);
             });
         })->export('xlsx');
+    }
+
+    private function exportWord($rows, $title)
+    {
+        $phpWord = new PhpWord();
+        //设置默认样式
+        $phpWord->setDefaultFontName('仿宋');//字体
+        $phpWord->setDefaultFontSize(16);//字号
+
+        //添加页面
+        $section = $phpWord->createSection();
+
+        //$section->addText('Hello PHP!');
+        //$section->addTextBreak();//换行符
+
+        //添加表格
+        $styleTable = [
+            'borderColor' => '006699',
+            'borderSize' => 6,
+            'cellMargin' => 50,
+        ];
+        $styleFirstRow = ['bgColor' => '66BBFF'];//第一行样式
+        foreach ($rows as $row) {
+            $phpWord->addTableStyle('myTable', $styleTable, $styleFirstRow);
+            $table = $section->addTable('myTable');
+            $table->addRow(400);//行高400
+            foreach ($title as $value) {
+                $table->addCell(2000)->addText($value);
+            }
+            $table->addRow(400);//行高400
+            foreach ($row as $value) {
+                $table->addCell(2000)->addText($value);
+            }
+            $section->addPageBreak();//分页符
+        }
+        //生成的文档为Word2007
+        $writer = IOFactory::createWriter($phpWord, 'Word2007');
+        $docName = "MeetUser_word_" . date("Y-m-d-H-i-s") . ".docx";
+        $doc = storage_path('exports/') . $docName;
+        $writer->save($doc);
+        HttpHelper::download($doc);
     }
 
 
@@ -168,7 +223,7 @@ class MeetUserService extends CommonService
         if (!empty($meetId)) {
             array_push($where, "mu.meet_id=$meetId");
         }
-        if (!empty($status)) {
+        if ($status !== "") {
             array_push($where, "mu.status=$status");
         }
         if (!empty($meetName)) {
