@@ -146,6 +146,32 @@
         </div>
     </div>
 
+    <div id="detail_prize" class="x_content detail_content" data-parsley-validate>
+        <form class="form-horizontal form-label-left">
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">奖项</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="prize_name" type="text" class="form-control" placeholder="奖项"
+                           required data-parsley-maxlength="30">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">奖品</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="remark" type="text" class="form-control" placeholder="奖品"
+                           required data-parsley-maxlength="50">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">奖品个数</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="prize_count" type="text" class="form-control" placeholder="奖品个数"
+                           required data-parsley-type="number">
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
@@ -666,16 +692,16 @@
                 _meetPrize: function (ids, full, obj) {
                     if (ids) {
                         var userTableId = "meet_prize_table";
-                        var userUrl = "/mprize/list?meetId=" + ids;
+                        var userUrl = "/mprize";
                         var meetUserList = function (ids) {
                             var aoColumns = [{
                                 "sTitle": "",
                                 "data": "id"
                             }, {
-                                "sTitle": "奖品",
+                                "sTitle": "奖项",
                                 "data": "name"
                             }, {
-                                "sTitle": "奖品描述",
+                                "sTitle": "奖品",
                                 "data": "remark"
                             }, {
                                 "sTitle": "奖品数量",
@@ -683,7 +709,7 @@
                             }];
                             var oSetting = {
                                 "tableId": userTableId,
-                                "url": userUrl,
+                                "url": userUrl + "/list?meetId=" + ids,
                                 "chk": {
                                     "display": true
                                 },
@@ -700,8 +726,8 @@
                                     "edit": {
                                         "display": 1,
                                         "info": "编辑",
-                                        "func": function () {
-
+                                        "func": function (ids, full, obj) {
+                                            _editPrize(ids, full, obj);
                                         }
                                     }
                                 }
@@ -725,30 +751,92 @@
                             });
                         };
                         openMeetUser(ids);
-                        var _refundMoney = function (ids) {
-                            if (ids) {
+                        var openPrize = function (id, type, yes) {
+                            $("#prize_name").val("");
+                            $("#remark").val("");
+                            $("#prize_count").val("");
+                            var usable = function () {
+                                btns.css("pointer-events", "");
+                            };
+                            var area = ["400px", "280px"];
+                            if (device.mobile()) {
+                                area = ["80%", "70%"];
+                            }
+                            layer.open({
+                                type: 1,
+                                title: "奖品信息",
+                                scrollbar: false,
+                                area: area, // 宽高
+                                content: $("#detail_prize"),
+                                btn: ['保存', '取消'],
+                                yes: function (index, layero) {
+                                    btns = layero.children(".layui-layer-btn").children("a");
+                                    try {
+                                        btns.css("pointer-events", "none");
+                                        var requestData = {
+                                            "prize_name": $("#prize_name").val(),
+                                            "remark": $("#remark").val(),
+                                            "prize_count": $("#prize_count").val(),
+                                            "meet_id": ids
+                                        };
+                                        var parsl = $('#detail_prize').parsley();
+                                        parsl.validate();
+                                        if (true === parsl.isValid()) {
+                                            yes(requestData, function () {
+                                                layer.close(index);
+                                            }, usable);
+                                        } else {
+                                            usable();
+                                        }
+                                    } catch (e) {
+                                        usable();
+                                    }
+                                }, success: function () {
+                                }
+                            });
+                        };
+                        var _addPrize = function () {
+                            openPrize(ids, 1, function (requestData, successfn, usable) {
                                 TableList.optTable({
                                     "tableId": userTableId,
-                                    "url": meetUrl + "/refund/" + ids,
+                                    "url": userUrl,
                                     "type": "post",
-                                    "async": true,
-                                    "successfn": function () {
-                                        parent.layer.msg('取消成功', {
-                                            icon: 1,
-                                            time: 800,
-                                            offset: "50px"
-                                        });
-                                    },
-                                    "failfn": function () {
-                                        parent.layer.msg('取消失败', {
-                                            icon: 1,
-                                            time: 800,
-                                            offset: "50px"
-                                        });
-                                    }
+                                    "reqData": requestData,
+                                    "successfn": successfn,
+                                    "failfn": usable
                                 });
+                            });
+                        };
+                        var _editPrize = function (ids, full, obj) {
+                            if (ids) {
+                                TableList.controllerDisabled(obj);
+                                var fillData = function (data) {
+                                    $("#prize_name").val(data.name);
+                                    $("#remark").val(data.remark);
+                                    $("#prize_count").val(data.prize_count);
+                                };
+                                var updateData = function (requestData, successfn, usable) {
+                                    TableList.optTable({
+                                        "tableId": userTableId,
+                                        "url": userUrl + "/" + ids,
+                                        "type": "put",
+                                        "reqData": requestData,
+                                        "successfn": successfn,
+                                        "failfn": usable
+                                    });
+                                };
+                                CommonUtil.requestService(userUrl + "/" + ids, "", true, "get",
+                                    function (response) {
+                                        if (response.code == 0) {
+                                            openPrize(ids, 2, updateData);//打开表单；保存时回调updateData 将数据传输到后台
+                                            fillData(response.data);//根据从后台获取的数据填充到表单上
+                                        }
+                                        TableList.controllerRemoveDisabled(obj);
+                                    }, function () {
+                                        TableList.controllerRemoveDisabled(obj);
+                                    });
                             }
-                        }
+                        };
                     }
                 },
                 _daterangepicker: function () {

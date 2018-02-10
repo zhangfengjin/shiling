@@ -9,11 +9,46 @@
 namespace App\Http\Services;
 
 
+use App\Models\MeetPrize;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
 
 class MeetPrizeService extends CommonService
 {
+
+    public function create($input)
+    {
+        $meetPrize = new MeetPrize();
+        $meetPrize->name = $input['prize_name'];
+        $meetPrize->remark = $input['remark'];
+        $meetPrize->prize_count = $input['prize_count'];
+        $meetPrize->meet_id = $input['meet_id'];
+        $meetPrize->creator = $this->user['uid'];
+        $meetPrize->save();
+    }
+
+    public function update($input, $meetPrizeId)
+    {
+        $meetPrize = MeetPrize::where("id", $meetPrizeId)->first();
+        if ($meetPrize) {
+            $meetPrize->name = $input['prize_name'];
+            $meetPrize->remark = $input['remark'];
+            $meetPrize->prize_count = $input['prize_count'];
+            $meetPrize->meet_id = $input['meet_id'];
+            $meetPrize->save();
+        }
+
+    }
+
+    public function show($prizeId)
+    {
+        $where = [
+            "flag" => 0,
+            "id" => $prizeId
+        ];
+        $meetPrize = MeetPrize::where($where)->first();
+        return $meetPrize;
+    }
 
     /**
      * @return array

@@ -195,10 +195,10 @@
                         "sTitle": "会议",
                         "data": "meet_name"
                     }, {
-                        "sTitle": "奖品",
+                        "sTitle": "奖项",
                         "data": "prize_name"
                     },  {
-                        "sTitle": "奖品详情",
+                        "sTitle": "奖品",
                         "data": "remark"
                     },{
                         "sTitle": "会议",
