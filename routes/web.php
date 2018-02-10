@@ -57,6 +57,7 @@ Route::group(['domain' => ''],
             Route::get("award", "AwardController@index");//
 
             Route::get("meetuser/list", "MeetUserController@getList");
+            Route::get("meetuser/export", "MeetUserController@export");
             Route::resource("meetuser", "MeetUserController");
 
 

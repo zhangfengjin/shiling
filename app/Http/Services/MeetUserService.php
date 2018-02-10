@@ -12,6 +12,7 @@ namespace App\Http\Services;
 use App\Models\MeetUser;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MeetUserService extends CommonService
 {
@@ -99,6 +100,47 @@ class MeetUserService extends CommonService
             $row->id = strval($row->id);
         }
         return DataStandard::getListData($this->sEcho, $total, $rows);
+    }
+
+
+    public function export()
+    {
+        //构建查询条件
+        $where = $this->getSearchWhere($this->searchs);
+        //要查询的字段
+        //要查询的字段
+        $select = [
+            'u.name', 'u.phone', 'u.email',
+        ];
+        $inMeetStatus = DB::raw("case when mu.status=1 then '已付款' 
+        when mu.status=2 then '退款中' 
+        when mu.status=3 then '已退款' 
+        when mu.status=4 then '已签到' 
+        else '已报名' end as status");
+        $meetName = DB::raw("meet.name as meet_name");
+        array_push($select, $inMeetStatus, $meetName);
+        //获取查询结果
+        $sortField = "mu.id";
+        $sSortDir = "asc";
+        $rows = DB::table("meet_users as mu")
+            ->leftJoin("users as u", 'u.id', '=', 'mu.user_id')
+            ->leftJoin("meets as meet", 'meet.id', '=', 'mu.meet_id')
+            ->where("mu.flag", 0)->whereRaw($where)
+            ->orderBy($sortField, $sSortDir)
+            ->take($this->iDisplayLength)
+            ->skip($this->iDisplayStart)->get($select)->toArray();
+        //导出Excel的表头
+        $title = [
+            '姓名', '手机号', '邮箱', '状态', '会议名称'
+        ];
+        $rows = json_decode(json_encode($rows), true);
+        array_unshift($rows, $title);
+        $excelName = "MeetUser_List_" . date("Y-m-d-H-i-s");
+        Excel::create($excelName, function ($excel) use ($rows) {
+            $excel->sheet('MeetUser_List_', function ($sheet) use ($rows) {
+                $sheet->rows($rows);
+            });
+        })->export('xlsx');
     }
 
 

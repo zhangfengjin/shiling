@@ -94,4 +94,10 @@ class MeetUserController extends HomeController
         $list = $meetService->getList();
         return DataStandard::printStandardData($list);
     }
+
+    public function export(Request $request)
+    {
+        $meetService = new MeetUserService($request);
+        $meetService->export();
+    }
 }

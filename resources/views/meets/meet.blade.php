@@ -382,6 +382,13 @@
                                 "display": 1,
                                 "info": "通知",
                                 "func": me._notify
+                            },
+                            "view": {
+                                "display": 1,
+                                "info": "查看参会人员",
+                                "func": function (ids, full, obj) {
+                                    CommonUtil.redirect('/meetuser?meetId=' + ids);
+                                }
                             }
                         }
                     };

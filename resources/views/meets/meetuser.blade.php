@@ -127,6 +127,7 @@
             var tableId = "meet_table";
             var searchInfo;
             var provinces = [];  //定义数组
+            var initMeetId = "";
             return me = {
                 _initOwn: function () {
                     $("#search").on("click", function () {
@@ -219,10 +220,15 @@
                         }
                     });
                 },
-                _import: function (content) {
-
-                },
                 _createList: function () {
+                    var request = CommonUtil.getRequest();
+                    initMeetId = request["meetId"];
+                    var initSearchs = {};
+                    if (initMeetId != undefined && initMeetId != "undefined" && initMeetId != "") {
+                        initSearchs = {
+                            "meetId": initMeetId
+                        };
+                    }
                     var aoColumns = [{
                         "sTitle": "",
                         "data": "id"
@@ -251,9 +257,26 @@
                         },
                         "aoColumns": aoColumns,
                         "order": [[0, "desc"]],
+                        "fnServerParams": {
+                            "searchs": initSearchs
+                        },
                         "toolbar": {
                             "batch_status": {
                                 "info": "批量修改状态", "func": me._batchStatus
+                            },
+                            "export": {
+                                "info": "导出", "func": function (ids) {
+                                    if (initMeetId != undefined &&
+                                        initMeetId != "undefined" &&
+                                        initMeetId != "" && !searchInfo) {
+                                        searchInfo = {
+                                            "searchs": {
+                                                "meetId": initMeetId
+                                            }
+                                        }
+                                    }
+                                    location.href = CommonUtil.getRootPath() + meetUrl + "/export?searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
+                                }
                             }
                         },
                         "opt": {
@@ -274,9 +297,12 @@
                             "meet_name": $("#search_meet_name").val(),
                         }
                     };
+                    if (initMeetId != undefined && initMeetId != "undefined" && initMeetId != "") {
+                        searchInfo.searchs.meetId = initMeetId;
+                    }
                     TableList.search(tableId, listUrl, searchInfo);
                 },
-                _batchStatus: function (ids,full,obj) {
+                _batchStatus: function (ids, full, obj) {
                     var batchEditStatus = function (requestData, successfn, usable) {
                         TableList.optTable({
                             "tableId": tableId,
