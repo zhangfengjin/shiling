@@ -36,7 +36,7 @@ Route::group(['domain' => '',], function () {
 
 
                 //Route::post("signin/code/{meetId}", "MeetController@signin");//二维码签到--会议二维码
-                Route::post("user/signin/code/{enroll}", "MeetUserController@userSignin");//二维码签到--会议用户个人二维码
+                Route::get("qrcode/{enroll}", "MeetUserController@getQrcode");//获取会议二维码
 
                 Route::post("meet/signup", "MeetController@enroll");
                 Route::get("meet/list", "MeetController@getList");//会议列表
@@ -53,6 +53,6 @@ Route::group(['domain' => '',], function () {
 
         });
     });
-
+    Route::post("signin/code/{enroll}", "Api\MeetUserController@userSignin");//二维码签到--会议用户个人二维码
 
 });

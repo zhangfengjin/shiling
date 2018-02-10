@@ -198,20 +198,25 @@ class MeetUserService extends CommonService
         HttpHelper::download($doc);
     }
 
-    public function userSignIn($enroll)
+    public function getSignInMeetUser($enroll)
     {
         $input = explode("_", $enroll);
         $where = [
             "mu.id" => $input[0],
             "u.id" => $input[1],
             "meet.id" => $input[2],
-            "mu.status" => 0,
+            "meet.status" => 0,
             "u.flag" => 0
         ];
         return DB::table("meet_users as mu")
             ->join("meets as meet", 'meet.id', '=', 'mu.meet_id')
             ->join("users as u", 'u.id', '=', 'mu.user_id')
-            ->where($where)->get(["mu.status"])->first();
+            ->where($where)->get(["mu.status","mu.id"])->first();
+    }
+
+    public function userSignIn($enroll)
+    {
+
     }
 
 
