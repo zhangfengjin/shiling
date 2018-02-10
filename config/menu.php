@@ -39,6 +39,9 @@ return [
             ],
             [
                 "name" => "参会人员", "href" => "/meetuser"
+            ],
+            [
+                "name" => "中奖列表", "href" => "/muprize"
             ]
         ]
     ]

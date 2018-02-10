@@ -176,6 +176,15 @@
         </div>
     </div>
 
+    <div id="detail_user_prize" class="x_content detail_content">
+        <div class="x_panel">
+            <div class="x_content">
+                <table id="user_prize_table" class="table table-striped table-bordered bulk_action">
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
@@ -383,11 +392,18 @@
                                 "info": "通知",
                                 "func": me._notify
                             },
-                            "view": {
+                            "file": {
                                 "display": 1,
                                 "info": "查看参会人员",
                                 "func": function (ids, full, obj) {
                                     CommonUtil.redirect('/meetuser?meetId=' + ids);
+                                }
+                            },
+                            "suitcase": {
+                                "display": 1,
+                                "info": "查看中奖人员",
+                                "func": function (ids, full, obj) {
+                                    CommonUtil.redirect('/muprize?meetId=' + ids);
                                 }
                             }
                         }

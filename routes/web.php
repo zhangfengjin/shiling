@@ -60,6 +60,9 @@ Route::group(['domain' => ''],
             Route::get("meetuser/export", "MeetUserController@export");
             Route::resource("meetuser", "MeetUserController");
 
+            Route::get("muprize/list", "PrizeController@getPrizeUserList");
+            Route::resource("muprize", "PrizeController");
+
 
             Route::post("goods/upload", "GoodsController@upload");
             Route::resource("goods", "GoodsController");
