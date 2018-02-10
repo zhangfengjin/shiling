@@ -45,7 +45,20 @@ class TelEmailService
         $headers = $this->getSMSHeader();
         // 发送请求
         $ret = HttpHelper::http_post_curlcontents($url, $headers, $post_data);
-        Log::info($ret);
+        return $ret;
+    }
+
+    public function sendNotifySMS($phone, $content)
+    {
+        $url = "https://api.netease.im/sms/sendtemplate.action";
+        $post_data = [
+            'templateid' => '1',
+            'mobile' => [$phone],
+            'params' => [$content]
+        ];
+        $headers = $this->getSMSHeader();
+        // 发送请求
+        $ret = HttpHelper::http_post_curlcontents($url, $headers, $post_data);
         return $ret;
     }
 

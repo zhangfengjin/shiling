@@ -167,6 +167,15 @@
         </form>
     </div>
 
+    <div id="detail_refund" class="x_content detail_content">
+        <div class="x_panel">
+            <div class="x_content">
+                <table id="user_table" class="table table-striped table-bordered bulk_action">
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
@@ -461,6 +470,7 @@
                                     time: 800,
                                     offset: "50px"
                                 });
+                                successfn();
                             },
                             "failfn": function () {
                                 parent.layer.msg('通知失败', {
@@ -468,6 +478,7 @@
                                     time: 800,
                                     offset: "50px"
                                 });
+                                usable();
                             }
                         });
                     };
@@ -563,6 +574,59 @@
                             }
                         });
 
+                    }
+                },
+                _refund: function (ids, full, obj) {
+                    if (ids) {
+                        var userTableId = "user_table";
+                        var userUrl = "/meet/user/list?meetId=" + ids + "&status=1";
+                        var meetUserList = function (ids) {
+                            var aoColumns = [{
+                                "sTitle": "",
+                                "data": "id"
+                            }, {
+                                "sTitle": "姓名",
+                                "data": "name"
+                            }, {
+                                "sTitle": "手机号",
+                                "data": "phone"
+                            }, {
+                                "sTitle": "邮箱",
+                                "data": "email"
+                            }];
+                            var oSetting = {
+                                "tableId": userTableId,
+                                "url": userUrl,
+                                "chk": {
+                                    "display": true
+                                },
+                                "aoColumns": aoColumns,
+                                "order": [[0, "desc"]],
+                                "toolbar": {
+                                    "add": {
+                                        "info": "退款", "func": me._refundMoney
+                                    }
+                                }
+                            };
+                            TableList.datatable(oSetting);
+                        };
+                        var openMeetUser = function (ids) {
+                            //var areaHeight = $(window).height() - 40;
+                            layer.open({
+                                type: 1,
+                                title: "退款人员",
+                                scrollbar: false,
+                                shadeClose: true,
+                                area: ["50%", "500px"], // 宽高
+                                content: $("#detail_refund"),
+                                yes: function (index, layero) {
+                                },
+                                success: function () {
+                                    meetUserList(ids);
+                                }
+                            });
+                        };
+                        openMeetUser(ids);
                     }
                 },
                 _daterangepicker: function () {

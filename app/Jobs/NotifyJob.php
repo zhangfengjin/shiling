@@ -2,12 +2,16 @@
 
 namespace App\Jobs;
 
+use App\Http\Services\TelEmailService;
 use App\Models\MeetUser;
+use App\Utils\EmailHelper;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class NotifyJob implements ShouldQueue
 {
@@ -33,14 +37,16 @@ class NotifyJob implements ShouldQueue
     public function handle()
     {
         $meetUsers = $this->getMeetUsers($this->notify['meetId']);
+        $content = "最新通知：" . $this->notify['notify_content'];
         foreach ($meetUsers as $user) {
-            if ($this->notify['send_sms'] && empty($user->phone)) {
-                $this->sendSMS($user->phone);
+            if ($this->notify['send_sms'] && !empty($user->phone)) {
+                $this->sendSMS($user->phone, $content);
             }
-            if ($this->notify['send_email'] && empty($user->email)) {
-                $this->sendEmail($user->email);
+            if ($this->notify['send_email'] && !empty($user->email)) {
+                $this->sendEmail($user->email, $content);
             }
         }
+        die;
     }
 
     private function getMeetUsers($meetId)
@@ -55,11 +61,16 @@ class NotifyJob implements ShouldQueue
         return $meetUsers;
     }
 
-    private function sendEmail($email)
+    private function sendSMS($phone, $content)
     {
+        $telService = new TelEmailService();
+        $telService->sendNotifySMS($phone, $content);
     }
 
-    private function sendSMS($phone)
+    private function sendEmail($email, $content)
     {
+        Mail::raw($content, function ($message) use ($email) {
+            $message->to($email)->subject("领师通知");
+        });
     }
 }
