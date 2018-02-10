@@ -1,4 +1,43 @@
 @extends('layouts.app_table')@section('tablecontent')
+    <script type="application/javascript">
+        var route = CommonUtil.getRootPath() + "/meet/upload?action=uploadimage&token=" + $('meta[name="csrf-token"]').attr('content');
+        var accept = {};
+        var fileNumLimit = 7;
+        var fileSizeLimit = 3 * 1024 * 1024;    // 3 M
+        var fileSingleSizeLimit = 1024 * 1024;  // 1 M
+    </script>
+    <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/webuploader.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/style.css')}}"/>
+    <div class="row" style="display: none;">
+        <div id="wrapper">
+            <div id="container">
+                <!--头部，相册选择和格式选择-->
+
+                <div id="uploader">
+                    <div class="queueList">
+                        <div id="dndArea" class="placeholder">
+                            <div id="filePicker"></div>
+                            {{--<p>或将照片拖到这里，单次最多可选300张</p>--}}
+                        </div>
+                    </div>
+                    <div class="statusBar" style="display:none;">
+                        <div class="progress">
+                            <span class="text">0%</span>
+                            <span class="percentage"></span>
+                        </div>
+                        <div class="info"></div>
+                        <div class="btns">
+                            <div id="filePicker2"></div>
+                            <div class="uploadBtn">开始上传</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{{url('/js/plugins/webuploader/webuploader.js')}}"></script>
+    <script type="text/javascript" src="{{url('/js/plugins/webuploader/upload.js')}}"></script>
+
     <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div class="form-group">
@@ -137,10 +176,10 @@
         </div>
     </div>
 
-    <div id="detail_meet_prize" class="x_content detail_content">
+    <div id="detail_user_prize" class="x_content detail_content">
         <div class="x_panel">
             <div class="x_content">
-                <table id="meet_prize_table" class="table table-striped table-bordered bulk_action">
+                <table id="user_prize_table" class="table table-striped table-bordered bulk_action">
                 </table>
             </div>
         </div>
@@ -364,32 +403,6 @@
                                 "display": 1,
                                 "info": "查看中奖人员",
                                 "func": me._userPrize
-                            },
-                            "heart": {
-                                "display": 1,
-                                "info": "抽奖设置",
-                                "draw": function (full) {
-                                    var params = {};
-                                    if (full.status == "已取消") {
-                                        params.disabled = true;
-                                    }
-                                    return params;
-                                },
-                                "func": me._meetPrize
-                            },
-                            "gift": {
-                                "display": 1,
-                                "info": "去抽奖",
-                                "draw": function (full) {
-                                    var params = {};
-                                    if (full.status == "已取消") {
-                                        params.disabled = true;
-                                    }
-                                    return params;
-                                },
-                                "func": function (ids, full, obj) {
-                                    CommonUtil.redirect('/meetuser?meetId=' + ids);
-                                }
                             }
                         }
                     };
@@ -663,23 +676,23 @@
                         }
                     }
                 },
-                _meetPrize: function (ids, full, obj) {
+                _userPrize: function (ids, full, obj) {
                     if (ids) {
-                        var userTableId = "meet_prize_table";
-                        var userUrl = "/mprize/list?meetId=" + ids;
+                        var userTableId = "user_prize_table";
+                        var userUrl = "/prize//list?meetId=" + ids + "&status=1";
                         var meetUserList = function (ids) {
                             var aoColumns = [{
                                 "sTitle": "",
                                 "data": "id"
                             }, {
-                                "sTitle": "奖品",
+                                "sTitle": "姓名",
                                 "data": "name"
                             }, {
-                                "sTitle": "奖品描述",
-                                "data": "remark"
+                                "sTitle": "手机号",
+                                "data": "phone"
                             }, {
-                                "sTitle": "奖品数量",
-                                "data": "prize_count"
+                                "sTitle": "邮箱",
+                                "data": "email"
                             }];
                             var oSetting = {
                                 "tableId": userTableId,
@@ -690,18 +703,9 @@
                                 "aoColumns": aoColumns,
                                 "order": [[0, "desc"]],
                                 "toolbar": {
-                                    "add": {
-                                        "info": "添加", "func": function (ids, fn) {
-                                            _addPrize(ids);
-                                        }
-                                    }
-                                },
-                                "opt": {
-                                    "edit": {
-                                        "display": 1,
-                                        "info": "编辑",
-                                        "func": function () {
-
+                                    "refund": {
+                                        "info": "退款", "func": function (ids, fn) {
+                                            _refundMoney(ids);
                                         }
                                     }
                                 }
@@ -712,11 +716,11 @@
                             //var areaHeight = $(window).height() - 40;
                             layer.open({
                                 type: 1,
-                                title: "会议奖品",
+                                title: "退款人员",
                                 scrollbar: false,
                                 shadeClose: true,
                                 area: ["50%", "500px"], // 宽高
-                                content: $("#detail_meet_prize"),
+                                content: $("#detail_refund"),
                                 yes: function (index, layero) {
                                 },
                                 success: function () {

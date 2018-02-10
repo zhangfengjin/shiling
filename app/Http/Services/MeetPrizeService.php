@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: fengjin1
- * Date: 2018/2/10
- * Time: 22:59
+ * Date: 2018/2/11
+ * Time: 0:15
  */
 
 namespace App\Http\Services;
@@ -12,42 +12,37 @@ namespace App\Http\Services;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
 
-class PrizeService extends CommonService
+class MeetPrizeService extends CommonService
 {
 
     /**
      * @return array
      */
-    public function getPrizeUserList()
+    public function getList()
     {
         $where = $this->getSearchWhere($this->searchs);
         $whereLimit = [
-            "mup.flag" => 0,
-            "mu.status" => 4
+            'mp.flag' => 0
         ];
+
         //获取查询的记录数
-        $total = DB::table("meet_prize_users as mup")
-            ->leftJoin("meet_users as mu", 'mu.id', '=', 'mup.meet_user_id')
-            ->leftJoin("users as u", 'u.id', '=', 'mu.user_id')
-            ->leftJoin("meets as meet", 'meet.id', '=', 'mu.meet_id')
+        $total = DB::table("meet_prizes as mp")
+            ->join("meets as meet", 'meet.id', '=', 'mp.meet_id')
             ->where($whereLimit)
             ->whereRaw($where)->count();
         //要查询的字段
         $select = [
-            'mup.id', 'mp.remark', 'u.phone', 'u.email'
+            'mp.id', 'mp.remark', 'mp.name', 'mp.prize_count'
         ];
         $meetName = DB::raw("meet.name as meet_name");
         $prizeName = DB::raw("mp.name as prize_name");
         $userName = DB::raw("u.name as user_name");
-        array_push($select, $meetName, $prizeName, $userName);
+        //array_push($select, $meetName, $prizeName, $userName);
         //获取查询结果
-        $sortField = "mup.id";
+        $sortField = "mp.id";
         $sSortDir = "asc";
-        $rows = DB::table("meet_prize_users as mup")
-            ->leftJoin("meet_users as mu", 'mu.id', '=', 'mup.meet_user_id')
-            ->leftJoin("meet_prizes as mp", 'mp.id', '=', 'mup.prize_id')
-            ->leftJoin("users as u", 'u.id', '=', 'mu.user_id')
-            ->leftJoin("meets as meet", 'meet.id', '=', 'mu.meet_id')
+        $rows = DB::table("meet_prizes as mp")
+            ->join("meets as meet", 'meet.id', '=', 'mp.meet_id')
             ->where($whereLimit)->whereRaw($where)
             ->orderBy($sortField, $sSortDir)
             ->take($this->iDisplayLength)
@@ -80,10 +75,7 @@ class PrizeService extends CommonService
         $areaId = isset($searchs["area_id"]) ? trim($searchs["area_id"])
             : (isset($this->allInput["area_id"]) ? trim($this->allInput["area_id"]) : "");//合同号
         if (!empty($meetId)) {
-            array_push($where, "mu.meet_id=$meetId");
-        }
-        if ($status !== "") {
-            array_push($where, "mu.status=$status");
+            array_push($where, "mp.meet_id=$meetId");
         }
         if (!empty($meetName)) {
             array_push($where, "meet.name like '%$meetName%'");
@@ -97,4 +89,5 @@ class PrizeService extends CommonService
         }
         return $where;
     }
+
 }
