@@ -354,11 +354,6 @@
                                 "info": "编辑",
                                 "func": me._edit
                             },
-                            "comment": {
-                                "display": 1,
-                                "info": "通知",
-                                "func": me._notify
-                            },
                             "check-square-o": {
                                 "display": 1,
                                 "info": "取消会议",
@@ -383,6 +378,11 @@
                                 },
                                 "func": me._refund
                             },
+                            "comment": {
+                                "display": 1,
+                                "info": "通知",
+                                "func": me._notify
+                            }
                         }
                     };
                     TableList.datatable(oSetting);
@@ -603,8 +603,10 @@
                                 "aoColumns": aoColumns,
                                 "order": [[0, "desc"]],
                                 "toolbar": {
-                                    "add": {
-                                        "info": "退款", "func": me._refundMoney
+                                    "refund": {
+                                        "info": "退款", "func": function (ids, fn) {
+                                            _refundMoney(ids);
+                                        }
                                     }
                                 }
                             };
@@ -627,6 +629,30 @@
                             });
                         };
                         openMeetUser(ids);
+                        var _refundMoney = function (ids) {
+                            if (ids) {
+                                TableList.optTable({
+                                    "tableId": userTableId,
+                                    "url": meetUrl + "/refund/" + ids,
+                                    "type": "post",
+                                    "async": true,
+                                    "successfn": function () {
+                                        parent.layer.msg('取消成功', {
+                                            icon: 1,
+                                            time: 800,
+                                            offset: "50px"
+                                        });
+                                    },
+                                    "failfn": function () {
+                                        parent.layer.msg('取消失败', {
+                                            icon: 1,
+                                            time: 800,
+                                            offset: "50px"
+                                        });
+                                    }
+                                });
+                            }
+                        }
                     }
                 },
                 _daterangepicker: function () {

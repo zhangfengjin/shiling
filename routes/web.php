@@ -52,7 +52,7 @@ Route::group(['domain' => ''],
             Route::get("meet/list", "MeetController@getList");
             Route::DELETE("meet/cancel/{meetId}", "MeetController@cancel");
             Route::PUT("meet/notify/{meetId}", "MeetController@notify");
-
+            Route::post("meet/refund/{ids}", "MeetController@refund");
             Route::get("meet/user/list", "MeetUserController@getList");
             Route::resource("meet", "MeetController");
             Route::get("award", "AwardController@index");//摇奖
@@ -64,6 +64,7 @@ Route::group(['domain' => ''],
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });
+            //Route::post("refund", "RefundController@refund");
             Route::post("signin/code", "MeetController@signin");//二维码签到
         });
     }

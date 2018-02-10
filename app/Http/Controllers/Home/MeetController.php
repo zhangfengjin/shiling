@@ -98,8 +98,9 @@ class MeetController extends HomeController
 
     public function cancel(Request $request, $meetId)
     {
+        $input = $request->all();
         $meetService = new MeetService($request);
-        $ret = $meetService->cancel($meetId);
+        $ret = $meetService->cancel($input, $meetId);
         if ($ret) {
             return DataStandard::getStandardData();
         }
@@ -117,6 +118,18 @@ class MeetController extends HomeController
         $input = $request->all();
         $meetService = new MeetService($request);
         $meetService->notify($input, $meetId);
+        return DataStandard::getStandardData();
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function refund(Request $request,$ids)
+    {
+        $input = $request->all();
+        $meetService = new MeetService($request);
+        $meetService->refund($input,$ids);
         return DataStandard::getStandardData();
     }
 

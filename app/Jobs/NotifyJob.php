@@ -46,7 +46,6 @@ class NotifyJob implements ShouldQueue
                 $this->sendEmail($user->email, $content);
             }
         }
-        die;
     }
 
     private function getMeetUsers($meetId)

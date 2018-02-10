@@ -134,12 +134,15 @@ class MeetService extends CommonService
      * @param $meetId
      * @return bool
      */
-    public function cancel($meetId)
+    public function cancel($input, $meetId)
     {
         $meet = Meet::find($meetId);
         if ($meet) {
             $meet->status = 1;
+            $meet->reason = $input['reason'];
             $meet->save();
+            //$input["meetId"] = $meetId;
+            //dispatch((new NotifyJob($input))->onQueue("meet_cancel"));
             return true;
         }
         return false;
@@ -153,6 +156,22 @@ class MeetService extends CommonService
     {
         $input["meetId"] = $meetId;
         dispatch((new NotifyJob($input))->onQueue("meet_notify"));
+    }
+
+    /**
+     * @param $input
+     * @param $meetId
+     */
+    public function refund($input, $meetUserIds)
+    {
+        $ids = array_filter(explode(",", $meetUserIds));
+        $res = DB::table("meet_users as mu")
+            ->where("status", 1)->whereIn("id", $ids)
+            ->update(["status" => 2]);
+        //todo
+        //获取退款人员订单号、退款金额等信息
+        //将退款信息放入退款队列
+        return true;
     }
 
     /**
