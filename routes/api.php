@@ -35,7 +35,8 @@ Route::group(['domain' => '',], function () {
                 Route::put("user/{userId}", "UserController@update");//更新用户信息
 
 
-                Route::post("signin/code/{meetId}", "MeetController@signin");//二维码签到
+                //Route::post("signin/code/{meetId}", "MeetController@signin");//二维码签到--会议二维码
+                Route::post("user/signin/code/{enroll}", "MeetUserController@userSignin");//二维码签到--会议用户个人二维码
 
                 Route::post("meet/signup", "MeetController@enroll");
                 Route::get("meet/list", "MeetController@getList");//会议列表

@@ -35,7 +35,7 @@ class MeetService extends CommonService
         $meet->keynote_speaker_id = 0;//主讲人封面id
         $meet->creator = $this->user['uid'];
         $meet->save();
-        $this->qrcode($meet->id);//生成签到二维码
+        $this->qrcode("meet", $meet->id);//生成会议签到二维码
         return true;
     }
 
@@ -63,11 +63,11 @@ class MeetService extends CommonService
     }
 
     /**
-     * 生成签到二维码
+     * 生成会议签到二维码
      */
-    private function qrcode($meetId)
+    private function qrcode($type, $meetId)
     {
-        $codeImg = config('app.qrcode.path') . $meetId . ".png";
+        $codeImg = config('app.qrcode.path') . $type . '/' . $meetId . ".png";
         if (!file_exists($codeImg)) {
             $sign = config('app.qrcode.sign') . "/$meetId";
             QrCode::format('png')->size(300)->generate($sign, $codeImg);
@@ -193,6 +193,11 @@ class MeetService extends CommonService
         $meetUser->user_id = $input['userId'];
         $meetUser->meet_id = $input['meetId'];
         $meetUser->save();
+        $codeImg = config('app.qrcode.path') . 'meet_user/' . $meetUser->id . ".png";
+        if (!file_exists($codeImg)) {
+            $sign = config('app.qrcode.usersign') . "/" . $meetUser->id . "_" . $meetUser->user_id . "_" . $meetUser->meet_id;
+            QrCode::format('png')->size(300)->generate($sign, $codeImg);
+        }
     }
 
     /**

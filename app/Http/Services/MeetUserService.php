@@ -198,6 +198,22 @@ class MeetUserService extends CommonService
         HttpHelper::download($doc);
     }
 
+    public function userSignIn($enroll)
+    {
+        $input = explode("_", $enroll);
+        $where = [
+            "mu.id" => $input[0],
+            "u.id" => $input[1],
+            "meet.id" => $input[2],
+            "mu.status" => 0,
+            "u.flag" => 0
+        ];
+        return DB::table("meet_users as mu")
+            ->join("meets as meet", 'meet.id', '=', 'mu.meet_id')
+            ->join("users as u", 'u.id', '=', 'mu.user_id')
+            ->where($where)->get(["mu.status"])->first();
+    }
+
 
     /**
      * 获取查询条件
