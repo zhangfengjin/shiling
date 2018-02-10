@@ -36,6 +36,9 @@ return [
         [
             [
                 "name" => "会议列表", "href" => "/meet"
+            ],
+            [
+                "name" => "参会人员", "href" => "/meetuser"
             ]
         ]
     ]

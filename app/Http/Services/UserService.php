@@ -50,6 +50,15 @@ class UserService extends CommonService
         return User::where($where)->count();
     }
 
+    public function uniqueUid($userId)
+    {
+        $where = [
+            "id" => $userId,
+            "flag" => 0
+        ];
+        return User::where($where)->count();
+    }
+
 
     /**
      * 重置密码

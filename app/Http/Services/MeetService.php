@@ -12,6 +12,7 @@ namespace App\Http\Services;
 use App\Jobs\NotifyJob;
 use App\Models\Meet;
 use App\Models\MeetNotify;
+use App\Models\MeetUser;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
@@ -172,6 +173,26 @@ class MeetService extends CommonService
         //获取退款人员订单号、退款金额等信息
         //将退款信息放入退款队列
         return true;
+    }
+
+    public function getMeet($input)
+    {
+        $where = [
+            "status" => 0,
+            "id" => $input['meetId']
+        ];
+        return Meet::where($where)->count();
+    }
+
+    /**
+     * @param $input
+     */
+    public function enroll($input)
+    {
+        $meetUser = new MeetUser();
+        $meetUser->user_id = $input['userId'];
+        $meetUser->meet_id = $input['meetId'];
+        $meetUser->save();
     }
 
     /**

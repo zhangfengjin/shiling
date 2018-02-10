@@ -36,6 +36,8 @@ Route::group(['domain' => '',], function () {
 
 
                 Route::post("signin/code/{meetId}", "MeetController@signin");//二维码签到
+
+                Route::post("meet/signup", "MeetController@enroll");
                 Route::get("meet/list", "MeetController@getList");//会议列表
 
                 Route::group(['prefix' => 'pay'], function () {

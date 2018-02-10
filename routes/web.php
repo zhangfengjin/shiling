@@ -53,9 +53,11 @@ Route::group(['domain' => ''],
             Route::DELETE("meet/cancel/{meetId}", "MeetController@cancel");
             Route::PUT("meet/notify/{meetId}", "MeetController@notify");
             Route::post("meet/refund/{ids}", "MeetController@refund");
-            Route::get("meet/user/list", "MeetUserController@getList");
             Route::resource("meet", "MeetController");
-            Route::get("award", "AwardController@index");//摇奖
+            Route::get("award", "AwardController@index");//
+
+            Route::get("meetuser/list", "MeetUserController@getList");
+            Route::resource("meetuser", "MeetUserController");
 
 
             Route::post("goods/upload", "GoodsController@upload");

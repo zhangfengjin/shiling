@@ -1,179 +1,43 @@
 @extends('layouts.app_table')@section('tablecontent')
-    <script type="application/javascript">
-        var route = CommonUtil.getRootPath() + "/meet/upload?action=uploadimage&token=" + $('meta[name="csrf-token"]').attr('content');
-        var accept = {};
-        var fileNumLimit = 7;
-        var fileSizeLimit = 3 * 1024 * 1024;    // 3 M
-        var fileSingleSizeLimit = 1024 * 1024;  // 1 M
-    </script>
-    <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/webuploader.css')}}"/>
-    <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/style.css')}}"/>
-    <div class="row" style="display: none;">
-        <div id="wrapper">
-            <div id="container">
-                <!--头部，相册选择和格式选择-->
-
-                <div id="uploader">
-                    <div class="queueList">
-                        <div id="dndArea" class="placeholder">
-                            <div id="filePicker"></div>
-                            {{--<p>或将照片拖到这里，单次最多可选300张</p>--}}
-                        </div>
-                    </div>
-                    <div class="statusBar" style="display:none;">
-                        <div class="progress">
-                            <span class="text">0%</span>
-                            <span class="percentage"></span>
-                        </div>
-                        <div class="info"></div>
-                        <div class="btns">
-                            <div id="filePicker2"></div>
-                            <div class="uploadBtn">开始上传</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script type="text/javascript" src="{{url('/js/plugins/webuploader/webuploader.js')}}"></script>
-    <script type="text/javascript" src="{{url('/js/plugins/webuploader/upload.js')}}"></script>
-
     <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">会议名称</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="meet_name" type="text" class="form-control" placeholder="会议名称"
+                    <input id="meet_name" type="text" class="form-control" disabled
                            required data-parsley-maxlength="50">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">主讲人</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">参会人</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="keynote_speaker" type="text" class="form-control" placeholder="主讲人"
+                    <input id="user_name" type="text" class="form-control" disabled
                            required data-parsley-maxlength="100">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">人数限制</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">状态</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="limit_count" type="text" class="form-control" placeholder="人数限制"
-                           required data-parsley-type="number">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议开始时间</label>
-                <div class="col-md-3 col-sm-3 col-xs-12 xdisplay_inputx form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="begin_time"
-                           placeholder="会议开始时间" aria-describedby="inputSuccess2Status">
-                    <span class="fa fa-calendar-o form-control-feedback left"
-                          aria-hidden="true"></span>
-                    <span id="inputSuccess2Status" class="sr-only">(success)</span>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议结束时间</label>
-                <div class="col-md-3 col-sm-3 col-xs-12 xdisplay_inputx form-group has-feedback">
-                    <input type="text" class="form-control has-feedback-left" id="end_time"
-                           placeholder="会议结束时间" aria-describedby="inputSuccess2Status">
-                    <span class="fa fa-calendar-o form-control-feedback left"
-                          aria-hidden="true"></span>
-                    <span id="inputSuccess2Status" class="sr-only">(success)</span>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">参会对象</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="to_object" type="text" class="form-control" placeholder="人数限制">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">省</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="province" class="form-control" required>
-                        <option value=""></option>
-                        @foreach($provinces as $province)
-                            <option value="{{$province->province_code}}">{{$province->province_name}}</option>
-                        @endforeach
+                    <select class="form-control" id="status">
+                        <option value="0">已报名</option>
+                        <option value="1">已付款</option>
+                        {{--<option value="2">退款中</option>
+                        <option value="3">已退款</option>--}}
                     </select>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">市</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="city" class="form-control" required>
-                        <option value=""></option>
-                        @foreach($cities as $city)
-                            <option parent="{{$city->province_code}}"
-                                    value="{{$city->city_code}}">{{$city->city_name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">县区</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="area" class="form-control" required>
-                        <option value=""></option>
-                        @foreach($areas as $area)
-                            <option parent="{{$area->city_code}}"
-                                    value="{{$area->id}}">{{$area->area_name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">详细地址</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
-                    <textarea id="addr" rows="3" class="form-control" placeholder="详细地址"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议详情</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
-                    <textarea id="abstract" rows="3" class="form-control" placeholder="会议详情"></textarea>
                 </div>
             </div>
         </form>
     </div>
 
-    <div id="detail_reason" class="x_content detail_content" data-parsley-validate>
+    <div id="detail_batch" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div class="form-group">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <label class="col-md-12 col-sm-12 col-xs-12">
-                        <textarea id="reason" rows="3" class="form-control" placeholder="取消原因"
-                                  required data-parsley-maxlength="20"></textarea>
-                    </label>
+                    <select class="form-control" id="pay_status">
+                        <option value="0">已报名</option>
+                        <option value="1">已付款</option>
+                        {{--<option value="2">退款中</option>
+                        <option value="3">已退款</option>--}}
+                    </select>
                 </div>
             </div>
         </form>
-    </div>
-
-    <div id="detail_notify" class="x_content detail_content" data-parsley-validate>
-        <form class="form-horizontal form-label-left">
-            <div class="form-group">
-                <div class="col-md-12 col-sm-12 col-xs-12 checkbox">
-                    <div class="checkbox">
-                        <label class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="checkbox" class="flat"
-                                   name="send_sms" id="send_sms" value="1"
-                                   checked> 短信通知&nbsp;&nbsp;
-                        </label>
-                        <label class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="checkbox" class="flat"
-                                   name="send_email" id="send_email"
-                                   value="2" checked> 邮件通知&nbsp;&nbsp;
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <label class="col-md-12 col-sm-12 col-xs-12">
-                        <textarea id="notify_content" rows="3" class="form-control" placeholder="通知内容"
-                                  required data-parsley-maxlength="20"></textarea>
-                    </label>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div id="detail_refund" class="x_content detail_content">
-        <div class="x_panel">
-            <div class="x_content">
-                <table id="user_table" class="table table-striped table-bordered bulk_action">
-                </table>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -188,25 +52,43 @@
                             <div class="form-group">
                                 <ul class="col-md-12 col-sm-12 col-xs-12">
                                     <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">手机号</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_phone"></li>
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">省</label>
+                                        <div class="col-md-7 col-sm-8 col-xs-12">
+                                            <select id="search_province" class="form-control" required>
+                                                <option value=""></option>
+                                                @foreach($provinces as $province)
+                                                    <option value="{{$province->province_code}}">{{$province->province_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </li>
                                     <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">邮箱</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_email"></li>
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">市</label>
+                                        <div class="col-md-7 col-sm-8 col-xs-12">
+                                            <select id="search_city" class="form-control" required>
+                                                <option value=""></option>
+                                                @foreach($cities as $city)
+                                                    <option parent="{{$city->province_code}}"
+                                                            value="{{$city->city_code}}">{{$city->city_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </li>
                                     <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">姓名</label>
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">县区</label>
+                                        <div class="col-md-7 col-sm-8 col-xs-12">
+                                            <select id="search_area" class="form-control" required>
+                                                <option value=""></option>
+                                                @foreach($areas as $area)
+                                                    <option parent="{{$area->city_code}}"
+                                                            value="{{$area->id}}">{{$area->area_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </li>
+                                    <li class="col-md-4 col-sm-6 col-xs-12">
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">会议名称</label>
                                         <input class="col-md-7 col-sm-8 col-xs-12" id="search_meet_name"></li>
-                                    <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">继教号</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_unum"></li>
-                                    <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">状态</label>
-                                        <select class="col-md-7 col-sm-8 col-xs-12" id="search_status">
-                                            <option value=""></option>
-                                            <option value="1">启用</option>
-                                            <option value="2">待审核</option>
-                                            <option value="3">已停用</option>
-                                        </select></li>
                                     <div class="col-md-3 col-sm-6 col-xs-12">
                                         <button id="search" type="button" class="btn btn-round btn-default search_btn">
                                             查询
@@ -235,7 +117,7 @@
 
     <div id="detail_mould"></div>
     <script type="application/javascript">
-        var meetUrl = "/meet";
+        var meetUrl = "/meetuser";
         $(function () {
             AccountUtil.init();
         });
@@ -251,11 +133,10 @@
                         me._searchList();
                     });
                     $("#reset").on("click", function () {
-                        $("#search_phone").val('');
-                        $("#search_email").val('');
+                        $("#search_province").val('');
+                        $("#search_city").val('');
+                        $("#search_area").val('');
                         $("#search_meet_name").val('');
-                        $("#search_unum").val('');
-                        $("#search_status").val('');
                     });
                 },
                 init: function () {
@@ -264,16 +145,16 @@
                     me._createList();
                 },
                 _ddl: function () {
-                    $("#province option").each(function () {  //遍历所有option
+                    $("#search_province option").each(function () {  //遍历所有option
                         var province = $(this).val();
                         if (province != "") {
                             var cities = [];
-                            $("#city option[parent='" + province + "']").each(function () {  //遍历所有option
+                            $("#search_city option[parent='" + province + "']").each(function () {  //遍历所有option
                                 var city = $(this).val();
                                 if (city != "") {
                                     var cityName = $(this).text();
                                     var areas = [];
-                                    $("#area option[parent='" + city + "']").each(function () {  //遍历所有option
+                                    $("#search_area option[parent='" + city + "']").each(function () {  //遍历所有option
                                         var area = $(this).val();
                                         if (area != "") {
                                             var areaName = $(this).text();
@@ -298,6 +179,45 @@
                             });
                         }
                     });
+
+                    $("#search_province").change(function () {
+                        var province = $(this).val();
+                        for (var idx in provinces) {
+                            var pro = provinces[idx];
+                            if (pro.name == province) {
+                                $("#search_city").empty();
+                                $("#search_area").empty();
+                                var cities = pro.value;
+                                for (var idx2 in cities) {
+                                    var cityValue = cities[idx2].name;
+                                    $("#search_city").append("<option parent='" + province + "' value='" + cityValue + "'>" + cities[idx2].value.name + "</option>");
+                                    var areas = cities[idx2].value.value;
+                                    for (var idx3 in areas) {
+                                        $("#search_area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    $("#search_city").change(function () {
+                        $("#area").empty();
+                        var cityValue = $(this).val();
+                        var province = $("#search_city option[value='" + cityValue + "']").attr('parent');
+                        for (var idx in provinces) {
+                            var pro = provinces[idx];
+                            if (pro.name == province) {
+                                var cities = pro.value;
+                                for (var idx2 in cities) {
+                                    if (cityValue == cities[idx2].name) {
+                                        var areas = cities[idx2].value.value;
+                                        for (var idx3 in areas) {
+                                            $("#search_area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
                 },
                 _import: function (content) {
 
@@ -307,29 +227,17 @@
                         "sTitle": "",
                         "data": "id"
                     }, {
-                        "sTitle": "会议名称",
+                        "sTitle": "会议",
+                        "data": "meet_name"
+                    }, {
+                        "sTitle": "姓名",
                         "data": "name"
                     }, {
-                        "sTitle": "主讲人",
-                        "data": "keynote_speaker"
+                        "sTitle": "手机号",
+                        "data": "phone"
                     }, {
-                        "sTitle": "开始时间",
-                        "data": "begin_time"
-                    }, {
-                        "sTitle": "结束时间",
-                        "data": "end_time"
-                    }, {
-                        "sTitle": "限制人数",
-                        "data": "limit_count"
-                    }, {
-                        "sTitle": "针对人群",
-                        "data": "to_object"
-                    }, {
-                        "sTitle": "区域",
-                        "data": "pca_name"
-                    }, {
-                        "sTitle": "详细地址",
-                        "data": "addr"
+                        "sTitle": "邮箱",
+                        "data": "email"
                     }, {
                         "sTitle": "状态",
                         "data": "status",
@@ -344,8 +252,8 @@
                         "aoColumns": aoColumns,
                         "order": [[0, "desc"]],
                         "toolbar": {
-                            "add": {
-                                "info": "新建", "func": me._add
+                            "batch_status": {
+                                "info": "批量修改状态", "func": me._batchStatus
                             }
                         },
                         "opt": {
@@ -353,36 +261,8 @@
                                 "display": 1,
                                 "info": "编辑",
                                 "func": me._edit
-                            },
-                            "check-square-o": {
-                                "display": 1,
-                                "info": "取消会议",
-                                "draw": function (full) {
-                                    var params = {};
-                                    if (full.status == "已取消") {
-                                        params.disabled = true;
-                                    }
-                                    return params;
-                                },
-                                "func": me._cancel
-                            },
-                            "money": {
-                                "display": 1,
-                                "info": "退款",
-                                "draw": function (full) {
-                                    var params = {};
-                                    if (full.status != "已取消") {
-                                        params.disabled = true;
-                                    }
-                                    return params;
-                                },
-                                "func": me._refund
-                            },
-                            "comment": {
-                                "display": 1,
-                                "info": "通知",
-                                "func": me._notify
                             }
+
                         }
                     };
                     TableList.datatable(oSetting);
@@ -390,25 +270,58 @@
                 _searchList: function () {
                     searchInfo = {
                         "searchs": {
-                            "phone": $("#search_phone").val(),
-                            "email": $("#search_email").val(),
-                            "meetName": $("#search_meet_name").val(),
-                            "unum": $("#search_unum").val(),
-                            "status": $("#search_status").val()
+                            "area_id": $("#search_area").val(),
+                            "meet_name": $("#search_meet_name").val(),
                         }
                     };
                     TableList.search(tableId, listUrl, searchInfo);
                 },
-                _add: function () {
-                    me._openlayer(0, 1, function (requestData, successfn, usable) {
+                _batchStatus: function (ids,full,obj) {
+                    var batchEditStatus = function (requestData, successfn, usable) {
                         TableList.optTable({
                             "tableId": tableId,
-                            "url": meetUrl,
-                            "type": "post",
+                            "url": meetUrl + "/" + ids,
+                            "type": "put",
                             "reqData": requestData,
                             "successfn": successfn,
                             "failfn": usable
                         });
+                    };
+                    var usable = function () {
+                        btns.css("pointer-events", "");
+                    };
+                    var area = ["200px", "200px"];
+                    if (device.mobile()) {
+                        area = ["80%", "70%"];
+                    }
+                    layer.open({
+                        type: 1,
+                        title: "支付状态信息",
+                        scrollbar: false,
+                        area: area, // 宽高
+                        content: $("#detail_batch"),
+                        btn: ['保存', '取消'],
+                        yes: function (index, layero) {
+                            btns = layero.children(".layui-layer-btn").children("a");
+                            try {
+                                btns.css("pointer-events", "none");
+                                var requestData = {
+                                    "status": $("#pay_status").val()
+                                };
+                                var parsl = $('#detail_batch').parsley();
+                                parsl.validate();
+                                if (true === parsl.isValid()) {
+                                    batchEditStatus(requestData, function () {
+                                        layer.close(index);
+                                    }, usable);
+                                } else {
+                                    usable();
+                                }
+                            } catch (e) {
+                                usable();
+                            }
+                        }, success: function () {
+                        }
                     });
                 },
                 _edit: function (ids, full, obj) {
@@ -416,21 +329,8 @@
                         TableList.controllerDisabled(obj);
                         var fillData = function (data) {
                             $("#meet_name").val(data.meet_name);
-                            $("#keynote_speaker").val(data.keynote_speaker);
-                            $("#limit_count").val(data.limit_count);
-                            $("#begin_time").attr("begin_time", data.begin_time);
-                            $('#begin_time').val(data.begin_time);
-                            $("#end_time").attr("end_time", data.end_time);
-                            $('#end_time').val(data.end_time);
-                            $("#to_object").val(data.to_object);
-                            $("#addr").val(data.addr);
-                            $("#abstract").val(data.abstract);
-                            $("#province").val(data.province_code);
-                            $('#province').trigger('change');
-                            $("#city").val(data.city_code);
-                            $('#city').trigger('change');
-                            $("#area").val(data.area_id);
-                            $('#area').trigger('change');
+                            $("#user_name").val(data.user_name);
+                            $("#status").val(data.status);
                         };
                         var updateData = function (requestData, successfn, usable) {
                             TableList.optTable({
@@ -490,7 +390,7 @@
                         type: 1,
                         title: "通知参会人员",
                         scrollbar: false,
-                        area: ["300px", "250px"], // 宽高
+                        area: ["300px", "220px"], // 宽高
                         content: $("#detail_notify"),
                         btn: ['通知', '取消'],
                         yes: function (index, layero) {
@@ -579,7 +479,7 @@
                 _refund: function (ids, full, obj) {
                     if (ids) {
                         var userTableId = "user_table";
-                        var userUrl = "/meetuser/list?meetId=" + ids + "&status=1";
+                        var userUrl = "/meetuser/list";
                         var meetUserList = function (ids) {
                             var aoColumns = [{
                                 "sTitle": "",
@@ -714,57 +614,20 @@
                         "height": 30
                     });
                     me._daterangepicker();
-                    $("#province").change(function () {
-                        var province = $(this).val();
-                        for (var idx in provinces) {
-                            var pro = provinces[idx];
-                            if (pro.name == province) {
-                                $("#city").empty();
-                                $("#area").empty();
-                                var cities = pro.value;
-                                for (var idx2 in cities) {
-                                    var cityValue = cities[idx2].name;
-                                    $("#city").append("<option parent='" + province + "' value='" + cityValue + "'>" + cities[idx2].value.name + "</option>");
-                                    var areas = cities[idx2].value.value;
-                                    for (var idx3 in areas) {
-                                        $("#area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
-                                    }
-                                }
-                            }
-                        }
-                    });
-                    $("#city").change(function () {
-                        $("#area").empty();
-                        var cityValue = $(this).val();
-                        var province = $("#city option[value='" + cityValue + "']").attr('parent');
-                        for (var idx in provinces) {
-                            var pro = provinces[idx];
-                            if (pro.name == province) {
-                                var cities = pro.value;
-                                for (var idx2 in cities) {
-                                    if (cityValue == cities[idx2].name) {
-                                        var areas = cities[idx2].value.value;
-                                        for (var idx3 in areas) {
-                                            $("#area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
+
                 },
                 _openlayer: function (id, type, yes) {
                     me._resetHtml();
                     var usable = function () {
                         btns.css("pointer-events", "");
                     };
-                    var area = ["80%", "60%"];
+                    var area = ["70%", "200px"];
                     if (device.mobile()) {
                         area = ["80%", "70%"];
                     }
                     layer.open({
                         type: 1,
-                        title: "会议信息",
+                        title: "参会人员信息",
                         scrollbar: false,
                         area: area, // 宽高
                         content: $("#detail"),
@@ -774,16 +637,7 @@
                             try {
                                 btns.css("pointer-events", "none");
                                 var requestData = {
-                                    "meetName": $("#meet_name").val(),
-                                    "keynote_speaker": $("#keynote_speaker").val(),
-                                    "limit_count": $("#limit_count").val(),
-                                    "begin_time": $("#begin_time").attr("begin_time"),
-                                    "end_time": $("#end_time").attr("end_time"),
-                                    "to_object": $("#to_object").val(),
-                                    "area_id": $("#area").val(),
-                                    "addr": $("#addr").val(),
-                                    "abstract": $("#abstract").val(),
-                                    "keynote_speaker_id": 0
+                                    "status": $("#status").val()
                                 };
                                 var parsl = $('#detail').parsley();
                                 parsl.validate();

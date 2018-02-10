@@ -104,6 +104,9 @@ TableList = function (me) {
                                             case "通过":
                                             case "在投放":
                                             case "正常":
+                                            case "已报名":
+                                            case "已签到":
+                                            case "已付款":
                                                 className = "status rsuccess";
                                                 break;
                                             case "未通过":
@@ -119,6 +122,8 @@ TableList = function (me) {
                                             case "待投放":
                                             case "暂停":
                                             case "已取消":
+                                            case "退款中":
+                                            case "已退款":
                                                 className = "status";
                                                 break;
                                             default:
@@ -373,7 +378,7 @@ TableList = function (me) {
                     fixedHeader: fixedHeader
                 });
                 if (toolbar) {
-                    $(".table_toolbar").css("cssText","overflow:hidden !important;");
+                    $(".table_toolbar").css("cssText", "overflow:hidden !important;");
                     $(".table_toolbar").children("div:first").append("<div class='btn-toolbar'></div>");
                     $.each(toolbar, function (key, obj) {
                         if (key == "custom") {
@@ -516,7 +521,7 @@ TableList = function (me) {
                     offset: "50px",
                     btn: ['确定', '取消']
                 }, function () {
-                    delFunc(ids,function(tableId){
+                    delFunc(ids, function (tableId) {
                         me.refresh(tableId);
                     });
                 });
