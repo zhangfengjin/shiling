@@ -22,6 +22,15 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class UserService extends CommonService
 {
+    public function getUserByToken($token)
+    {
+        $where = [
+            'im_token' => $token,
+            'flag' => 0
+        ];
+        return User::where($where)->first();
+    }
+
     /**
      * 判断email是否存在
      *
@@ -92,7 +101,6 @@ class UserService extends CommonService
         if ($ret['code'] === 200) {
             $input['im_token'] = $ret["info"]["token"];
         } else {
-            Log::info(json_encode($ret));
             if ($ret["code"] == 414) {
                 $ret = $wyIM->updateUserToken($input['account']);
                 $input['im_token'] = $ret["info"]["token"];

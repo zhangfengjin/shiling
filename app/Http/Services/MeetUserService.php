@@ -78,6 +78,7 @@ class MeetUserService extends CommonService
         //获取查询的记录数
         $total = DB::table("meet_users as mu")
             ->leftJoin("meets as meet", 'meet.id', '=', 'mu.meet_id')
+            ->leftJoin("users as u", 'u.id', '=', 'mu.user_id')
             ->whereRaw($where)->where("mu.flag", 0)->count();
         //要查询的字段
         $select = [
@@ -88,8 +89,9 @@ class MeetUserService extends CommonService
         when mu.status=3 then '已退款' 
         when mu.status=4 then '已签到' 
         else '已报名' end as status");
+        $inMeetStatusId = DB::raw("mu.status as status_id");
         $meetName = DB::raw("meet.name as meet_name");
-        array_push($select, $inMeetStatus, $meetName);
+        array_push($select, $inMeetStatus, $meetName, $inMeetStatusId);
         //获取查询结果
         $sortField = "mu.id";
         $sSortDir = "asc";
@@ -236,11 +238,25 @@ class MeetUserService extends CommonService
     public function cancel($input)
     {
         $where = [
-            "user_id" => $input['userId'],
-            "meet_id" => $input['meetId'],
-            "flag" => 0
+            "mu.user_id" => $input['userId'],
+            "mu.meet_id" => $input['meetId'],
+            "mu.flag" => 0,
+            "meet.flag" => 0
         ];
-        MeetUser::where($where)->update(["flag" => 1]);
+        //$meetUser = MeetUser::where($where)->first();
+        $meetUser = DB::table("meet_users as mu")
+            ->join("meets as meet", 'meet.id', '=', 'mu.meet_id')
+            ->where($where)
+            ->get(["mu.id", "meet.begin_time"])->first();
+        if ($meetUser) {
+            $nowTime = time();
+            $beginTime = strtotime($meetUser->begin_time);
+            $day = round(($beginTime - $nowTime) / 3600 / 24);
+            if ($day >= 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -265,6 +281,9 @@ class MeetUserService extends CommonService
             : (isset($this->allInput["meet_name"]) ? trim($this->allInput["meet_name"]) : "");//合同号
         $areaId = isset($searchs["area_id"]) ? trim($searchs["area_id"])
             : (isset($this->allInput["area_id"]) ? trim($this->allInput["area_id"]) : "");//合同号
+
+        $userName = isset($searchs["userName"]) ? trim($searchs["userName"])
+            : (isset($this->allInput["userName"]) ? trim($this->allInput["userName"]) : "");//合同号
         if (!empty($meetId)) {
             array_push($where, "mu.meet_id=$meetId");
         }
@@ -276,6 +295,9 @@ class MeetUserService extends CommonService
         }
         if (!empty($areaId)) {
             array_push($where, "meet.area_id=$areaId");
+        }
+        if (!empty($userName)) {
+            array_push($where, "u.name like '%$userName%'");
         }
         $where = implode(" and ", $where);
         if (empty($where)) {

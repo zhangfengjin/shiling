@@ -8,7 +8,7 @@ use App\Utils\HttpHelper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class MeetUserController extends Controller
+class MeetUserController extends ApiController
 {
     //
 
@@ -54,7 +54,30 @@ class MeetUserController extends Controller
     {
         $input = $request->all();
         $meetUserService = new MeetUserService($request);
-        $meetUserService->cancel($input);
-        return DataStandard::getStandardData();
+        if ($meetUserService->cancel($input)) {
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config('validator.716'), 716);
+    }
+
+
+    public function getList(Request $request)
+    {
+        $meetService = new MeetUserService($request);
+        $list = $meetService->getList();
+        return DataStandard::printStandardData($list);
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        if (parent::validateAuth($request)) {
+            $input = $request->all();
+            $input['status'] = 2;//已付款
+            $meetUserService = new MeetUserService($request);
+            $ret = $meetUserService->update($input, $id);
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config('validator.301'), 301);
     }
 }

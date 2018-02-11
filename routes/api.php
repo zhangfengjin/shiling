@@ -34,14 +34,14 @@ Route::group(['domain' => '',], function () {
                 Route::get("user/{userId}", "UserController@show");//获取用户信息
                 Route::put("user/{userId}", "UserController@update");//更新用户信息
 
+                Route::post("meet/signup", "MeetController@enroll");//报名
+                Route::get("meet/list", "MeetController@getList");//会议列表
+                Route::get("meet/{meetId}", "MeetController@show");//会议详情
 
                 //Route::post("signin/code/{meetId}", "MeetController@signin");//二维码签到--会议二维码
                 Route::get("qrcode", "MeetUserController@getQrcode");//获取会议二维码
                 Route::post("meet/cancel", "MeetUserController@cancel");//取消报名
-
-                Route::post("meet/signup", "MeetController@enroll");//报名
-                Route::get("meet/list", "MeetController@getList");//会议列表
-                Route::get("meet/{meetId}", "MeetController@show");//会议详情
+                Route::put("meetuser/{muId}", "MeetUserController@update");
 
                 Route::group(['prefix' => 'pay'], function () {
                     Route::post("unifiedorder", "PayController@unifiedorder");
