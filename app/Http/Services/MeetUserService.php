@@ -253,6 +253,7 @@ class MeetUserService extends CommonService
             $beginTime = strtotime($meetUser->begin_time);
             $day = round(($beginTime - $nowTime) / 3600 / 24);
             if ($day >= 1) {
+                MeetUser::where("id", $meetUser->id)->update(["flag" => 1]);
                 return true;
             }
         }

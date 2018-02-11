@@ -41,6 +41,7 @@ Route::group(['domain' => '',], function () {
                 //Route::post("signin/code/{meetId}", "MeetController@signin");//二维码签到--会议二维码
                 Route::get("qrcode", "MeetUserController@getQrcode");//获取会议二维码
                 Route::post("meet/cancel", "MeetUserController@cancel");//取消报名
+                Route::get("meetuser/list", "MeetUserController@getList");
                 Route::put("meetuser/{muId}", "MeetUserController@update");
 
                 Route::group(['prefix' => 'pay'], function () {
