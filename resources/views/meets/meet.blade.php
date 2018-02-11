@@ -72,6 +72,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">报名费(元)</label>
+                <div class="col-md-10 col-sm-10 col-xs-12">
+                    <input id="in_price" type="text" class="form-control" placeholder="报名费(元)"
+                           required pattern="^\d+(.\d+)?$">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">详细地址</label>
                 <div class="col-md-10 col-sm-10 col-xs-12">
                     <textarea id="addr" rows="3" class="form-control" placeholder="详细地址"></textarea>
@@ -457,6 +464,7 @@
                             $("#end_time").attr("end_time", data.end_time);
                             $('#end_time').val(data.end_time);
                             $("#to_object").val(data.to_object);
+                            $("#in_price").val(data.in_price);
                             $("#addr").val(data.addr);
                             $("#abstract").val(data.abstract);
                             $("#province").val(data.province_code);
@@ -964,6 +972,7 @@
                                     "begin_time": $("#begin_time").attr("begin_time"),
                                     "end_time": $("#end_time").attr("end_time"),
                                     "to_object": $("#to_object").val(),
+                                    "in_price": $("#in_price").val(),
                                     "area_id": $("#area").val(),
                                     "addr": $("#addr").val(),
                                     "abstract": $("#abstract").val(),

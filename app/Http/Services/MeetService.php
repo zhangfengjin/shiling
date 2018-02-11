@@ -13,6 +13,7 @@ use App\Jobs\NotifyJob;
 use App\Models\Meet;
 use App\Models\MeetNotify;
 use App\Models\MeetUser;
+use App\Models\Order;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
@@ -29,6 +30,7 @@ class MeetService extends CommonService
         $meet->begin_time = $input['begin_time'];
         $meet->end_time = $input['end_time'];
         $meet->to_object = $input['to_object'];
+        $meet->in_price = $input['in_price'];
         $meet->area_id = $input['area_id'];
         $meet->addr = $input['addr'];
         $meet->abstract = $input['abstract'];
@@ -53,6 +55,7 @@ class MeetService extends CommonService
         $meet->begin_time = $input['begin_time'];
         $meet->end_time = $input['end_time'];
         $meet->to_object = $input['to_object'];
+        $meet->in_price = $input['in_price'];
         $meet->area_id = $input['area_id'];
         $meet->addr = $input['addr'];
         $meet->abstract = $input['abstract'];
@@ -87,7 +90,7 @@ class MeetService extends CommonService
         //要查询的字段
         $select = [
             'meet.id', 'meet.name', 'meet.addr', 'meet.begin_time', 'meet.end_time',
-            'meet.keynote_speaker', 'meet.limit_count', 'meet.to_object'
+            'meet.keynote_speaker', 'meet.limit_count', 'meet.to_object', 'meet.in_price'
         ];
         $status = DB::raw("case when meet.status=1 then '已取消' else '正常' end status");
         $areaName = DB::raw("CONCAT(province_name,'-',city_name,'-',area_name) as pca_name");
@@ -117,7 +120,7 @@ class MeetService extends CommonService
     {
         $select = [
             'meet.id', 'meet.addr', 'meet.begin_time', 'meet.end_time', 'meet.keynote_speaker',
-            'meet.limit_count', 'meet.to_object', 'meet.creator', 'meet.abstract', 'meet.area_id',
+            'meet.limit_count', 'meet.to_object', 'meet.creator', 'meet.abstract', 'meet.area_id', 'meet.in_price',
             'area.area_name', 'area.province_code', 'area.province_name', 'area.city_code', 'area.city_name'
         ];
         $creatorName = DB::RAW("u.name as creator_name");
@@ -189,15 +192,36 @@ class MeetService extends CommonService
      */
     public function enroll($input)
     {
-        $meetUser = new MeetUser();
-        $meetUser->user_id = $input['userId'];
-        $meetUser->meet_id = $input['meetId'];
-        $meetUser->save();
-        $codeImg = config('app.qrcode.path') . 'meet_user/' . $meetUser->id . ".png";
-        if (!file_exists($codeImg)) {
-            $sign = config('app.qrcode.usersign') . "?userId" . $meetUser->user_id . "&meetId" . $meetUser->meet_id;
-            QrCode::format('png')->size(300)->generate($sign, $codeImg);
+        $userId = $input['userId'];
+        $meetId = $input['meetId'];
+        $meet = Meet::find($meetId);
+        $inPrice = $meet->in_price;
+        DB::beginTransaction();
+        try {
+            //生成参会订单
+            $order = new Order();
+            $order->name = "用户" . $userId . "参加会议" . $meetId . "的支付订单";
+            $order->code = "meet_" . $userId . "_" . $meetId . time();//订单号
+            $order->status = 0;
+            $order->place_order_people = $userId;
+            $order->total_price = $inPrice;
+            $order->save();
+            $meetUser = new MeetUser();
+            $meetUser->user_id = $input['userId'];
+            $meetUser->meet_id = $input['meetId'];
+            $meetUser->order_id = $order->id;
+            $meetUser->save();
+            DB::commit();
+            $codeImg = config('app.qrcode.path') . 'meet_user/' . $meetUser->id . ".png";
+            if (!file_exists($codeImg)) {
+                $sign = config('app.qrcode.usersign') . "?userId" . $meetUser->user_id . "&meetId" . $meetUser->meet_id;
+                QrCode::format('png')->size(300)->generate($sign, $codeImg);
+            }
+        } catch (\Exception $ex) {
+            DB::rollback();
+            throw  $ex;
         }
+
     }
 
     /**

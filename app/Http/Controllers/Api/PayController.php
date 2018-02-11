@@ -33,16 +33,16 @@ class PayController extends Controller
         $config_biz = [
             'body' => 'APP支付测试',
             'notify_url' => 'http://lingshi.weibo.com/pay/notify/' . $payType,
-            'out_trade_no' => '1415659990',
-            'total_fee' => '1',
-            'trade_type' => 'APP'
+            'out_trade_no' => '1415659990',//订单号
+            'total_fee' => '1',//金额
+            'trade_type' => 'APP'//app支付
         ];
         try {
             $pay = new Pay($this->config);
             $wxOrder = $pay->driver('wechat')->gateway('app')->pay($config_biz);
             return DataStandard::getStandardData($wxOrder);
         } catch (\Exception $e) {
-            return DataStandard::getStandardData([],config("validator.201"), 201);
+            return DataStandard::getStandardData([], config("validator.201"), 201);
         }
     }
 
