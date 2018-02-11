@@ -396,7 +396,9 @@
                             "suitcase": {
                                 "display": 1,
                                 "info": "查看中奖人员",
-                                "func": me._userPrize
+                                "func": function (ids, full, obj) {
+                                    CommonUtil.redirect('/muprize?meetId=' + ids);
+                                }
                             },
                             "heart": {
                                 "display": 1,
