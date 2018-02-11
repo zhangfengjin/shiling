@@ -23,6 +23,13 @@ class MeetController extends Controller
         return DataStandard::getStandardData($meetId);
     }
 
+    public function show(Request $request, $meetId)
+    {
+        $meetService = new MeetService($request);
+        $meet = $meetService->show($meetId);
+        return DataStandard::getStandardData($meet);
+    }
+
     /**
      * 报名
      * @param Request $request

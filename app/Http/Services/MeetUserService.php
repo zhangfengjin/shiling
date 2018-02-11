@@ -28,7 +28,8 @@ class MeetUserService extends CommonService
     {
         $where = [
             "meet_id" => $input['meetId'],
-            "user_id" => $input['userId']
+            "user_id" => $input['userId'],
+            "flag" => 0
         ];
         return MeetUser::where($where)->whereRaw("status<>3")->count();
     }
@@ -65,7 +66,7 @@ class MeetUserService extends CommonService
         $update = [
             "status" => $input['status']
         ];
-        $meetUser = MeetUser::whereIn("id", $ids)->update($update);
+        return MeetUser::whereIn("id", $ids)->update($update);
     }
 
     /**
@@ -198,25 +199,48 @@ class MeetUserService extends CommonService
         HttpHelper::download($doc);
     }
 
-    public function getSignInMeetUser($enroll)
+    public function getSignInMeetUser($input)
     {
-        $input = explode("_", $enroll);
         $where = [
-            "mu.id" => $input[0],
-            "u.id" => $input[1],
-            "meet.id" => $input[2],
+            "mu.user_id" => $input['userId'],
+            "mu.meet_id" => $input['meetId'],
             "meet.status" => 0,
-            "u.flag" => 0
+            "u.flag" => 0,
+            "mu.flag" => 0
         ];
         return DB::table("meet_users as mu")
             ->join("meets as meet", 'meet.id', '=', 'mu.meet_id')
             ->join("users as u", 'u.id', '=', 'mu.user_id')
-            ->where($where)->get(["mu.status","mu.id"])->first();
+            ->where($where)->get(["mu.status", "mu.id"])->first();
     }
 
-    public function userSignIn($enroll)
+    /**
+     * 签到
+     * @param $input
+     */
+    public function userSignIn($input)
     {
+        $where = [
+            "user_id" => $input['userId'],
+            "meet_id" => $input['meetId'],
+            "status" => 1,
+            "mu.flag" => 0
+        ];
+        MeetUser::where($where)->update(["status" => 4]);
+    }
 
+    /**
+     * 取消报名
+     * @param $input
+     */
+    public function cancel($input)
+    {
+        $where = [
+            "user_id" => $input['userId'],
+            "meet_id" => $input['meetId'],
+            "flag" => 0
+        ];
+        MeetUser::where($where)->update(["flag" => 1]);
     }
 
 

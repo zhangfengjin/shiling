@@ -36,10 +36,12 @@ Route::group(['domain' => '',], function () {
 
 
                 //Route::post("signin/code/{meetId}", "MeetController@signin");//二维码签到--会议二维码
-                Route::get("qrcode/{enroll}", "MeetUserController@getQrcode");//获取会议二维码
+                Route::get("qrcode", "MeetUserController@getQrcode");//获取会议二维码
+                Route::post("meet/cancel", "MeetUserController@cancel");//取消报名
 
-                Route::post("meet/signup", "MeetController@enroll");
+                Route::post("meet/signup", "MeetController@enroll");//报名
                 Route::get("meet/list", "MeetController@getList");//会议列表
+                Route::get("meet/{meetId}", "MeetController@show");//会议详情
 
                 Route::group(['prefix' => 'pay'], function () {
                     Route::post("unifiedorder", "PayController@unifiedorder");
@@ -53,6 +55,6 @@ Route::group(['domain' => '',], function () {
 
         });
     });
-    Route::post("signin/code/{enroll}", "Api\MeetUserController@userSignin");//二维码签到--会议用户个人二维码
+    Route::post("signin/code", "Api\MeetUserController@userSignin");//二维码签到--会议用户个人二维码
 
 });

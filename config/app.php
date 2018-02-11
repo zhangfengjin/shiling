@@ -257,7 +257,7 @@ return [
     ],
     'qrcode' => [
         'sign' => 'http://lingshi.weibo.com/api/signin/code',
-        'usersign' => 'http://lingshi.weibo.com/api/user/signin/code',
+        'usersign' => 'http://lingshi.weibo.com/api/signin/code',
         'path' => storage_path('qrcodes/'),
     ],
     'wy' => [

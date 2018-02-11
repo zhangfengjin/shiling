@@ -195,7 +195,7 @@ class MeetService extends CommonService
         $meetUser->save();
         $codeImg = config('app.qrcode.path') . 'meet_user/' . $meetUser->id . ".png";
         if (!file_exists($codeImg)) {
-            $sign = config('app.qrcode.usersign') . "/" . $meetUser->id . "_" . $meetUser->user_id . "_" . $meetUser->meet_id;
+            $sign = config('app.qrcode.usersign') . "?userId" . $meetUser->user_id . "&meetId" . $meetUser->meet_id;
             QrCode::format('png')->size(300)->generate($sign, $codeImg);
         }
     }
@@ -212,10 +212,10 @@ class MeetService extends CommonService
             return $sql;
         }
         $where = [];
-        $schoolName = isset($searchs["meetName"]) ? trim($searchs["meetName"])
+        $meetName = isset($searchs["meetName"]) ? trim($searchs["meetName"])
             : (isset($this->allInput["meetName"]) ? trim($this->allInput["meetName"]) : "");//合同号
-        if (!empty($schoolName)) {
-            array_push($where, "meet.name like '%$schoolName%'");
+        if (!empty($meetName)) {
+            array_push($where, "meet.name like '%$meetName%'");
         }
         $where = implode(" and ", $where);
         if (empty($where)) {
