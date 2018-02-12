@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Http\Services\DictService;
+use App\Http\Services\GoodService;
 use App\Http\Services\UploadService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
@@ -17,8 +19,13 @@ class GoodsController extends HomeController
      */
     public function index()
     {
-        //
-        return view("goods.goods");
+        $dict = new DictService();
+        $goodsTypes = $dict->getDictByType("good_type");
+        $pages = [
+            "goodsTypes" => $goodsTypes
+        ];
+
+        return view("goods.goods")->with($pages);
     }
 
     /**
@@ -31,26 +38,19 @@ class GoodsController extends HomeController
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $goodService = new GoodService($request);
+        $goodService->create($input);
+        return DataStandard::getStandardData();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $goodService = new GoodService($request);
+        $goods = $goodService->show($id);
+        return DataStandard::getStandardData($goods);
     }
 
     /**
@@ -65,26 +65,35 @@ class GoodsController extends HomeController
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return array
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        $goodService = new GoodService($request);
+        $goodService->update($input, $id);
+        return DataStandard::getStandardData();
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return array
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $goodService = new GoodService($request);
+        $goodService->delete($id);
+        return DataStandard::getStandardData();
+    }
+
+    public function getList(Request $request)
+    {
+        $goodService = new GoodService($request);
+        $goods = $goodService->getList();
+        return DataStandard::getStandardData($goods);
     }
 
 

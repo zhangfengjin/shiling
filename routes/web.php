@@ -68,6 +68,7 @@ Route::group(['domain' => ''],
 
 
             Route::post("goods/upload", "GoodsController@upload");
+            Route::get("goods/list", "GoodsController@getList");
             Route::resource("goods", "GoodsController");
 
             Route::group(['prefix' => 'pay'], function () {

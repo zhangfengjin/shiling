@@ -341,8 +341,8 @@ class UserService extends CommonService
             DB::beginTransaction();
             try {
                 User::whereIn("id", $ids)->update($updateInfo);
-                UserCourse::whereIn("id", $ids)->update($updateInfo);
-                UserGrade::whereIn("id", $ids)->update($updateInfo);
+                UserCourse::whereIn("user_id", $ids)->update($updateInfo);
+                UserGrade::whereIn("user_id", $ids)->update($updateInfo);
                 DB::commit();
             } catch (\Exception $ex) {
                 DB::rollback();

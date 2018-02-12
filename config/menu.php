@@ -44,5 +44,19 @@ return [
                 "name" => "中奖列表", "href" => "/muprize"
             ]
         ]
+    ],
+    [
+        "name" => "商城管理", "icon" => "cog", "href" => "", "childrens" =>
+        [
+            [
+                "name" => "商品列表", "href" => "/goods"
+            ],
+            [
+                "name" => "参会人员", "href" => "/meetuser"
+            ],
+            [
+                "name" => "中奖列表", "href" => "/muprize"
+            ]
+        ]
     ]
 ];

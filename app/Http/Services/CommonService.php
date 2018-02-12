@@ -25,20 +25,26 @@ class CommonService
 
     public function __construct(Request $request = null, $switch = false)
     {
-        $this->switch = $switch;
-        if ($request) {
-            $this->user = $request->get("user");
-            $this->sEcho = intval($request->input("sEcho"));//请求服务器次数 必须
-            $this->iDisplayStart = intval($request->input("pageindex")) ? intval($request->input("pageindex")) : intval($request->input("iDisplayStart"));//开始index 从0开始
-            $this->iDisplayLength = intval($request->input("pagelength")) ? intval($request->input("pagelength")) : intval($request->input("iDisplayLength"));//每页长度
-            $this->sEcho = $this->sEcho ? $this->sEcho : 0;
-            $this->iDisplayStart = $this->iDisplayStart ? $this->iDisplayStart : 0;
-            $this->iDisplayLength = $this->iDisplayLength ? $this->iDisplayLength : 500;//默认最多500行记录
-            $this->searchs = json_decode($request->input("searchs"), true);
-            if (!count($this->searchs) || empty($this->searchs)) {
-                $this->allInput = $request->all();
+        try {
+            $this->switch = $switch;
+            if ($request) {
+                $this->user = $request->get("user");
+                $this->sEcho = intval($request->input("sEcho"));//请求服务器次数 必须
+                $this->iDisplayStart = intval($request->input("pageindex")) ? intval($request->input("pageindex")) : intval($request->input("iDisplayStart"));//开始index 从0开始
+                $this->iDisplayLength = intval($request->input("pagelength")) ? intval($request->input("pagelength")) : intval($request->input("iDisplayLength"));//每页长度
+                $this->sEcho = $this->sEcho ? $this->sEcho : 0;
+                $this->iDisplayStart = $this->iDisplayStart ? $this->iDisplayStart : 0;
+                $this->iDisplayLength = $this->iDisplayLength ? $this->iDisplayLength : 500;//默认最多500行记录
+                $this->searchs = json_decode($request->input("searchs"), true);
+                if (!count($this->searchs) || empty($this->searchs)) {
+                    $this->allInput = $request->all();
+                }
             }
+        } catch (\Exception $ex) {
+            echo $ex->getMessage();
+            die;
         }
+
     }
 
     /**
