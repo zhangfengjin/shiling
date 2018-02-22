@@ -11,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class NotifyJob implements ShouldQueue
@@ -68,6 +69,8 @@ class NotifyJob implements ShouldQueue
 
     private function sendEmail($email, $content)
     {
+        Log::info("email");
+        //todo 通知
         Mail::raw($content, function ($message) use ($email) {
             $message->to($email)->subject("领师通知");
         });
