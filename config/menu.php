@@ -45,7 +45,7 @@ return [
             ]
         ]
     ],
-    [
+   /* [
         "name" => "商城管理", "icon" => "cog", "href" => "", "childrens" =>
         [
             [
@@ -58,5 +58,5 @@ return [
                 "name" => "中奖列表", "href" => "/muprize"
             ]
         ]
-    ]
+    ]*/
 ];
