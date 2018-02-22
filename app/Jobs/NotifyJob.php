@@ -41,7 +41,6 @@ class NotifyJob implements ShouldQueue
         $content = "最新通知：" . $this->notify['notify_content'];
         foreach ($meetUsers as $user) {
             if ($this->notify['send_sms'] && !empty($user->phone)) {
-                Log::info("sms");
                 $this->sendSMS($user->phone, $content);
             }
             if ($this->notify['send_email'] && !empty($user->email)) {
@@ -64,8 +63,6 @@ class NotifyJob implements ShouldQueue
 
     private function sendSMS($phone, $content)
     {
-        Log::info("sms");
-        //todo 通知
         $telService = new TelEmailService();
         $telService->sendNotifySMS($phone, $content);
     }

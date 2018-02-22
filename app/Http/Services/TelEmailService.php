@@ -50,6 +50,7 @@ class TelEmailService
 
     public function sendNotifySMS($phone, $content)
     {
+        //todo 调试 修改templateid
         $url = "https://api.netease.im/sms/sendtemplate.action";
         $post_data = [
             'templateid' => '1',
