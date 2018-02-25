@@ -119,7 +119,6 @@ class GoodService extends CommonService
                 DB::table("goods_atts")->where($gaWhere)->update(["flag" => 1]);
             } else {
                 $dbAtts = GoodsAtt::where($gaWhere)->get(["att_id"]);
-                $addAtts = [];
                 $oldAtts = [];
                 foreach ($dbAtts as $dbAtt) {
                     $oldAtts[] = $dbAtt->att_id;
@@ -131,11 +130,13 @@ class GoodService extends CommonService
                             "att_id" => $att,
                             "creator" => $this->user['uid']
                         ];
-                    } else
+                    } else{
                         array_splice ( $oldAtts, $key, 1 ); // 删除存在的
+                    }
                 }
+                Log::info($oldAtts);
                 if (! empty ( $oldAtts )) {
-                    DB::table("goods_atts")->where($gaWhere)->whereIn("att_id", $atts)->update(["flag" => 1]);
+                    DB::table("goods_atts")->where($gaWhere)->whereIn("att_id", $oldAtts)->update(["flag" => 1]);
                 }
                 if (!empty($goodAtts)) {
                     DB::table("goods_atts")->insert($goodAtts);

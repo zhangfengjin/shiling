@@ -19,7 +19,6 @@
 
 
 
-
     <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div id="reset_div">
@@ -358,7 +357,7 @@
                             $("#uploaded_img").removeClass("display");
                             var goodAtts = data.goodAtts;
                             $.each(goodAtts, function () {
-                                $("#uploaded_img_list").append("<li id='li_" + this.id + "'><div><span id='del_img_" + this.id + "' attId=" + this.id + " class='cursor'>删除</span></div><img src='" + this.url + "' style='width:100px;height:100px;' /></li>");
+                                $("#uploaded_img_list").append("<li style='float: left;' id='li_" + this.id + "'><div><span id='del_img_" + this.id + "' attId=" + this.id + " class='cursor'>删除</span></div><img src='" + this.url + "' style='width:100px;height:100px;' /></li>");
                                 uploadUids.push(this.id);
                             });
                             $("span[id^='del_img_']").on('click', function () {
