@@ -182,7 +182,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
-                <div class="panel panel-default collapse-link">
+                {{--<div class="panel panel-default collapse-link">
                     <div class="panel-heading collapse-title">
                         查询条件
                     </div>
@@ -221,7 +221,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>--}}
 
                 <div class="x_content">
                     <table id="meet_table" class="table table-striped table-bordered bulk_action">
