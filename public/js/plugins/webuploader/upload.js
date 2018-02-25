@@ -93,11 +93,11 @@
                     window['expressinstallcallback'] = function (state) {
                         switch (state) {
                             case 'Download.Cancelled':
-                                alert('您取消了更新！')
+                                alert('您取消了更新！');
                                 break;
 
                             case 'Download.Failed':
-                                alert('安装失败')
+                                alert('安装失败');
                                 break;
 
                             default:
@@ -136,7 +136,7 @@
             alert('Web Uploader 不支持您的浏览器！');
             return;
         }
-
+        //alert(12);
         // 实例化
         uploader = WebUploader.create({
             pick: {
@@ -285,8 +285,8 @@
                 if (prev === 'progress') {
                     $prgress.hide().width(0);
                 } else if (prev === 'queued') {
-                    $li.off('mouseenter mouseleave');
-                    $btns.remove();
+                    /*$li.off('mouseenter mouseleave');
+                     $btns.remove();*/
                 }
 
                 // 成功
@@ -325,7 +325,13 @@
 
                 switch (index) {
                     case 0:
+                        var attId = file.att_id;
+                        var idx = $.inArray(attId, uploadUids);
+                        if (idx >= 0) {
+                            uploadUids.splice(idx, 1);
+                        }
                         uploader.removeFile(file);
+
                         return;
 
                     case 1:
@@ -499,10 +505,10 @@
             updateTotalProgress();
         };
 
-        uploader.onUploadBeforeSend=function(file, data, header) {
+        uploader.onUploadBeforeSend = function (file, data, header) {
             // 这里可以通过data对象添加POST参数
             header['X_Requested_With'] = 'XMLHttpRequest';
-            header['X-CSRF-TOKEN'] =  $('meta[name="csrf-token"]').attr('content');
+            header['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
         };
 
         uploader.onFileQueued = function (file) {
@@ -531,6 +537,12 @@
             updateTotalProgress();
 
         };
+
+        uploader.on('uploadSuccess', function (file, ret) {
+            uploadUids.push(ret.att_id);
+            file.att_id = ret.att_id;
+            //console.log(uploadUids);
+        });
 
         uploader.on('all', function (type) {
             var stats;

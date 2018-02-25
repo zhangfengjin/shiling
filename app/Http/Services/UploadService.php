@@ -76,7 +76,7 @@ class UploadService
         $attachment->filetype = $file ['type'];
         $attachment->filesize = $file ['size'];
         $attachment->save();
-        $file["id"] = $attachment->id;
+        $file["att_id"] = $attachment->id;
         return $file;
     }
 }

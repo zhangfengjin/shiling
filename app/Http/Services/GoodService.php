@@ -13,6 +13,7 @@ use App\Models\Goods;
 use App\Models\GoodsAtt;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class GoodService extends CommonService
 {
@@ -28,17 +29,20 @@ class GoodService extends CommonService
             $goods->abstract = $input['abstract'];
             $goods->goods_detail = $input['goods_detail'];
             $goods->creator = $this->user['uid'];
+            $goods->status = $input['status'];
             $goods->save();
-            $goodAtts = [];
-            foreach ($input['atts'] as $att) {
-                $goodAtts[] = [
-                    "goods_id" => $goods->id,
-                    "att_id" => $att,
-                    "creator" => $this->user['uid']
-                ];
-            }
-            if (!empty($goodAtts)) {
-                DB::table("goods_atts")->insert($goodAtts);
+            if (isset($input['atts'])) {
+                $goodAtts = [];
+                foreach ($input['atts'] as $att) {
+                    $goodAtts[] = [
+                        "goods_id" => $goods->id,
+                        "att_id" => $att,
+                        "creator" => $this->user['uid']
+                    ];
+                }
+                if (!empty($goodAtts)) {
+                    DB::table("goods_atts")->insert($goodAtts);
+                }
             }
             DB::commit();
         } catch (\Exception $ex) {
@@ -50,12 +54,12 @@ class GoodService extends CommonService
     public function show($goodsId)
     {
         $where = [
-            "id" => $goodsId,
-            "flag" => 0
+            "g.id" => $goodsId,
+            "g.flag" => 0
         ];
         $select = [
-            'g.id', 'g.name', 'g.goods_type_id',
-            'g.goods_count', 'g.price', 'g.abstract'
+            'g.id', 'g.name', 'g.goods_type_id','g.goods_count',
+            'g.price', 'g.abstract','goods_detail'
         ];
         $userName = DB::raw("u.name as user_name");
         $goodsTypeName = DB::raw("dict.value as goods_type");
@@ -64,16 +68,31 @@ class GoodService extends CommonService
             ->leftJoin("users as u", 'u.id', '=', 'g.creator')
             ->leftJoin("dicts as dict", 'dict.id', '=', 'g.goods_type_id')
             ->where($where)->get($select)->first();
+        $gaWhere = [
+            "goods_id" => $goodsId,
+            "ga.flag" => 0
+        ];
         $goodAtts = DB::table("goods_atts as ga")
             ->leftJoin("attachments as att", 'att.id', '=', 'ga.att_id')
-            ->get(["att.diskposition", "att.filename"])->where(["goods_id"]);
+            ->where($gaWhere)
+            ->get(["att.diskposition", "att.filename", "att.id"]);
         $goods->goodAtts = [];
         foreach ($goodAtts as $goodAtt) {
-            $goods->goodAtts[] = $goodAtt->diskposition . $goodAtt->filename;
+            $att = [
+                "url" => $goodAtt->diskposition . $goodAtt->filename,
+                "id" => $goodAtt->id
+            ];
+            $goods->goodAtts[] = $att;
         }
         return $goods;
     }
 
+    /**
+     * 更新
+     * @param $input
+     * @param $goodsId
+     * @throws \Exception
+     */
     public function update($input, $goodsId)
     {
         DB::beginTransaction();
@@ -85,17 +104,42 @@ class GoodService extends CommonService
             $goods->price = $input['price'];
             $goods->abstract = $input['abstract'];
             $goods->goods_detail = $input['goods_detail'];
+            $goods->status = $input['status'];
             $goods->save();
             $goodAtts = [];
-            foreach ($input['atts'] as $att) {
-                $goodAtts[] = [
-                    "goods_id" => $goodsId,
-                    "att_id" => $att,
-                    "creator" => $this->user['uid']
-                ];
+            $atts = [];
+            if (isset($input['atts'])) {
+                $atts = $input['atts'];
             }
-            if (!empty($goodAtts)) {
-                DB::table("goods_atts")->insert($goodAtts);
+            $gaWhere = [
+                "goods_id" => $goodsId,
+                "flag" => 0
+            ];
+            if (empty($atts)) {
+                DB::table("goods_atts")->where($gaWhere)->update(["flag" => 1]);
+            } else {
+                $dbAtts = GoodsAtt::where($gaWhere)->get(["att_id"]);
+                $addAtts = [];
+                $oldAtts = [];
+                foreach ($dbAtts as $dbAtt) {
+                    $oldAtts[] = $dbAtt->att_id;
+                }
+                foreach ( $atts as $idx => $att ) {
+                    if (($key = array_search ( $att, $oldAtts )) === FALSE) {
+                        $goodAtts[] = [
+                            "goods_id" => $goodsId,
+                            "att_id" => $att,
+                            "creator" => $this->user['uid']
+                        ];
+                    } else
+                        array_splice ( $oldAtts, $key, 1 ); // 删除存在的
+                }
+                if (! empty ( $oldAtts )) {
+                    DB::table("goods_atts")->where($gaWhere)->whereIn("att_id", $atts)->update(["flag" => 1]);
+                }
+                if (!empty($goodAtts)) {
+                    DB::table("goods_atts")->insert($goodAtts);
+                }
             }
             DB::commit();
         } catch (\Exception $ex) {
@@ -109,12 +153,13 @@ class GoodService extends CommonService
         $ids = array_filter(explode(",", $goodsIds));
         if ($goodsIds) {
             $updateInfo = [
-                'flag' => 1
+                //'flag' => 0
+                'status' => 2
             ];
             DB::beginTransaction();
             try {
                 Goods::whereIn("id", $ids)->update($updateInfo);
-                GoodsAtt::whereIn("goods_id", $ids)->update($updateInfo);
+                GoodsAtt::whereIn("goods_id", $ids)->update(["flag" => 1]);
                 DB::commit();
             } catch (\Exception $ex) {
                 DB::rollback();
@@ -137,7 +182,8 @@ class GoodService extends CommonService
         ];
         $userName = DB::raw("u.name as user_name");
         $goodsTypeName = DB::raw("dict.value as goods_type");
-        array_push($select, $userName, $goodsTypeName);
+        $goodsStatus = DB::raw("case when g.status=1 then '已上架' when g.status=2 then '已下架' else '暂存' end as status");
+        array_push($select, $userName, $goodsTypeName, $goodsStatus);
         //获取查询结果
         $sortField = "g.id";
         $sSortDir = "asc";

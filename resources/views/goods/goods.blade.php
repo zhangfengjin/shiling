@@ -6,181 +6,95 @@
         var fileNumLimit = 7;
         var fileSizeLimit = 3 * 1024 * 1024;    // 3 M
         var fileSingleSizeLimit = 1024 * 1024;  // 1 M
+        var uploadUids = [];
     </script>
     <link href="{{url('/js/plugins/umeditor/themes/default/css/umeditor.css')}}" type="text/css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/webuploader.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/style.css')}}"/>
     <script type="text/javascript" src="{{url('/js/plugins/umeditor/third-party/template.min.js')}}"></script>
     <script type="text/javascript" charset="utf-8" src="{{url('/js/plugins/umeditor/umeditor.config.js')}}"></script>
     <script type="text/javascript" charset="utf-8" src="{{url('/js/plugins/umeditor/umeditor.min.js')}}"></script>
     <script type="text/javascript" src="{{url('/js/plugins/umeditor/lang/zh-cn/zh-cn.js')}}"></script>
 
-    <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/webuploader.css')}}"/>
-    <link rel="stylesheet" type="text/css" href="{{url('/css/plugins/webuploader/style.css')}}"/>
 
 
-
-    <script type="text/javascript">
-        //实例化编辑器
-        var um = UM.getEditor('goods_detail');
-        um.addListener('blur', function () {
-            $('#focush2').html('编辑器失去焦点了')
-        });
-        um.addListener('focus', function () {
-            $('#focush2').html('')
-        });
-        //按钮的操作
-        function insertHtml() {
-            var value = prompt('插入html代码', '');
-            um.execCommand('insertHtml', value)
-        }
-        function isFocus() {
-            alert(um.isFocus())
-        }
-        function doBlur() {
-            um.blur()
-        }
-        function createEditor() {
-            enableBtn();
-            um = UM.getEditor('goods_detail');
-        }
-        function getAllHtml() {
-            alert(UM.getEditor('goods_detail').getAllHtml())
-        }
-        function getContent() {
-            var arr = [];
-            arr.push("使用editor.getContent()方法可以获得编辑器的内容");
-            arr.push("内容为：");
-            arr.push(UM.getEditor('goods_detail').getContent());
-            alert(arr.join("\n"));
-        }
-        function getPlainTxt() {
-            var arr = [];
-            arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
-            arr.push("内容为：");
-            arr.push(UM.getEditor('goods_detail').getPlainTxt());
-            alert(arr.join('\n'))
-        }
-        function setContent(isAppendTo) {
-            var arr = [];
-            arr.push("使用editor.setContent('欢迎使用umeditor')方法可以设置编辑器的内容");
-            UM.getEditor('goods_detail').setContent('欢迎使用umeditor', isAppendTo);
-            alert(arr.join("\n"));
-        }
-        function setDisabled() {
-            UM.getEditor('goods_detail').setDisabled('fullscreen');
-            disableBtn("enable");
-        }
-
-        function setEnabled() {
-            UM.getEditor('goods_detail').setEnabled();
-            enableBtn();
-        }
-
-        function getText() {
-            //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
-            var range = UM.getEditor('goods_detail').selection.getRange();
-            range.select();
-            var txt = UM.getEditor('goods_detail').selection.getText();
-            alert(txt)
-        }
-
-        function getContentTxt() {
-            var arr = [];
-            arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
-            arr.push("编辑器的纯文本内容为：");
-            arr.push(UM.getEditor('goods_detail').getContentTxt());
-            alert(arr.join("\n"));
-        }
-        function hasContent() {
-            var arr = [];
-            arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
-            arr.push("判断结果为：");
-            arr.push(UM.getEditor('goods_detail').hasContents());
-            alert(arr.join("\n"));
-        }
-        function setFocus() {
-            UM.getEditor('goods_detail').focus();
-        }
-        function deleteEditor() {
-            disableBtn();
-            UM.getEditor('goods_detail').destroy();
-        }
-        function disableBtn(str) {
-            var div = document.getElementById('btns');
-            var btns = domUtils.getElementsByTagName(div, "button");
-            for (var i = 0, btn; btn = btns[i++];) {
-                if (btn.id == str) {
-                    domUtils.removeAttributes(btn, ["disabled"]);
-                } else {
-                    btn.setAttribute("disabled", "true");
-                }
-            }
-        }
-        function enableBtn() {
-            var div = document.getElementById('btns');
-            var btns = domUtils.getElementsByTagName(div, "button");
-            for (var i = 0, btn; btn = btns[i++];) {
-                domUtils.removeAttributes(btn, ["disabled"]);
-            }
-        }
-    </script>
 
     <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">商品名称</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="goods_name" type="text" class="form-control" placeholder="商品名称"
-                           required data-parsley-maxlength="200">
+            <div id="reset_div">
+                <div class="form-group">
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12">商品名称</label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <input id="goods_name" type="text" class="form-control" placeholder="商品名称"
+                               required data-parsley-maxlength="200">
+                    </div>
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12">商品类型</label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <select id="goods_type_id" class="form-control">
+                            <option value="0"></option>
+                            @foreach($goodsTypes as $goodsType )
+                                <option value="{{$goodsType->id}}">{{$goodsType->value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12">商品数量</label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <input id="goods_count" type="text" class="form-control" placeholder="商品数量"
+                               required data-parsley-type="number">
+                    </div>
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">商品类型</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <select id="goods_type_id">
-                        <option value="0"></option>
-                        @foreach($goodsTypes as $goodsType )
-                            <option value="{{$goodsType->id}}">{{$goodsType->value}}</option>
-                        @endforeach
-                    </select>
+                <div class="form-group">
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12">商品价格(元)</label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <input id="price" type="text" class="form-control" placeholder="商品价格(元)"
+                               required pattern="^\d+(.\d+)?$">
+                    </div>
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12">状态</label>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <select id="goods_status" class="form-control">
+                            <option value="0">暂存</option>
+                            <option value="1" selected>上架</option>
+                            <option value="2">下架</option>
+                        </select>
+                    </div>
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">商品数量</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="goods_count" type="text" class="form-control" placeholder="商品数量"
-                           required data-parsley-type="number">
+                <div class="form-group">
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12">商品介绍</label>
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+                        <textarea id="abstract" rows="3" class="form-control" placeholder="商品介绍"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">商品价格(元)</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
-                    <input id="price" type="text" class="form-control" placeholder="商品价格(元)"
-                           required pattern="^\d+(.\d+)?$">
+                <div id="uploaded_img" class="form-group display">
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12">已上传图片</label>
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+                        <ul id="uploaded_img_list">
+
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">商品介绍</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
-                    <textarea id="abstract" rows="3" class="form-control" placeholder="商品介绍"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">商品介绍</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
-                    <div class="row">
-                        <div id="wrapper">
-                            <div id="container">
-                                <div id="uploader">
-                                    <div class="queueList">
-                                        <div id="dndArea" class="placeholder">
-                                            <div id="filePicker"></div>
+                <div class="form-group">
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12">商品图片</label>
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+                        <div class="row">
+                            <div id="wrapper">
+                                <div id="container">
+                                    <div id="uploader">
+                                        <div class="queueList">
+                                            <div id="dndArea" class="placeholder">
+                                                <div id="filePicker"></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="statusBar" style="display:none;">
-                                        <div class="progress">
-                                            <span class="text">0%</span>
-                                            <span class="percentage"></span>
-                                        </div>
-                                        <div class="info"></div>
-                                        <div class="btns">
-                                            <div id="filePicker2"></div>
-                                            <div class="uploadBtn">开始上传</div>
+                                        <div class="statusBar" style="display:none;">
+                                            <div class="progress">
+                                                <span class="text">0%</span>
+                                                <span class="percentage"></span>
+                                            </div>
+                                            <div class="info"></div>
+                                            <div class="btns">
+                                                <div id="filePicker2"></div>
+                                                <div class="uploadBtn">开始上传</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -190,96 +104,10 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议详情</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
-                    {{--<script type="text/plain" id="goods_detail" style="width:1000px;height:240px;">
-                    </script>--}}
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div id="detail_reason" class="x_content detail_content" data-parsley-validate>
-        <form class="form-horizontal form-label-left">
-            <div class="form-group">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <label class="col-md-12 col-sm-12 col-xs-12">
-                        <textarea id="reason" rows="3" class="form-control" placeholder="取消原因"
-                                  required data-parsley-maxlength="20"></textarea>
-                    </label>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div id="detail_notify" class="x_content detail_content" data-parsley-validate>
-        <form class="form-horizontal form-label-left">
-            <div class="form-group">
-                <div class="col-md-12 col-sm-12 col-xs-12 checkbox">
-                    <div class="checkbox">
-                        <label class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="checkbox" class="flat"
-                                   name="send_sms" id="send_sms" value="1"
-                                   checked> 短信通知&nbsp;&nbsp;
-                        </label>
-                        <label class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="checkbox" class="flat"
-                                   name="send_email" id="send_email"
-                                   value="2" checked> 邮件通知&nbsp;&nbsp;
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <label class="col-md-12 col-sm-12 col-xs-12">
-                        <textarea id="notify_content" rows="3" class="form-control" placeholder="通知内容"
-                                  required data-parsley-maxlength="20"></textarea>
-                    </label>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div id="detail_refund" class="x_content detail_content">
-        <div class="x_panel">
-            <div class="x_content">
-                <table id="user_table" class="table table-striped table-bordered bulk_action">
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="detail_meet_prize" class="x_content detail_content">
-        <div class="x_panel">
-            <div class="x_content">
-                <table id="meet_prize_table" class="table table-striped table-bordered bulk_action">
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="detail_prize" class="x_content detail_content" data-parsley-validate>
-        <form class="form-horizontal form-label-left">
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">奖项</label>
-                <div class="col-md-9 col-sm-9 col-xs-12">
-                    <input id="prize_name" type="text" class="form-control" placeholder="奖项"
-                           required data-parsley-maxlength="30">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">奖品</label>
-                <div class="col-md-9 col-sm-9 col-xs-12">
-                    <input id="remark" type="text" class="form-control" placeholder="奖品"
-                           required data-parsley-maxlength="50">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">奖品个数</label>
-                <div class="col-md-9 col-sm-9 col-xs-12">
-                    <input id="prize_count" type="text" class="form-control" placeholder="奖品个数"
-                           required data-parsley-type="number">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">商品详情</label>
+                <div class="col-md-8 col-sm-8 col-xs-12" id="um_content">
+                    <script type="text/plain" id="goods_detail" style="height:240px;">
+                    </script>
                 </div>
             </div>
         </form>
@@ -346,6 +174,8 @@
     <script type="text/javascript" src="{{url('/js/plugins/webuploader/upload.js')}}"></script>
 
     <div id="detail_mould"></div>
+
+
     <script type="application/javascript">
         var meetUrl = "/goods";
         $(function () {
@@ -357,6 +187,8 @@
             var tableId = "meet_table";
             var searchInfo;
             var provinces = [];  //定义数组
+            var um, umc;
+            var firstOpen = true;
             return me = {
                 _initOwn: function () {
                     $("#search").on("click", function () {
@@ -399,6 +231,9 @@
                     }, {
                         "sTitle": "创建人",
                         "data": "user_name"
+                    }, {
+                        "sTitle": "状态",
+                        "data": "status"
                     }];
                     var oSetting = {
                         "tableId": tableId,
@@ -520,23 +355,27 @@
                     if (ids) {
                         TableList.controllerDisabled(obj);
                         var fillData = function (data) {
-                            $("#meet_name").val(data.meet_name);
-                            $("#keynote_speaker").val(data.keynote_speaker);
-                            $("#limit_count").val(data.limit_count);
-                            $("#begin_time").attr("begin_time", data.begin_time);
-                            $('#begin_time').val(data.begin_time);
-                            $("#end_time").attr("end_time", data.end_time);
-                            $('#end_time').val(data.end_time);
-                            $("#to_object").val(data.to_object);
-                            $("#in_price").val(data.in_price);
-                            $("#addr").val(data.addr);
+                            $("#uploaded_img").removeClass("display");
+                            var goodAtts = data.goodAtts;
+                            $.each(goodAtts, function () {
+                                $("#uploaded_img_list").append("<li id='li_" + this.id + "'><div><span id='del_img_" + this.id + "' attId=" + this.id + " class='cursor'>删除</span></div><img src='" + this.url + "' style='width:100px;height:100px;' /></li>");
+                                uploadUids.push(this.id);
+                            });
+                            $("span[id^='del_img_']").on('click', function () {
+                                var attId = parseInt($(this).attr("attId"));
+                                var idx = $.inArray(attId, uploadUids);
+                                if (idx >= 0) {
+                                    uploadUids.splice(idx, 1);
+                                }
+                                $("#li_" + attId).remove();
+                            });
+                            $("#goods_name").val(data.name);
+                            $("#goods_type_id").val(data.goods_type_id);
+                            $("#goods_count").val(data.goods_count);
+                            $("#price").val(data.price);
                             $("#abstract").val(data.abstract);
-                            $("#province").val(data.province_code);
-                            $('#province').trigger('change');
-                            $("#city").val(data.city_code);
-                            $('#city').trigger('change');
-                            $("#area").val(data.area_id);
-                            $('#area').trigger('change');
+                            $("#status").val(data.status);
+                            um.setContent(data.goods_detail);
                         };
                         var updateData = function (requestData, successfn, usable) {
                             TableList.optTable({
@@ -947,74 +786,18 @@
                     $("ul.parsley-errors-list").remove();
                     $("#detail").remove();
                     $("#detail_mould").append(lay);
-                    var config = {
-                        ".chosen-select": {},
-                        ".chosen-select-deselect": {
-                            allow_single_deselect: true
-                        },
-                        ".chosen-select-no-single": {
-                            disable_search_threshold: 10
-                        },
-                        ".chosen-select-no-results": {
-                            no_results_text: "Oops, nothing found!"
-                        },
-                        ".chosen-select-width": {
-                            width: "95%"
-                        }
-                    };
-                    for (var selector in config) {
-                        $(selector).chosen(config[selector])
+                    uploadUids = [];
+                    if (um) {
+                        um.destroy();
                     }
-                    $(".chosen-container").css({
-                        "width": $("#meet_name").width() + "%",
-                        "height": 30
-                    });
-                    me._daterangepicker();
-                    $("#province").change(function () {
-                        var province = $(this).val();
-                        for (var idx in provinces) {
-                            var pro = provinces[idx];
-                            if (pro.name == province) {
-                                $("#city").empty();
-                                $("#area").empty();
-                                var cities = pro.value;
-                                for (var idx2 in cities) {
-                                    var cityValue = cities[idx2].name;
-                                    $("#city").append("<option parent='" + province + "' value='" + cityValue + "'>" + cities[idx2].value.name + "</option>");
-                                    var areas = cities[idx2].value.value;
-                                    for (var idx3 in areas) {
-                                        $("#area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
-                                    }
-                                }
-                            }
-                        }
-                    });
-                    $("#city").change(function () {
-                        $("#area").empty();
-                        var cityValue = $(this).val();
-                        var province = $("#city option[value='" + cityValue + "']").attr('parent');
-                        for (var idx in provinces) {
-                            var pro = provinces[idx];
-                            if (pro.name == province) {
-                                var cities = pro.value;
-                                for (var idx2 in cities) {
-                                    if (cityValue == cities[idx2].name) {
-                                        var areas = cities[idx2].value.value;
-                                        for (var idx3 in areas) {
-                                            $("#area").append("<option parent='" + cityValue + "' value='" + areas[idx3].name + "'>" + areas[idx3].value + "</option>");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    um = UM.getEditor('goods_detail');
                 },
                 _openlayer: function (id, type, yes) {
                     me._resetHtml();
                     var usable = function () {
                         btns.css("pointer-events", "");
                     };
-                    var area = ["80%", "60%"];
+                    var area = ["80%", "90%"];
                     if (device.mobile()) {
                         area = ["80%", "70%"];
                     }
@@ -1030,17 +813,14 @@
                             try {
                                 btns.css("pointer-events", "none");
                                 var requestData = {
-                                    "meetName": $("#meet_name").val(),
-                                    "keynote_speaker": $("#keynote_speaker").val(),
-                                    "limit_count": $("#limit_count").val(),
-                                    "begin_time": $("#begin_time").attr("begin_time"),
-                                    "end_time": $("#end_time").attr("end_time"),
-                                    "to_object": $("#to_object").val(),
-                                    "in_price": $("#in_price").val(),
-                                    "area_id": $("#area").val(),
-                                    "addr": $("#addr").val(),
+                                    "goods_name": $("#goods_name").val(),
+                                    "goods_type_id": $("#goods_type_id").val(),
+                                    "goods_count": $("#goods_count").val(),
+                                    "price": $("#price").val(),
                                     "abstract": $("#abstract").val(),
-                                    "keynote_speaker_id": 0
+                                    "goods_detail": um.getContent(),
+                                    "status": $("#goods_status").val(),
+                                    "atts": uploadUids
                                 };
                                 var parsl = $('#detail').parsley();
                                 parsl.validate();
@@ -1054,7 +834,11 @@
                             } catch (e) {
                                 usable();
                             }
-                        }, success: function () {
+                        }, success: function (layero, index) {
+                            /* $.getScript("/js/plugins/webuploader/webuploader.js");*/
+                            $.getScript("/js/plugins/webuploader/upload.js");
+                            $("#goods_detail").width($("#abstract").width());
+                            um.setWidth($("#abstract").width());
                         }
                     });
                 }
