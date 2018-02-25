@@ -26,10 +26,30 @@
                         <form class="form-horizontal form-label-left">
                             <div class="form-group">
                                 <ul class="col-md-12 col-sm-12 col-xs-12">
-                                    <li class="col-md-4 col-sm-6 col-xs-12">
-                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">会议名称</label>
-                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_meet_name"></li>
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <li class="col-md-6 col-sm-6 col-xs-12">
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">订单号</label>
+                                        <input class="col-md-7 col-sm-8 col-xs-12" id="search_order_code"></li>
+                                    <li class="col-md-6 col-sm-6 col-xs-12">
+                                        <label class="control-label col-md-2 col-sm-4 col-xs-12">下单时间</label>
+                                        <div class="col-md-8 col-sm-8 col-xs-12 input-prepend input-group">
+                                            <span class="add-on input-group-addon">
+                                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                            <input type="text" name="search_place_time"
+                                                   id="search_place_time"
+                                                   class="pull-right form-control"/>
+                                        </div>
+                                    </li>
+                                    <li class="col-md-6 col-sm-6 col-xs-12">
+                                        <label class="control-label col-md-5 col-sm-4 col-xs-12">订单状态</label>
+                                        <select class="col-md-7 col-sm-8 col-xs-12" id="search_status">
+                                            <option value=""></option>
+                                            <option value="0">未支付</option>
+                                            <option value="1">待发货</option>
+                                            <option value="2">已发货</option>
+                                            {{--<option value="3">已签收</option>--}}
+                                            <option value="4">已取消</option>
+                                        </select></li>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
                                         <button id="search" type="button" class="btn btn-round btn-default search_btn">
                                             查询
                                         </button>
@@ -74,16 +94,43 @@
                         me._searchList();
                     });
                     $("#reset").on("click", function () {
-                        $("#search_province").val('');
-                        $("#search_city").val('');
-                        $("#search_area").val('');
-                        $("#search_meet_name").val('');
+                        $("#search_order_code").val('');
+                        $("#search_place_time").val('');
+                        $("#search_place_time").attr("startTime",'');
+                        $("#search_place_time").attr("endTime",'');
+                        $("#search_status").val('');
                     });
+                    me._daterangepicker();
                 },
                 init: function () {
                     me._initOwn();
                     me._ddl();
                     me._createList();
+                },
+                _daterangepicker: function () {
+                    moment.locale("zh-cn");
+                    var placeTimeObj = $('#search_place_time');
+                    placeTimeObj.daterangepicker({
+                        timePicker: false,
+                        timePickerIncrement: 30,
+                        timePicker24Hour: true,
+                        locale: {
+                            format: 'YYYY/MM/DD h:mm A'
+                        }
+                    }, function (start, end, label) {
+                        placeTimeObj.attr("startTime", start.format('YYYY-MM-DD HH:mm:ss'));
+                        placeTimeObj.attr("endTime", end.format('YYYY-MM-DD HH:mm:ss'));
+                    });
+                    placeTimeObj.val("");
+                    placeTimeObj.on("hide.daterangepicker", function (event, picker) {
+                        placeTimeObj.attr("startTime", picker.startDate.format('YYYY-MM-DD HH:mm'));
+                        placeTimeObj.attr("endTime", picker.endDate.format('YYYY-MM-DD HH:mm'));
+                    });
+                    placeTimeObj.on("cancel.daterangepicker", function (event, picker) {
+                        picker.element.val('');
+                        placeTimeObj.attr("startTime", 0);
+                        placeTimeObj.attr("endTime", 0);
+                    });
                 },
                 _ddl: function () {
                     $("#search_province option").each(function () {  //遍历所有option
@@ -227,8 +274,10 @@
                 _searchList: function () {
                     searchInfo = {
                         "searchs": {
-                            "area_id": $("#search_area").val(),
-                            "meet_name": $("#search_meet_name").val()
+                            "order_code": $("#search_order_code").val(),
+                            "start_time": $("#search_place_time").attr("startTime"),
+                            "end_time": $("#search_place_time").attr("endTime"),
+                            "status": $("#search_status").val()
                         }
                     };
                     if (initMeetId != undefined && initMeetId != "undefined" && initMeetId != "") {
@@ -465,37 +514,6 @@
                         }
                     }
                 },
-                _daterangepicker: function () {
-                    moment.locale("zh-cn");
-                    var beginTime = $('#begin_time');
-                    var date = moment().format('YYYY-MM-DD HH:mm');
-                    var timeOptions = {
-                        "singleDatePicker": true,
-                        "timePicker": true,
-                        "timePicker24Hour": true,
-                        "locale": {
-                            "format": 'YYYY-MM-DD HH:mm'
-                        },
-                        startDate: date
-                    };
-                    if (beginTime.attr("begin_time") == undefined || beginTime.attr("begin_time") == "") {
-                        beginTime.attr("begin_time", date);
-                    } else {
-                        timeOptions.startDate = beginTime.attr("begin_time");
-                    }
-                    beginTime.daterangepicker(timeOptions, function (start, end, label) {
-                        beginTime.attr("begin_time", start.format('YYYY-MM-DD HH:mm'));
-                    });
-                    var endTime = $('#end_time');
-                    if (endTime.attr("begin_time") == undefined || endTime.attr("begin_time") == "") {
-                        endTime.attr("begin_time", date);
-                    } else {
-                        timeOptions.startDate = endTime.attr("begin_time");
-                    }
-                    endTime.daterangepicker(timeOptions, function (start, end, label) {
-                        endTime.attr("time_time", start.format('YYYY-MM-DD HH:mm'));
-                    });
-                },
                 _resetHtml: function () {
                     $(".parsley-error").removeClass("parsley-error");
                     $("ul.parsley-errors-list").remove();
@@ -523,7 +541,6 @@
                         "width": $("#meet_name").width() + "%",
                         "height": 30
                     });
-                    me._daterangepicker();
 
                 },
                 _openlayer: function (id, type, yes) {

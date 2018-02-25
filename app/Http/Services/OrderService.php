@@ -55,7 +55,7 @@ class OrderService extends CommonService
     {
         $where = $this->getSearchWhere($this->searchs);
         //获取查询的记录数
-        $total = DB::table("goods as g")->whereRaw($where)->where("flag", 0)->count();
+        $total = DB::table("orders as o")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
             'o.id', 'o.code', 'o.place_order_time', 'o.pay_way',
@@ -96,8 +96,20 @@ class OrderService extends CommonService
         $where = [];
         $orderCode = isset($searchs["order_code"]) ? trim($searchs["order_code"])
             : (isset($this->allInput["order_code"]) ? trim($this->allInput["order_code"]) : "");//合同号
-        if (!empty($meetName)) {
+        $startTime = isset($searchs["start_time"]) ? trim($searchs["start_time"])
+            : (isset($this->allInput["start_time"]) ? trim($this->allInput["start_time"]) : "");//合同号
+        $endTime = isset($searchs["end_time"]) ? trim($searchs["end_time"])
+            : (isset($this->allInput["end_time"]) ? trim($this->allInput["end_time"]) : "");//合同号
+        $status = isset($searchs["status"]) ? trim($searchs["status"])
+            : (isset($this->allInput["status"]) ? trim($this->allInput["status"]) : "");//合同号
+        if (!empty($orderCode)) {
             array_push($where, "o.code like '%$orderCode%'");
+        }
+        if ($startTime && $endTime) {
+            array_push($where, "(o.place_order_time >= '$startTime' and o.place_order_time <= '$endTime')");
+        }
+        if ($status !== "") {
+            array_push($where, "o.status = $status");
         }
         $where = implode(" and ", $where);
         if (empty($where)) {
