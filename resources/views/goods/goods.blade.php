@@ -17,8 +17,6 @@
     <script type="text/javascript" charset="utf-8" src="{{url('/js/plugins/umeditor/umeditor.min.js')}}"></script>
     <script type="text/javascript" src="{{url('/js/plugins/umeditor/lang/zh-cn/zh-cn.js')}}"></script>
 
-
-
     <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div id="reset_div">

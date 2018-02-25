@@ -78,6 +78,10 @@ Route::group(['domain' => ''],
             Route::get("order/export", "OrderController@export");
             Route::resource("order", "OrderController");
 
+            Route::get("news/list", "NewsController@getList");
+            Route::get("news/export", "NewsController@export");
+            Route::resource("news", "NewsController");
+
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
             });

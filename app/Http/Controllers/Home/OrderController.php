@@ -46,7 +46,6 @@ class OrderController extends HomeController
         if ($ret) {
             return DataStandard::getStandardData();
         }
-        return DataStandard::getStandardData([], config('validator.621'), 621);
     }
 
     public function export(Request $request)

@@ -72,5 +72,13 @@ return [
                 "name" => "中奖列表", "href" => "/muprize"
             ]*/
         ]
+    ],
+    [
+        "name" => "新闻管理", "icon" => "cog", "href" => "", "childrens" =>
+        [
+            [
+                "name" => "新闻公告", "href" => "/news"
+            ]
+        ]
     ]
 ];

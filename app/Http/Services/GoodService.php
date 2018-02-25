@@ -138,7 +138,6 @@ class GoodService extends CommonService
                         array_splice($oldAtts, $key, 1); // 删除存在的
                     }
                 }
-                Log::info($oldAtts);
                 if (!empty ($oldAtts)) {
                     DB::table("goods_atts")->where($gaWhere)->whereIn("att_id", $oldAtts)->update(["flag" => 1]);
                 }
