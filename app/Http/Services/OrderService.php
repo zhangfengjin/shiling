@@ -12,6 +12,7 @@ namespace App\Http\Services;
 use App\Models\Order;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderService extends CommonService
 {
@@ -79,6 +80,42 @@ class OrderService extends CommonService
             $row->id = strval($row->id);
         }
         return DataStandard::getListData($this->sEcho, $total, $rows);
+    }
+
+    public function export()
+    {
+        //构建查询条件
+        $where = $this->getSearchWhere($this->searchs);
+        //要查询的字段
+        $select = [
+            'o.code', 'o.place_order_time', 'o.pay_way', 'o.total_price',
+            'o.take_tel', 'o.take_name'
+        ];
+        $billType = DB::raw("case when o.bill_type=1 then '电子' when o.bill_type=2 then '纸质' else '无' end as bill_type");
+        $orderStatus = DB::raw("case when o.status=1 then '待发货' when o.status=2 then '已发货' when o.status=3 then '已签收' when o.status=4 then '已取消' else '未支付' end as status");
+        $userName = DB::raw("u.name as user_name");
+        array_push($select, $billType, $orderStatus, $userName);
+        //获取查询结果
+        $sortField = "o.id";
+        $sSortDir = "asc";
+        $rows = DB::table("orders as o")
+            ->leftJoin("users as u", 'u.id', '=', 'o.place_order_people')
+            ->leftJoin("dicts as dict", 'dict.id', '=', 'o.bill_use_id')
+            ->where("o.flag", 0)->whereRaw($where)
+            ->orderBy($sortField, $sSortDir)
+            ->get($select)->toArray();
+        //导出Excel的表头
+        $title = [
+            '订单号', '下单时间', '支付方式', '订单总额', '收货人手机', '收货人', '发票类型', '订单状态', '下单人'
+        ];
+        $rows = json_decode(json_encode($rows), true);
+        array_unshift($rows, $title);
+        $excelName = "Order_List_" . date("Y-m-d-H-i-s");
+        Excel::create($excelName, function ($excel) use ($rows) {
+            $excel->sheet('Order_List_', function ($sheet) use ($rows) {
+                $sheet->rows($rows);
+            });
+        })->export('xlsx');
     }
 
 

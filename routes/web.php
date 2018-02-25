@@ -75,6 +75,7 @@ Route::group(['domain' => ''],
             Route::resource("goods", "GoodsController");
 
             Route::get("order/list", "OrderController@getList");
+            Route::get("order/export", "OrderController@export");
             Route::resource("order", "OrderController");
 
             Route::group(['prefix' => 'pay'], function () {

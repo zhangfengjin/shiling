@@ -96,8 +96,8 @@
                     $("#reset").on("click", function () {
                         $("#search_order_code").val('');
                         $("#search_place_time").val('');
-                        $("#search_place_time").attr("startTime",'');
-                        $("#search_place_time").attr("endTime",'');
+                        $("#search_place_time").attr("startTime", '');
+                        $("#search_place_time").attr("endTime", '');
                         $("#search_status").val('');
                     });
                     me._daterangepicker();
@@ -259,7 +259,13 @@
                         "fnServerParams": {
                             "searchs": initSearchs
                         },
-                        "toolbar": {},
+                        "toolbar": {
+                            "export": {
+                                "info": "导出", "func": function (ids) {
+                                    location.href = CommonUtil.getRootPath() + meetUrl + "/export?searchs=" + JSON.stringify(searchInfo ? searchInfo["searchs"] : "");
+                                }
+                            }
+                        },
                         "opt": {
                             "edit": {
                                 "display": 1,
