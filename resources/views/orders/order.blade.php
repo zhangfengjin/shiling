@@ -1,4 +1,20 @@
 @extends('layouts.app_table')@section('tablecontent')
+    <div id="detail" class="x_content detail_content" data-parsley-validate>
+        <form class="form-horizontal form-label-left">
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">状态</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select class="form-control" id="status">
+                        <option value="0">未支付</option>
+                        <option value="1">待发货</option>
+                        <option value="2">已发货</option>
+                        {{--<option value="3">已签收</option>--}}
+                        <option value="4">已取消</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
@@ -162,10 +178,10 @@
                     }, {
                         "sTitle": "下单时间",
                         "data": "place_order_time"
-                    },  {
+                    }, {
                         "sTitle": "下单人",
                         "data": "user_name"
-                    },{
+                    }, {
                         "sTitle": "订单总额",
                         "data": "total_price"
                     }, {
@@ -176,7 +192,8 @@
                         "data": "take_name"
                     }, {
                         "sTitle": "订单状态",
-                        "data": "status"
+                        "data": "status",
+                        "columnType": "custom"
                     }, {
                         "sTitle": "支付方式",
                         "data": "pay_way"
@@ -195,7 +212,15 @@
                         "fnServerParams": {
                             "searchs": initSearchs
                         },
-                        "toolbar": {}
+                        "toolbar": {},
+                        "opt": {
+                            "edit": {
+                                "display": 1,
+                                "info": "编辑",
+                                "func": me._edit
+                            }
+
+                        }
                     };
                     TableList.datatable(oSetting);
                 },
@@ -210,6 +235,36 @@
                         searchInfo.searchs.meetId = initMeetId;
                     }
                     TableList.search(tableId, listUrl, searchInfo);
+                },
+                _edit: function (ids, full, obj) {
+                    if (ids) {
+                        TableList.controllerDisabled(obj);
+                        var fillData = function (data) {
+                            $("#status").val(data.status);
+                        };
+                        var updateData = function (requestData, successfn, usable) {
+                            TableList.optTable({
+                                "tableId": tableId,
+                                "url": meetUrl + "/" + ids,
+                                "type": "put",
+                                "reqData": requestData,
+                                "successfn": successfn,
+                                "failfn": usable
+                            });
+                        };
+                        CommonUtil.requestService(meetUrl + "/" + ids, "", true, "get",
+                            function (response) {
+                                //从后台成功获取数据 拼写到前台页面
+                                //弹出层模式
+                                if (response.code == 0) {
+                                    me._openlayer(ids, 2, updateData);//打开表单；保存时回调updateData 将数据传输到后台
+                                    fillData(response.data);//根据从后台获取的数据填充到表单上
+                                }
+                                TableList.controllerRemoveDisabled(obj);
+                            }, function () {
+                                TableList.controllerRemoveDisabled(obj);
+                            });
+                    }
                 },
                 _notify: function (ids, full, obj) {
                     var notifyRequest = function (requestData, successfn, usable) {
@@ -482,7 +537,7 @@
                     }
                     layer.open({
                         type: 1,
-                        title: "参会人员信息",
+                        title: "订单信息",
                         scrollbar: false,
                         area: area, // 宽高
                         content: $("#detail"),

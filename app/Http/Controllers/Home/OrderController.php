@@ -26,8 +26,26 @@ class OrderController extends HomeController
 
     public function getList(Request $request)
     {
-        $goodService = new OrderService($request);
-        $goods = $goodService->getList();
-        return DataStandard::getStandardData($goods);
+        $orderService = new OrderService($request);
+        $order = $orderService->getList();
+        return DataStandard::getStandardData($order);
+    }
+
+    public function show(Request $request, $orderId)
+    {
+        $orderService = new OrderService($request);
+        $order = $orderService->show($orderId);
+        return DataStandard::getStandardData($order);
+    }
+
+    public function update(Request $request, $orderId)
+    {
+        $input = $request->all();
+        $orderService = new OrderService($request);
+        $ret = $orderService->update($input, $orderId);
+        if ($ret) {
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config('validator.621'), 621);
     }
 }

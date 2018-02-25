@@ -82,7 +82,6 @@ class MeetController extends HomeController
         if ($ret) {
             return DataStandard::getStandardData();
         }
-        return DataStandard::getStandardData([], config('validator.621'), 621);
     }
 
     /**
@@ -125,11 +124,11 @@ class MeetController extends HomeController
      * @param Request $request
      * @return array
      */
-    public function refund(Request $request,$ids)
+    public function refund(Request $request, $ids)
     {
         $input = $request->all();
         $meetService = new MeetService($request);
-        $meetService->refund($input,$ids);
+        $meetService->refund($input, $ids);
         return DataStandard::getStandardData();
     }
 

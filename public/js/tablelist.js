@@ -107,15 +107,18 @@ TableList = function (me) {
                                             case "已报名":
                                             case "已签到":
                                             case "已付款":
+                                            case "已发货":
                                                 className = "status rsuccess";
                                                 break;
                                             case "未通过":
+                                            case "未支付":
                                                 className = "status rfail";
                                                 break;
                                             case "异常":
                                             case "已删除":
                                             case "离职":
                                             case "已停用":
+                                            case "待发货":
                                                 className = "status rerror";
                                                 break;
                                             case "待审核":
