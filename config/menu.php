@@ -51,12 +51,26 @@ return [
             [
                 "name" => "商品列表", "href" => "/goods"
             ],
-            [
-                "name" => "参会人员", "href" => "/meetuser"
+            /*[
+                "name" => "商品统计", "href" => "/goods/tj"
             ],
             [
                 "name" => "中奖列表", "href" => "/muprize"
-            ]
+            ]*/
+        ]
+    ],
+    [
+        "name" => "订单管理", "icon" => "cog", "href" => "", "childrens" =>
+        [
+            [
+                "name" => "订单列表", "href" => "/order"
+            ],
+            /*[
+                "name" => "商品统计", "href" => "/goods/tj"
+            ],
+            [
+                "name" => "中奖列表", "href" => "/muprize"
+            ]*/
         ]
     ]
 ];

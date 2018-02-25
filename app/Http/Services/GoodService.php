@@ -25,6 +25,7 @@ class GoodService extends CommonService
             $goods->name = $input['goods_name'];
             $goods->goods_type_id = $input['goods_type_id'];
             $goods->goods_count = $input['goods_count'];
+            $goods->goods_residue_count = $input['goods_count'];
             $goods->price = $input['price'];
             $goods->abstract = $input['abstract'];
             $goods->goods_detail = $input['goods_detail'];
@@ -58,8 +59,8 @@ class GoodService extends CommonService
             "g.flag" => 0
         ];
         $select = [
-            'g.id', 'g.name', 'g.goods_type_id','g.goods_count',
-            'g.price', 'g.abstract','goods_detail'
+            'g.id', 'g.name', 'g.goods_type_id', 'g.goods_count',
+            'g.price', 'g.abstract', 'goods_detail'
         ];
         $userName = DB::raw("u.name as user_name");
         $goodsTypeName = DB::raw("dict.value as goods_type");
@@ -76,14 +77,17 @@ class GoodService extends CommonService
             ->leftJoin("attachments as att", 'att.id', '=', 'ga.att_id')
             ->where($gaWhere)
             ->get(["att.diskposition", "att.filename", "att.id"]);
-        $goods->goodAtts = [];
-        foreach ($goodAtts as $goodAtt) {
-            $att = [
-                "url" => $goodAtt->diskposition . $goodAtt->filename,
-                "id" => $goodAtt->id
-            ];
-            $goods->goodAtts[] = $att;
+        if ($goods) {
+            $goods->goodAtts = [];
+            foreach ($goodAtts as $goodAtt) {
+                $att = [
+                    "url" => $goodAtt->diskposition . $goodAtt->filename,
+                    "id" => $goodAtt->id
+                ];
+                $goods->goodAtts[] = $att;
+            }
         }
+
         return $goods;
     }
 
@@ -123,19 +127,19 @@ class GoodService extends CommonService
                 foreach ($dbAtts as $dbAtt) {
                     $oldAtts[] = $dbAtt->att_id;
                 }
-                foreach ( $atts as $idx => $att ) {
-                    if (($key = array_search ( $att, $oldAtts )) === FALSE) {
+                foreach ($atts as $idx => $att) {
+                    if (($key = array_search($att, $oldAtts)) === FALSE) {
                         $goodAtts[] = [
                             "goods_id" => $goodsId,
                             "att_id" => $att,
                             "creator" => $this->user['uid']
                         ];
-                    } else{
-                        array_splice ( $oldAtts, $key, 1 ); // 删除存在的
+                    } else {
+                        array_splice($oldAtts, $key, 1); // 删除存在的
                     }
                 }
                 Log::info($oldAtts);
-                if (! empty ( $oldAtts )) {
+                if (!empty ($oldAtts)) {
                     DB::table("goods_atts")->where($gaWhere)->whereIn("att_id", $oldAtts)->update(["flag" => 1]);
                 }
                 if (!empty($goodAtts)) {
@@ -178,13 +182,14 @@ class GoodService extends CommonService
         $total = DB::table("goods as g")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
-            'g.id', 'g.name', 'g.goods_type_id',
-            'g.goods_count', 'g.price', 'g.abstract'
+            'g.id', 'g.name', 'g.goods_type_id','g.goods_residue_count',
+            'g.goods_count','g.price', 'g.abstract'
         ];
+        $goodsSellCount = DB::raw("g.goods_count-g.goods_residue_count as goods_sell_count");
         $userName = DB::raw("u.name as user_name");
         $goodsTypeName = DB::raw("dict.value as goods_type");
         $goodsStatus = DB::raw("case when g.status=1 then '已上架' when g.status=2 then '已下架' else '暂存' end as status");
-        array_push($select, $userName, $goodsTypeName, $goodsStatus);
+        array_push($select, $goodsSellCount,$userName, $goodsTypeName, $goodsStatus);
         //获取查询结果
         $sortField = "g.id";
         $sSortDir = "asc";
@@ -200,6 +205,37 @@ class GoodService extends CommonService
         }
         return DataStandard::getListData($this->sEcho, $total, $rows);
     }
+
+    public function getGoodsTjList()
+    {
+        $where = $this->getSearchWhere($this->searchs);
+        //获取查询的记录数
+        $total = DB::table("goods as g")->whereRaw($where)->where("flag", 0)->count();
+        //要查询的字段
+        $select = [
+            'g.id', 'g.name', 'g.goods_type_id','g.goods_count', 'g.price', 'g.abstract'
+        ];
+        $userName = DB::raw("u.name as user_name");
+        $goodsTypeName = DB::raw("dict.value as goods_type");
+        $goodsStatus = DB::raw("case when g.status=1 then '已上架' when g.status=2 then '已下架' else '暂存' end as status");
+        array_push($select, $userName, $goodsTypeName, $goodsStatus);
+        //获取查询结果
+        $sortField = "g.id";
+        $sSortDir = "asc";
+        $rows = DB::table("goods as g")
+            ->leftJoin("users as u", 'u.id', '=', 'g.creator')
+            ->leftJoin("dicts as dict", 'dict.id', '=', 'g.goods_type_id')
+            ->leftJoin("")
+            ->where("g.flag", 0)->whereRaw($where)
+            ->orderBy($sortField, $sSortDir)
+            ->take($this->iDisplayLength)
+            ->skip($this->iDisplayStart)->get($select);
+        foreach ($rows as $row) {
+            $row->id = strval($row->id);
+        }
+        return DataStandard::getListData($this->sEcho, $total, $rows);
+    }
+
 
     /**
      * 获取查询条件

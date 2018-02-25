@@ -219,6 +219,12 @@
                         "sTitle": "商品数量",
                         "data": "goods_count"
                     }, {
+                        "sTitle": "销售数量",
+                        "data": "goods_sell_count"
+                    },{
+                        "sTitle": "剩余数量",
+                        "data": "goods_residue_count"
+                    },{
                         "sTitle": "价格",
                         "data": "price"
                     }, {
@@ -821,15 +827,21 @@
                                     "status": $("#goods_status").val(),
                                     "atts": uploadUids
                                 };
-                                var parsl = $('#detail').parsley();
-                                parsl.validate();
-                                if (true === parsl.isValid()) {
-                                    yes(requestData, function () {
-                                        layer.close(index);
-                                    }, usable);
-                                } else {
+                                if (uploadUids.length > 7) {
+                                    alert("图片上传个数超过限制");
                                     usable();
+                                } else {
+                                    var parsl = $('#detail').parsley();
+                                    parsl.validate();
+                                    if (true === parsl.isValid()) {
+                                        yes(requestData, function () {
+                                            layer.close(index);
+                                        }, usable);
+                                    } else {
+                                        usable();
+                                    }
                                 }
+
                             } catch (e) {
                                 usable();
                             }

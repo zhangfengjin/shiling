@@ -69,7 +69,13 @@ Route::group(['domain' => ''],
 
             Route::post("goods/upload", "GoodsController@upload");
             Route::get("goods/list", "GoodsController@getList");
+
+            /*Route::get("goods/tj", "GoodsTJController@index");
+            Route::get("goods/tj/list", "GoodsTJController@getList");*/
             Route::resource("goods", "GoodsController");
+
+            Route::get("order/list", "OrderController@getList");
+            Route::resource("order", "OrderController");
 
             Route::group(['prefix' => 'pay'], function () {
                 Route::post("unifiedorder", "PayController@unifiedorder");
