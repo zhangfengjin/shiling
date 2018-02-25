@@ -423,7 +423,7 @@
                                     return params;
                                 },
                                 "func": function (ids, full, obj) {
-                                    CommonUtil.redirect('/meetuser?meetId=' + ids);
+                                    CommonUtil.redirect('/award?meetId=' + ids);
                                 }
                             }
                         }

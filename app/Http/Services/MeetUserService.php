@@ -21,6 +21,26 @@ class MeetUserService extends CommonService
 {
 
     /**
+     * 获取参会人员（已签到）
+     * @return int
+     */
+    public function getMeetUserList($meetId)
+    {
+        $where = [
+            'mu.status' => 4,//已签到
+            'mu.meet_id' => $meetId,
+            'mu.flag' => 0
+        ];
+        $select = [
+            'u.phone', 'u.name'
+        ];
+        $rows = DB::table("meet_users as mu")
+            ->join("users as u", 'u.id', '=', 'mu.user_id')
+            ->where($where)->get($select);
+        return $rows;
+    }
+
+    /**
      * @param $input
      * @return int
      */

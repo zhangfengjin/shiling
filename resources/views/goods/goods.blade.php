@@ -256,7 +256,8 @@
                                 "display": 1,
                                 "info": "编辑",
                                 "func": me._edit
-                            },
+                            }
+                            /*,
                             "check-square-o": {
                                 "display": 1,
                                 "info": "取消会议",
@@ -325,7 +326,7 @@
                                 "func": function (ids, full, obj) {
                                     CommonUtil.redirect('/meetuser?meetId=' + ids);
                                 }
-                            }
+                            }*/
                         }
                     };
                     TableList.datatable(oSetting);

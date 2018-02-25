@@ -15,6 +15,17 @@ use Illuminate\Support\Facades\DB;
 
 class MeetPrizeService extends CommonService
 {
+    public function prizeEnums($meetId)
+    {
+        $select = [
+            'id', 'name', 'remark', 'prize_count'
+        ];
+        $where = [
+            "meet_id" => $meetId,
+            "flag" => 0
+        ];
+        return MeetPrize::where($where)->get($select);
+    }
 
     public function create($input)
     {
