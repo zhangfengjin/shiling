@@ -55,6 +55,7 @@ Route::group(['domain' => ''],
             Route::post("meet/refund/{ids}", "MeetController@refund");
             Route::resource("meet", "MeetController");
             Route::get("award", "AwardController@index");//
+            Route::post("award/prizeuser", "AwardController@getPrizeUser");//
 
             Route::get("meetuser/list", "MeetUserController@getList");
             Route::get("meetuser/export", "MeetUserController@export");

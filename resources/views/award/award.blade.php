@@ -1,6 +1,8 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title></title>
     <link href="{{url('/css/plugins/award/prize.css')}}" rel="stylesheet" type="text/css">
     <style>
@@ -206,7 +208,7 @@
         }
 
         var prizeUsers = [];
-        //获取中奖人员（一次性将该奖项的中奖人员全部获取到）
+        //获取中奖人员
         function getAwardPrizeUser() {
             var requestData = {
                 "type": "meet",
@@ -214,22 +216,52 @@
                 "meet_id": initMeetId,//会议id
                 "user_list": userList//会议签到人员id（截止到页面初始化时的签到人员，不包含抽奖开始后的签到人员）
             };
-            CommonUtil.requestService("/award/getprizeuser?", requestData, true, "post",
+            CommonUtil.requestService("/award/prizeuser?", requestData, true, "post",
                 function (response) {
                     //从后台成功获取数据 拼写到前台页面
                     //弹出层模式
                     if (response.code == 0) {
-                        prizeUsers[selectId] = response.data;
+                        var award = response.data;
+                        clearInterval(codeTimer);
+                        $("div[hand='current']").hide().removeAttr("hand");
+                        $("#user_" + award.user_id).show().attr("hand", 'current');
+                        if ((idx = $.inArray(award.user_id, userList)) >= 0) {
+                            userList.splice(idx, 1);
+                            prizeUsers[selectId].push(award.user_id);
+                        }
                     }
                 }, function () {
+                    clearInterval(codeTimer);
+                });
+        }
+        function getAwardPrizeUserList() {
+            var requestData = {
+                "type": "meet",
+                "prize_id": selectId,//奖项id
+                "meet_id": initMeetId,//会议id
+                "user_list": userList//会议签到人员id（截止到页面初始化时的签到人员，不包含抽奖开始后的签到人员）
+            };
+            CommonUtil.requestService("/award/prizeuser?", requestData, true, "post",
+                function (response) {
+                    //从后台成功获取数据 拼写到前台页面
+                    //弹出层模式
+                    if (response.code == 0) {
+                        var awards = response.data;
+                    }
+                }, function () {
+                    clearInterval(codeTimer);
                 });
         }
 
         $("#start_award").on("click", function () {
             if ($(this).attr("stop") == 1) {
                 //从中奖数组中提取中奖人员，显示到中奖区域
+                getAwardPrizeUser();
+                $("#start_award").text("开始抽奖");
+                $("#start_award").removeAttr("stop");
             } else {
                 var size = userList.length;
+                alert(size);
                 if (selectId != "" && size > 0) {
                     $("#start_award").text("停止");
                     $("#start_award").attr("stop", 1);

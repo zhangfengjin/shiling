@@ -22,7 +22,8 @@ class MeetUserService extends CommonService
 
     /**
      * 获取参会人员（已签到）
-     * @return int
+     * @param $meetId
+     * @return mixed
      */
     public function getMeetUserList($meetId)
     {
@@ -32,7 +33,7 @@ class MeetUserService extends CommonService
             'mu.flag' => 0
         ];
         $select = [
-            'u.phone', 'u.name'
+            'u.phone', 'u.name', 'mu.user_id','mu.id'
         ];
         $rows = DB::table("meet_users as mu")
             ->join("users as u", 'u.id', '=', 'mu.user_id')
