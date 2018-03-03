@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Services\DictService;
 use App\Http\Services\GoodService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
@@ -23,5 +24,12 @@ class GoodsController extends Controller
         $goodService = new GoodService($request);
         $goods = $goodService->show($meetId);
         return DataStandard::getStandardData($goods);
+    }
+
+    public function getGoodsType(Request $request)
+    {
+        $dictService = new DictService($request);
+        $dict = $dictService->getDictByType("good_type");
+        return DataStandard::getStandardData($dict);
     }
 }

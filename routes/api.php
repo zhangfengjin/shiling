@@ -44,6 +44,7 @@ Route::group(['domain' => '',], function () {
                 Route::get("meetuser/list", "MeetUserController@getList");
                 Route::put("meetuser/{muId}", "MeetUserController@update");
 
+                Route::get("goods/type", "GoodsController@getGoodsType");
                 Route::get("goods/list", "GoodsController@getList");//商品列表
                 Route::get("goods/{goodsId}", "GoodsController@show");//商品详情
 
@@ -51,6 +52,7 @@ Route::group(['domain' => '',], function () {
                 Route::get("orders/{goodsId}", "OrderController@show");//商品详情
                 Route::post("orders", "OrderController@store");//下单
                 Route::put("orders/{ordersId}", "OrderController@update");//更新订单
+                Route::get("bill/use", "OrderController@getBillUse");
 
                 Route::get("news/list", "NewsController@getList");//新闻列表
 
@@ -61,6 +63,7 @@ Route::group(['domain' => '',], function () {
                 Route::get("school/list", "SchoolController@getList");//学校列表
                 Route::get("role/list", "RoleController@getList");//角色列表
                 Route::get("usertitle/list", "UserTitleController@getList");//职级列表
+
 
             });
 

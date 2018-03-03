@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Services\DictService;
 use App\Http\Services\OrderService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
@@ -42,5 +43,12 @@ class OrderController extends Controller
         $orderService = new OrderService($request);
         $order = $orderService->update($input,$orderId);
         return DataStandard::getStandardData($order);
+    }
+
+    public function getBillUse(Request $request)
+    {
+        $dictService = new DictService($request);
+        $dict = $dictService->getDictByType("bill_use");
+        return DataStandard::getStandardData($dict);
     }
 }
