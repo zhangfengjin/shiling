@@ -50,6 +50,16 @@ class DataStandard
         ]);
     }
 
+    public static function printStandardDataExit($data = [], $msg = "", $code = 0)
+    {
+        echo json_encode([
+            "code" => $code,
+            "data" => $data,
+            "message" => $msg
+        ]);
+        exit();
+    }
+
     public static function printStandardData($data = [], $msg = "", $code = 0)
     {
         $output = [

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Services\UserService;
 use App\Utils\DataStandard;
 use Closure;
 use Illuminate\Support\Facades\Cache;
@@ -21,6 +22,16 @@ class ApiCheck
         if (empty($token)) {
             return DataStandard::printStandardData([], config("validator.112"), 112);
         }
+        $userService = new UserService();
+        $userInfo = $userService->getUserByToken($token);
+        $user = [
+            "user" => [
+                "uid" => $userInfo->id,
+                "userName" => $userInfo->name,
+                "avatar" => ""
+            ]
+        ];
+        $request->attributes->add($user);
         //todo
         if (Cache::has($token)) {//Cache::has($token)
             return $next($request);

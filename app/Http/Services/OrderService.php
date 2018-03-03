@@ -9,16 +9,181 @@
 namespace App\Http\Services;
 
 
+use App\Models\Goods;
 use App\Models\Order;
+use App\Models\OrderGoods;
 use App\Utils\DataStandard;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OrderService extends CommonService
 {
     public function create($input)
     {
+        $inputFields = [
+            'take_addr', 'take_tel', 'take_name', 'bill_type',
+            'bill_title', 'pay_duty_code', 'bill_use_id'
+        ];
+        if (isset($input['goods'])) {
+            DB::beginTransaction();
+            try {
+                $order = new Order();
+                $order->name = "用户" . $this->user['uid'] . "的商品订单";
+                $order->code = "goods_" . $this->user['uid'] . "_" . time();//订单号
+                $order->status = 0;
+                $order->place_order_people = $this->user['uid'];
+                foreach ($inputFields as $inputField) {
+                    if (isset($input[$inputField])) {
+                        $order->$inputField = $input[$inputField];
+                    }
+                }
+                $order->save();
+                $goods = $input['goods'];
+                foreach ($goods as $good) {
+                    $goodsIds[] = $good["goods_id"];
+                }
+                if (!empty($goodsIds)) {
+                    $dbGoods = Goods::whereIn("id", $goodsIds)
+                        ->get(["id", "goods_residue_count", "name", "price", "status", "flag"]);
+                    $orderGoods = [];
+                    $totalPrice = 0;
+                    foreach ($dbGoods as $dbGood) {
+                        if ($dbGood->status != 1 || $dbGood->flag != 0) {
+                            DataStandard::printStandardDataExit([$dbGood->name], config("validator.752"), 752);
+                        }
+                        foreach ($goods as $good) {
+                            $goodsId = $good["goods_id"];
+                            $goodsCount = $good["goods_count"];
+                            //商品是否存在 且商品剩余数量大于等于购买数量
+                            if ($dbGood->id == $goodsId
+                            ) {
+                                if ($dbGood->goods_residue_count >= $goodsCount) {
+                                    $goodsPrice = $goodsCount * $dbGood->price;
+                                    $totalPrice += $goodsPrice;
+                                    $orderGoods[] = [
+                                        "goods_id" => $goodsId,
+                                        "goods_count" => $goodsCount,
+                                        "goods_price" => $goodsPrice,
+                                        "orders_id" => $order->id
+                                    ];
+                                    Goods::where("id", $dbGood->id)->update([
+                                        "goods_residue_count" => ($dbGood->goods_residue_count - $good["goods_count"])
+                                    ]);
+                                    break;
+                                } else {
+                                    DataStandard::printStandardDataExit([$dbGood->name], config("validator.751"), 751);
+                                }
+                            }
+                        }
+                    }
+                    if (!empty($orderGoods)) {
+                        DB::table("order_goods")->insert($orderGoods);
+                    }
+                    $order->total_price = $totalPrice;
+                    $order->save();
+                    DB::commit();
+                    return $order;
+                } else {
+                    DataStandard::printStandardDataExit([], config("validator.753"), 753);
+                }
+            } catch (\Exception $ex) {
+                DB::rollback();
+                throw $ex;
+            }
+        }
+        DataStandard::printStandardDataExit([], config("validator.753"), 753);
+    }
 
+    public function update($input, $ordersId)
+    {
+        $inputFields = [
+            'take_addr', 'take_tel', 'take_name', 'bill_type',
+            'bill_title', 'pay_duty_code', 'bill_use_id'
+        ];
+        $where = [
+            "id" => $ordersId,
+            "place_order_people" => $this->user['uid'],
+            "status" => 0,
+            "flag" => 0
+        ];
+        $order = Order::where($where)->first();
+        if ($order) {
+            DB::beginTransaction();
+            try {
+                $goods = $input['goods'];
+                foreach ($goods as $good) {
+                    $goodsIds[] = $good["goods_id"];
+                }
+                if (!empty($goodsIds)) {
+                    $ogWhere = [
+                        "orders_id" => $ordersId,
+                        "flag" => 0
+                    ];
+                    $dbOrderGoods = OrderGoods::where($ogWhere)->get(["goods_id", "goods_count", "goods_price"]);
+                    //删除订单下的所有商品
+                    OrderGoods::where($ogWhere)->update(["flag" => 1]);
+                    $dbGoods = Goods::whereIn("id", $goodsIds)
+                        ->get(["id", "goods_residue_count", "name", "price","status","flag"]);
+                    $orderGoods = [];
+                    $totalPrice = 0;
+                    foreach ($dbGoods as $dbGood) {
+                        if ($dbGood->status != 1 || $dbGood->flag != 0) {
+                            DataStandard::printStandardDataExit([$dbGood->name], config("validator.752"), 752);
+                        }
+                        $residueCount = $dbGood->goods_residue_count;
+                        //更新商品的剩余数量
+                        foreach ($dbOrderGoods as $dbOrderGood) {
+                            if ($dbOrderGood->goods_id == $dbGood->id) {
+                                $residueCount = $dbGood->goods_residue_count + $dbOrderGood->goods_count;
+                                break;
+                            }
+                        }
+                        foreach ($goods as $good) {
+                            $goodsId = $good["goods_id"];
+                            $goodsCount = $good["goods_count"];
+                            if ($dbGood->id == $goodsId
+                            ) {//商品存在
+                                if ($residueCount >= $goodsCount) {
+                                    $goodsPrice = $goodsCount * $dbGood->price;
+                                    $totalPrice += $goodsPrice;
+                                    $orderGoods[] = [
+                                        "goods_id" => $goodsId,
+                                        "goods_count" => $goodsCount,
+                                        "goods_price" => $goodsPrice,
+                                        "orders_id" => $order->id
+                                    ];
+                                    Goods::where("id", $dbGood->id)->update([
+                                        "goods_residue_count" => ($residueCount - $good["goods_count"])
+                                    ]);
+                                    break;
+                                } else {
+                                    DataStandard::printStandardDataExit([$dbGood->name], config("validator.751"), 751);
+                                }
+                            }
+                        }
+                    }
+                    if (!empty($orderGoods)) {
+                        DB::table("order_goods")->insert($orderGoods);
+                    }
+                    $order->total_price = $totalPrice;
+                    foreach ($inputFields as $inputField) {
+                        if (isset($input[$inputField])) {
+                            $order->$inputField = $input[$inputField];
+                        }
+                    }
+                    $order->save();
+                    DB::commit();
+                    return $order;
+                } else {
+                    DataStandard::printStandardDataExit([], config("validator.753"), 753);
+                }
+            } catch (\Exception $ex) {
+                DB::rollback();
+                throw $ex;
+            }
+        }
+        DataStandard::printStandardDataExit([], config("validator.755"), 755);
     }
 
 
@@ -47,7 +212,9 @@ class OrderService extends CommonService
                 'g.goods_residue_count', 'g.price', 'g.abstract'
             ];
             $goodsTypeName = DB::raw("dict.value as goods_type");
-            array_push($goodSelect, $goodsTypeName);
+            $orderGoodsCount = DB::raw("og.goods_count as order_goods_count");
+            $orderGoodsPrice = DB::raw("og.goods_price as order_goods_price");
+            array_push($goodSelect, $goodsTypeName, $orderGoodsCount, $orderGoodsPrice);
             $goods = DB::table("order_goods as og")
                 ->join("goods as g", 'g.id', '=', 'og.goods_id')
                 ->leftJoin("dicts as dict", 'dict.id', '=', 'g.goods_type_id')
@@ -76,14 +243,6 @@ class OrderService extends CommonService
             }
         }
         return $order;
-    }
-
-    public function update($input, $orderId)
-    {
-        $order = Order::find($orderId);
-        $order->status = $input['status'];
-        $order->save();
-        return true;
     }
 
     public function getList()
