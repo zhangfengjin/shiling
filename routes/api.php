@@ -52,6 +52,8 @@ Route::group(['domain' => '',], function () {
                 Route::post("orders", "OrderController@store");//下单
                 Route::put("orders/{ordersId}", "OrderController@update");//更新订单
 
+                Route::get("news/list", "NewsController@getList");//新闻列表
+
                 Route::group(['prefix' => 'pay'], function () {
                     Route::post("unifiedorder", "PayController@unifiedorder");
                 });
