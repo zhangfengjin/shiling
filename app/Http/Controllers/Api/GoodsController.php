@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Services\OrderService;
+use App\Http\Services\GoodService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class OrderController extends Controller
+class GoodsController extends Controller
 {
     //
+
     public function getList(Request $request)
     {
-        $orderService = new OrderService($request);
-        $list = $orderService->getList();
+        $goodService = new GoodService($request);
+        $list = $goodService->getList();
         return DataStandard::printStandardData($list);
     }
 
     public function show(Request $request, $meetId)
     {
-        $orderService = new OrderService($request);
-        $orders = $orderService->show($meetId);
-        return DataStandard::getStandardData($orders);
+        $goodService = new GoodService($request);
+        $goods = $goodService->show($meetId);
+        return DataStandard::getStandardData($goods);
     }
 }

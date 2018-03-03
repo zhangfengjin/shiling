@@ -41,6 +41,40 @@ class OrderService extends CommonService
             ->leftJoin("users as u", 'u.id', '=', 'o.place_order_people')
             ->leftJoin("dicts as dict", 'dict.id', '=', 'o.bill_use_id')
             ->where($where)->get($select)->first();
+        if ($order) {
+            $goodSelect = [
+                'g.id', 'g.name', 'g.goods_type_id', 'g.goods_count',
+                'g.goods_residue_count', 'g.price', 'g.abstract'
+            ];
+            $goodsTypeName = DB::raw("dict.value as goods_type");
+            array_push($goodSelect, $goodsTypeName);
+            $goods = DB::table("order_goods as og")
+                ->join("goods as g", 'g.id', '=', 'og.goods_id')
+                ->leftJoin("dicts as dict", 'dict.id', '=', 'g.goods_type_id')
+                ->where([
+                    "og.orders_id" => $orderId,
+                    "og.flag" => 0
+                ])->get($goodSelect);
+            $order->goods = $goods;
+            foreach ($goods as &$good) {
+                $gaWhere = [
+                    "goods_id" => $good->id,
+                    "ga.flag" => 0
+                ];
+                $goodAtts = DB::table("goods_atts as ga")
+                    ->leftJoin("attachments as att", 'att.id', '=', 'ga.att_id')
+                    ->where($gaWhere)
+                    ->get(["att.diskposition", "att.filename", "att.id"]);
+                $good->goodAtts = [];
+                foreach ($goodAtts as $goodAtt) {
+                    $att = [
+                        "url" => $goodAtt->diskposition . $goodAtt->filename,
+                        "id" => $goodAtt->id
+                    ];
+                    $good->goodAtts[] = $att;
+                }
+            }
+        }
         return $order;
     }
 

@@ -60,7 +60,7 @@ class GoodService extends CommonService
         ];
         $select = [
             'g.id', 'g.name', 'g.goods_type_id', 'g.goods_count',
-            'g.price', 'g.abstract', 'goods_detail'
+            'g.goods_residue_count','g.price', 'g.abstract', 'goods_detail'
         ];
         $userName = DB::raw("u.name as user_name");
         $goodsTypeName = DB::raw("dict.value as goods_type");
