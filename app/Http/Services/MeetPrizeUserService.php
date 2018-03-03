@@ -40,10 +40,11 @@ class MeetPrizeUserService extends CommonService
      * @param $meetId
      * @return mixed
      */
-    public function getMeetPrizeUserCount($meetId)
+    public function getMeetPrizeUserCount($meetId, $prizeId)
     {
         $where = [
             'mu.meet_id' => $meetId,
+            'mpu.prize_id' => $prizeId,
             'mu.flag' => 0
         ];
         $select = [
@@ -60,7 +61,7 @@ class MeetPrizeUserService extends CommonService
     {
         $mpu = new MeetPrizeUser();
         $mpu->meet_user_id = $awards['meet_user_id'];
-        $mpu->prize_id =  $awards['prize_id'];
+        $mpu->prize_id = $awards['prize_id'];
         $mpu->save();
     }
 }

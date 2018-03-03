@@ -8,6 +8,7 @@ use App\Http\Services\MeetUserService;
 use App\Utils\DataStandard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class AwardController extends HomeController
 {
@@ -34,7 +35,7 @@ class AwardController extends HomeController
         $prizes = $mpService->prizeEnums($meetId);
         //当前会议已中奖人员
         $mpuService = new MeetPrizeUserService($request);
-        $awardedCount = $mpuService->getMeetPrizeUserCount($meetId);//当前会议已中奖人员数量
+        $awardedCount = $mpuService->getMeetPrizeUserCount($meetId, $prizeId);//当前会议已中奖人员数量
         foreach ($prizes as $prize) {
             if ($prize->id == $prizeId) {//当前奖项开始抽奖
                 if (($residue = $prize->prize_count - $awardedCount)) {
@@ -60,6 +61,8 @@ class AwardController extends HomeController
                                     'meet_user_id' => $muser->id,
                                     'user_id' => $muser->user_id,
                                     'prize_id' => $prizeId,
+                                    'phone' => substr($muser->phone, 0, 3) . "****" . substr($muser->phone, 7, 4),
+                                    'name' => $muser->name
                                 ];
                                 $awardUsers[] = $award;
                             }
@@ -68,8 +71,8 @@ class AwardController extends HomeController
                     $award = array_rand($awardUsers, 1);//随机获取一个中奖人员
                     $mpuService->create($awardUsers[$award]);
                     return DataStandard::getStandardData($awardUsers[$award]);
-                }else{
-                    return DataStandard::getStandardData($awardUsers[$award]);
+                } else {
+                    return DataStandard::getStandardData([], config('validator.1001'), 1001);
                 }
             }
         }

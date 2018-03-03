@@ -112,19 +112,9 @@
                         <h1 id="award_in_list"></h1>
                         <div class="list pa">
                             <ul id="awardListUl">
-                                <li id="19214">
-                                    <img src="http://wx.qlogo.cn/mmopen/PiajxSqBRaEJksJBjvvqNicZwiaV03zI6ia8Tiar6YnY7z2xvFFGibgryqYlsuhFZ6cu0vichicoF4pbHa3H547JcjqXPQ/0">
-                                    <p title="张三">张三</p>
-                                    <a href="javascript:;" onclick="deleteAward('19214','370')"></a>
-                                </li>
-                                <li id="19208">
-                                    <img src="http://wx.qlogo.cn/mmopen/PiajxSqBRaEKO5RgTNwE89rRhvzERwH983O4lQ0WicEqzH99351ibs1k2fyVE0BylZ4QsR4osknsYY7ZJ3mRFfTyw/0">
-                                    <p title="张三">张三</p>
-                                    <a href="javascript:;" onclick="deleteAward('19208','370')"></a>
-                                </li>
                             </ul>
                         </div>
-                        <a href="javascript:;" class="btn" onclick="clearUser();">清空名单</a>
+                        {{--<a href="javascript:;" class="btn" onclick="clearUser();">清空名单</a>--}}
                     </div>
                 </div>
 
@@ -146,7 +136,12 @@
             $("#prize_count").val(selectId);
             var prizeName = $(this).find("option:selected").text();
             $("#award_in_list").empty();
-            $("#award_in_list").append("<em id='awardItemName'>" + prizeName + "</em>获奖人数：<em id='awardCountEm'>0</em>")
+            $("#award_in_list").append("<em id='awardItemName'>" + prizeName + "</em>获奖人数：<em id='awardCountEm'>" + (prizeUsers[selectId] ? prizeUsers[selectId].length : 0) + "</em>"
+            )
+            $("#awardListUl").empty();
+            $.each(prizeUsers[selectId], function () {
+                createAwaredUser(this);
+            });
         });
         var request = CommonUtil.getRequest();
         initMeetId = request["meetId"];
@@ -227,13 +222,32 @@
                         $("#user_" + award.user_id).show().attr("hand", 'current');
                         if ((idx = $.inArray(award.user_id, userList)) >= 0) {
                             userList.splice(idx, 1);
-                            prizeUsers[selectId].push(award.user_id);
+                            if (!prizeUsers[selectId]) {
+                                prizeUsers[selectId] = [];
+                            }
+                            var awarded = {
+                                "user_id": award.user_id,
+                                "phone": award.phone,
+                                "name": award.name
+                            };
+                            prizeUsers[selectId].push(awarded);
+                            $("#awardCountEm").text(prizeUsers[selectId].length);
+                            createAwaredUser(awarded);
                         }
                     }
                 }, function () {
                     clearInterval(codeTimer);
                 });
         }
+
+        function createAwaredUser(awarded) {
+            var li = "<li><span class='user_list' style='padding:60px;padding-left:35px;'>" +
+                awarded.name + "</span>" +
+                "<img src='/images/award/prize_user.jpg'><p title='" +
+                awarded.phone + "'>" + awarded.phone + "</p></li>";
+            $("#awardListUl").append(li);
+        }
+
         function getAwardPrizeUserList() {
             var requestData = {
                 "type": "meet",
@@ -261,14 +275,24 @@
                 $("#start_award").removeAttr("stop");
             } else {
                 var size = userList.length;
-                alert(size);
-                if (selectId != "" && size > 0) {
-                    $("#start_award").text("停止");
-                    $("#start_award").attr("stop", 1);
-                    $("#user_0").hide();
-                    $("#all_user").show();
-                    var random = createRandom(size, 0, size);
-                    startAward(size, random);
+                if (selectId != "") {
+                    if (size > 0) {
+                        var count = $("#prize_count").find("option:selected").text();
+                        ;
+                        var pacount = prizeUsers[selectId] ? prizeUsers[selectId].length : 0;
+                        if (count > pacount) {
+                            $("#start_award").text("停止");
+                            $("#start_award").attr("stop", 1);
+                            $("#user_0").hide();
+                            $("#all_user").show();
+                            var random = createRandom(size, 0, size);
+                            startAward(size, random);
+                        } else {
+                            alert("奖品个数不足");
+                        }
+                    } else {
+                        alert("抽奖人数不足");
+                    }
                 } else {
                     alert("选择奖项");
                 }
