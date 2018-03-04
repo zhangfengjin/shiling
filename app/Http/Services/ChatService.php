@@ -17,7 +17,7 @@ class ChatService extends CommonService
     {
         $chat = new ChatLog();
         $chat->content_type = $contentType;
-        $chat->appKey = $appKey;
+        $chat->app_key = $appKey;
         $chat->curtime = $curTime;
         $chat->md5 = $md5;
         $chat->checkSum = $checkSum;

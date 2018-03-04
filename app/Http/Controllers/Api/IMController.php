@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Home\HomeController;
 use App\Http\Services\ChatService;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 
-class IMController extends HomeController
+class IMController extends ApiController
 {
     //
     public function sync(Request $request)
