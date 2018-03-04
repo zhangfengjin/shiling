@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post("im/sync", "IMController@sync");
 Route::group(['domain' => '', 'middleware' => ['logger']], function () {
     Route::group(['middleware' => ['lsapi']], function () {
         Route::any('/', function () {

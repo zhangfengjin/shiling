@@ -25,6 +25,8 @@ class SysLogService extends CommonService
     {
         try {
             $yspLog = new SysLog();
+            $yspLog->content_type = $request->header('content-type');
+            $yspLog->app_key = $request->header("appKey");
             $yspLog->userid = $user ? $user['uid'] : 0;
             $yspLog->operoot = $request->root();
             $yspLog->operroute = $request->path();
