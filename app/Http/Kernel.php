@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
         'apiauth' => \App\Http\Middleware\ApiCheck::class,
         'login' => \App\Http\Middleware\Login::class,
         'auth2' => \App\Http\Middleware\Authenticate::class,
+        'logger' => \App\Http\Middleware\SysLogger::class,
 
     ];
 }

@@ -12,7 +12,7 @@
 */
 
 //linkteach.cn
-Route::group(['domain' => ''],
+Route::group(['domain' => '', 'middleware' => ['logger']],
     function () {
         Route::get("verify/code", 'Verify\VerifyController@code');
         Route::group(["namespace" => 'Auth', 'prefix' => 'auth'], function () {
