@@ -571,6 +571,7 @@
                                 "url": meetUrl + "/cancel/" + ids,
                                 "type": "DELETE",
                                 "async": true,
+                                "reqData":requestData,
                                 "successfn": function () {
                                     parent.layer.msg('取消成功', {
                                         icon: 1,
@@ -870,7 +871,7 @@
                     beginTime.daterangepicker(timeOptions, function (start, end, label) {
                         beginTime.attr("begin_time", start.format('YYYY-MM-DD HH:mm'));
                     });
-                    
+
                     var endTime = $('#end_time');
                     if (endTime.attr("end_time") == undefined || endTime.attr("end_time") == "") {
                         endTime.attr("end_time", date);
