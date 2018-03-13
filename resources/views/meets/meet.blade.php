@@ -870,14 +870,15 @@
                     beginTime.daterangepicker(timeOptions, function (start, end, label) {
                         beginTime.attr("begin_time", start.format('YYYY-MM-DD HH:mm'));
                     });
+                    
                     var endTime = $('#end_time');
-                    if (endTime.attr("begin_time") == undefined || endTime.attr("begin_time") == "") {
-                        endTime.attr("begin_time", date);
+                    if (endTime.attr("end_time") == undefined || endTime.attr("end_time") == "") {
+                        endTime.attr("end_time", date);
                     } else {
-                        timeOptions.startDate = endTime.attr("begin_time");
+                        timeOptions.startDate = endTime.attr("end_time");
                     }
                     endTime.daterangepicker(timeOptions, function (start, end, label) {
-                        endTime.attr("time_time", start.format('YYYY-MM-DD HH:mm'));
+                        endTime.attr("end_time", start.format('YYYY-MM-DD HH:mm'));
                     });
                 },
                 _resetHtml: function () {
