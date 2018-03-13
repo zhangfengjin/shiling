@@ -578,6 +578,7 @@
                                         time: 800,
                                         offset: "50px"
                                     });
+                                    successfn();
                                 },
                                 "failfn": function () {
                                     parent.layer.msg('取消失败', {
@@ -585,6 +586,7 @@
                                         time: 800,
                                         offset: "50px"
                                     });
+                                    usable();
                                 }
                             });
                         };
