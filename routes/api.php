@@ -32,6 +32,7 @@ Route::group(['domain' => '', 'middleware' => ['logger']], function () {
             Route::get("grade/list", "GradeController@getList");//科目列表
             Route::group(['middleware' => ['apiauth']], function () {
                 Route::get("user/list", "UserController@getList");//用户列表
+                Route::get("user/reset", "UserController@reset");//用户修改密码
                 Route::get("user/{userId}", "UserController@show");//获取用户信息
                 Route::put("user/{userId}", "UserController@update");//更新用户信息
 

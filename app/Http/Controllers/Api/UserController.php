@@ -34,10 +34,10 @@ class UserController extends Controller
     public function update(Request $request, $userId)
     {
         $input = $request->all();
-        $validate = Validator::make($input, $this->basicValidator);
+        /*$validate = Validator::make($input, $this->basicValidator);
         if ($validate->fails()) {
             return DataStandard::getStandardData($validate->errors(),config("validator.100"), 100);
-        }
+        }*/
         $userService = new UserService();
         $userService->update($input, $userId);
         return DataStandard::getStandardData();
@@ -49,4 +49,26 @@ class UserController extends Controller
         $list = $userService->getList();
         return DataStandard::printStandardData($list);
     }
+
+    public function reset(Request $request)
+    {
+        $input = $request->all();
+        $validate = Validator::make($input, [
+            'password' => 'required',
+            'confirm' => 'required',
+        ]);
+        if ($validate->fails()) {
+            return DataStandard::getStandardData($validate->errors(), config("validator.100"), 100);
+        }
+        $password = $request->input('password');
+        $confirm = $request->input('confirm');
+        if ($password == $confirm) {
+            $user = $request->get("user");
+            $userService = new UserService();
+            $userService->resetPWD("id", $user["uid"], $password);
+            return DataStandard::getStandardData();
+        }
+        return DataStandard::getStandardData([], config("validator.121"), 121);
+    }
+
 }

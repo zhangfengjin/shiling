@@ -75,7 +75,6 @@ class UserService extends CommonService
         return User::where($where)->count();
     }
 
-
     /**
      * 重置密码
      *
@@ -194,6 +193,7 @@ class UserService extends CommonService
                 $user->user_title_id = $input["userTitle"];
                 $user->school_id = $input["school"];
                 $user->address = $input["address"];
+                $user->ext = $input["ext"];
                 $user->save();
 
                 $linkWhere = [
