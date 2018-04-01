@@ -32,13 +32,13 @@ return [
         ]
     ],
     [
-        "name" => "会议管理", "icon" => "cog", "href" => "", "childrens" =>
+        "name" => "会议课程管理", "icon" => "cog", "href" => "", "childrens" =>
         [
             [
-                "name" => "会议列表", "href" => "/meet"
+                "name" => "会议课程列表", "href" => "/meet"
             ],
             [
-                "name" => "参会人员", "href" => "/meetuser"
+                "name" => "参加人员", "href" => "/meetuser"
             ],
             [
                 "name" => "中奖列表", "href" => "/muprize"

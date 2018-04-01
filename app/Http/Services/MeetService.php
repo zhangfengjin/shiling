@@ -36,6 +36,7 @@ class MeetService extends CommonService
         $meet->abstract = $input['abstract'];
         $meet->keynote_speaker_id = 0;//主讲人封面id
         $meet->creator = $this->user['uid'];
+        $meet->type = $input["type"];
         $meet->save();
         $this->qrcode("meet", $meet->id);//生成会议签到二维码
         return true;
@@ -61,6 +62,7 @@ class MeetService extends CommonService
         $meet->abstract = $input['abstract'];
         $meet->keynote_speaker_id = 0;//主讲人封面id
         $meet->modifier = $this->user['uid'];
+        $meet->type = $input["type"];
         $meet->save();
         return true;
     }
@@ -95,7 +97,8 @@ class MeetService extends CommonService
         $status = DB::raw("case when meet.status=1 then '已取消' else '正常' end status");
         $areaName = DB::raw("CONCAT(province_name,'-',city_name,'-',area_name) as pca_name");
         $userName = DB::raw("u.name as user_name");
-        array_push($select, $status, $areaName, $userName);
+        $type = DB::raw("case when meet.type=1 then '课程' else '会议' end type");
+        array_push($select, $status, $areaName, $userName,$type);
         //获取查询结果
         $sortField = "meet.id";
         $sSortDir = "asc";

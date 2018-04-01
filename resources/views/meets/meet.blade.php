@@ -2,9 +2,18 @@
     <div id="detail" class="x_content detail_content" data-parsley-validate>
         <form class="form-horizontal form-label-left">
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议名称</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">类型</label>
+                <div class="col-md-11 col-sm-11 col-xs-12">
+                    <select id="type" class="form-control" required>
+                        <option value="0">会议</option>
+                        <option value="1">课程</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">名称</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="meet_name" type="text" class="form-control" placeholder="会议名称"
+                    <input id="meet_name" type="text" class="form-control" placeholder="名称"
                            required data-parsley-maxlength="50">
                 </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">主讲人</label>
@@ -19,18 +28,18 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议开始时间</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">开始时间</label>
                 <div class="col-md-3 col-sm-3 col-xs-12 xdisplay_inputx form-group has-feedback">
                     <input type="text" class="form-control has-feedback-left" id="begin_time"
-                           placeholder="会议开始时间" aria-describedby="inputSuccess2Status">
+                           placeholder="开始时间" aria-describedby="inputSuccess2Status">
                     <span class="fa fa-calendar-o form-control-feedback left"
                           aria-hidden="true"></span>
                     <span id="inputSuccess2Status" class="sr-only">(success)</span>
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议结束时间</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">结束时间</label>
                 <div class="col-md-3 col-sm-3 col-xs-12 xdisplay_inputx form-group has-feedback">
                     <input type="text" class="form-control has-feedback-left" id="end_time"
-                           placeholder="会议结束时间" aria-describedby="inputSuccess2Status">
+                           placeholder="结束时间" aria-describedby="inputSuccess2Status">
                     <span class="fa fa-calendar-o form-control-feedback left"
                           aria-hidden="true"></span>
                     <span id="inputSuccess2Status" class="sr-only">(success)</span>
@@ -85,9 +94,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">会议详情</label>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">详情</label>
                 <div class="col-md-10 col-sm-10 col-xs-12">
-                    <textarea id="abstract" rows="3" class="form-control" placeholder="会议详情"></textarea>
+                    <textarea id="abstract" rows="3" class="form-control" placeholder="详情"></textarea>
                 </div>
             </div>
         </form>
@@ -310,7 +319,10 @@
                         "sTitle": "",
                         "data": "id"
                     }, {
-                        "sTitle": "会议名称",
+                        "sTitle": "类型",
+                        "data": "type"
+                    }, {
+                        "sTitle": "名称",
                         "data": "name"
                     }, {
                         "sTitle": "主讲人",
@@ -359,7 +371,7 @@
                             },
                             "check-square-o": {
                                 "display": 1,
-                                "info": "取消会议",
+                                "info": "取消",
                                 "draw": function (full) {
                                     var params = {};
                                     if (full.status == "已取消") {
@@ -388,7 +400,7 @@
                             },
                             "file": {
                                 "display": 1,
-                                "info": "查看参会人员",
+                                "info": "查看参加人员",
                                 "func": function (ids, full, obj) {
                                     CommonUtil.redirect('/meetuser?meetId=' + ids);
                                 }
@@ -596,7 +608,7 @@
                         $("#reason").val('');
                         layer.open({
                             type: 1,
-                            title: "会议取消原因",
+                            title: "取消原因",
                             scrollbar: false,
                             area: ["300px", "200px"], // 宽高
                             content: $("#detail_reason"),
@@ -751,7 +763,7 @@
                             //var areaHeight = $(window).height() - 40;
                             layer.open({
                                 type: 1,
-                                title: "会议奖品",
+                                title: "奖品",
                                 scrollbar: false,
                                 shadeClose: true,
                                 area: ["50%", "500px"], // 宽高
@@ -962,7 +974,7 @@
                     }
                     layer.open({
                         type: 1,
-                        title: "会议信息",
+                        title: "信息",
                         scrollbar: false,
                         area: area, // 宽高
                         content: $("#detail"),
@@ -972,6 +984,7 @@
                             try {
                                 btns.css("pointer-events", "none");
                                 var requestData = {
+                                    "type":$("#type").val(),
                                     "meetName": $("#meet_name").val(),
                                     "keynote_speaker": $("#keynote_speaker").val(),
                                     "limit_count": $("#limit_count").val(),
