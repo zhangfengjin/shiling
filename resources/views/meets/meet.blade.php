@@ -1,13 +1,60 @@
 @extends('layouts.app_table')@section('tablecontent')
+    <style type="text/css">
+        .uploadImg {
+            border: 0px currentColor;
+            border-image: none;
+            overflow: hidden;
+            display: block;
+            position: absolute;
+            cursor: pointer;
+            width: 147px;
+            height: 26px;
+        }</style>
     <div id="detail" class="x_content detail_content" data-parsley-validate>
-        <form class="form-horizontal form-label-left">
+        <div class="form-horizontal form-label-left">
             <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">类型</label>
-                <div class="col-md-11 col-sm-11 col-xs-12">
+                <div class="col-md-3 col-sm-3 col-xs-12">
                     <select id="type" class="form-control" required>
                         <option value="0">会议</option>
                         <option value="1">课程</option>
                     </select>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">图标</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <div>
+                        <form id="uploadimg_form"
+                              action="{{url('/goods/upload?action=uploadimage')}}"
+                              enctype="multipart/form-data" method="POST"
+                              target="refresh_iframe">
+                            <input id="uploadcover" name="file" class="uploadImg"
+                                   style="FILTER: alpha(opacity =               0); opacity: 0; -moz-opacity: 0; -khtml-opacity: 0;"
+                                   type="file" accept="image/*">
+                            <input name="_token" type="hidden" value="{{csrf_token() }}">
+                            <img id="datumCover" class="uploadImg" alt="缩略图" style="z-index: -1; cursor: pointer;"
+                                 title="更换图标">
+                        </form>
+                        <iframe id="refresh_iframe" name="refresh_iframe"
+                                style="display: none;"></iframe>
+                    </div>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">图片</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <div>
+                        <form id="uploadimg_form2"
+                              action="{{url('/goods/upload?action=uploadimage')}}"
+                              enctype="multipart/form-data" method="POST"
+                              target="refresh_iframe2">
+                            <input id="uploadcover2" name="file" class="uploadImg"
+                                   style="FILTER: alpha(opacity =               0); opacity: 0; -moz-opacity: 0; -khtml-opacity: 0;"
+                                   type="file" accept="image/*">
+                            <input name="_token" type="hidden" value="{{csrf_token() }}">
+                            <img id="datumCover2" class="uploadImg" alt="缩略图" style="z-index: -1; cursor: pointer;"
+                                 title="更换图标">
+                        </form>
+                        <iframe id="refresh_iframe2" name="refresh_iframe2"
+                                style="display: none;"></iframe>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -16,18 +63,6 @@
                     <input id="meet_name" type="text" class="form-control" placeholder="名称"
                            required data-parsley-maxlength="50">
                 </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">主讲人</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="keynote_speaker" type="text" class="form-control" placeholder="主讲人"
-                           required data-parsley-maxlength="100">
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">人数限制</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="limit_count" type="text" class="form-control" placeholder="人数限制"
-                           required data-parsley-type="number">
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">开始时间</label>
                 <div class="col-md-3 col-sm-3 col-xs-12 xdisplay_inputx form-group has-feedback">
                     <input type="text" class="form-control has-feedback-left" id="begin_time"
@@ -43,10 +78,6 @@
                     <span class="fa fa-calendar-o form-control-feedback left"
                           aria-hidden="true"></span>
                     <span id="inputSuccess2Status" class="sr-only">(success)</span>
-                </div>
-                <label class="control-label col-md-1 col-sm-1 col-xs-12">参会对象</label>
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input id="to_object" type="text" class="form-control" placeholder="人数限制">
                 </div>
             </div>
             <div class="form-group">
@@ -81,10 +112,47 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">参会对象</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="to_object" type="text" class="form-control" placeholder="人数限制">
+                </div>
+
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">人数限制</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="limit_count" type="text" class="form-control" placeholder="人数限制"
+                           required data-parsley-type="number">
+                </div>
                 <label class="control-label col-md-1 col-sm-1 col-xs-12">报名费(元)</label>
-                <div class="col-md-10 col-sm-10 col-xs-12">
+                <div class="col-md-3 col-sm-3 col-xs-12">
                     <input id="in_price" type="text" class="form-control" placeholder="报名费(元)"
                            required pattern="^\d+(.\d+)?$">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">发起人</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="keynote_speaker" type="text" class="form-control" placeholder="发起人"
+                           required data-parsley-maxlength="100">
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">电话</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="keynote_speaker_tel" type="text" class="form-control" placeholder="电话"
+                           required>
+                </div>
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">邮箱</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input id="keynote_speaker_email" type="text" class="form-control" placeholder="邮箱"
+                           required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-1 col-sm-1 col-xs-12">课程</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <select id="course_id" class="form-control" required>
+                        @foreach($courses as $course)
+                            <option value="{{$course->id}}">{{$course->value}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="form-group">
@@ -99,7 +167,7 @@
                     <textarea id="abstract" rows="3" class="form-control" placeholder="详情"></textarea>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 
     <div id="detail_reason" class="x_content detail_content" data-parsley-validate>
@@ -269,6 +337,7 @@
                         $("#search_unum").val('');
                         $("#search_status").val('');
                     });
+
                 },
                 init: function () {
                     me._initOwn();
@@ -487,6 +556,13 @@
                             $('#city').trigger('change');
                             $("#area").val(data.area_id);
                             $('#area').trigger('change');
+                            $("#datumCover").attr("src", data.icon_url);// 更换上传的封面
+                            $("#datumCover").attr("iconid", data.icon_att_id);// 更换上传的封面id
+                            $("#datumCover2").attr("src", data.meet_url);// 更换上传的封面
+                            $("#datumCover2").attr("iconid", data.meet_att_id);// 更换上传的封面id
+                            $("#keynote_speaker_tel").val(data.keynote_speaker_tel);
+                            $("#keynote_speaker_email").val(data.keynote_speaker_email);
+                            $("#course_id").val(data.course_id);
                         };
                         var updateData = function (requestData, successfn, usable) {
                             TableList.optTable({
@@ -583,7 +659,7 @@
                                 "url": meetUrl + "/cancel/" + ids,
                                 "type": "DELETE",
                                 "async": true,
-                                "reqData":requestData,
+                                "reqData": requestData,
                                 "successfn": function () {
                                     parent.layer.msg('取消成功', {
                                         icon: 1,
@@ -962,6 +1038,36 @@
                             }
                         }
                     });
+                    $("#uploadcover").change(function () {// 上传资料封面
+                        $('#uploadimg_form').submit();
+                    });
+                    $("#refresh_iframe").load(
+                        function () {
+                            var data = $(
+                                window.frames['refresh_iframe'].document.body)
+                                .html();
+                            // 若iframe携带返回数据，则显示在feedback中
+                            if (data != null && data != "") {
+                                data = CommonUtil.parseToJson(data);
+                                $("#datumCover").attr("src", data.url);// 更换上传的封面
+                                $("#datumCover").attr("iconid", data.att_id);// 更换上传的封面id
+                            }
+                        });
+                    $("#uploadcover2").change(function () {// 上传资料封面
+                        $('#uploadimg_form2').submit();
+                    });
+                    $("#refresh_iframe2").load(
+                        function () {
+                            var data = $(
+                                window.frames['refresh_iframe2'].document.body)
+                                .html();
+                            // 若iframe携带返回数据，则显示在feedback中
+                            if (data != null && data != "") {
+                                data = CommonUtil.parseToJson(data);
+                                $("#datumCover2").attr("src", data.url);// 更换上传的封面
+                                $("#datumCover2").attr("iconid", data.att_id);// 更换上传的封面id
+                            }
+                        });
                 },
                 _openlayer: function (id, type, yes) {
                     me._resetHtml();
@@ -984,7 +1090,7 @@
                             try {
                                 btns.css("pointer-events", "none");
                                 var requestData = {
-                                    "type":$("#type").val(),
+                                    "type": $("#type").val(),
                                     "meetName": $("#meet_name").val(),
                                     "keynote_speaker": $("#keynote_speaker").val(),
                                     "limit_count": $("#limit_count").val(),
@@ -995,7 +1101,12 @@
                                     "area_id": $("#area").val(),
                                     "addr": $("#addr").val(),
                                     "abstract": $("#abstract").val(),
-                                    "keynote_speaker_id": 0
+                                    "keynote_speaker_id": 0,
+                                    "icon_att_id": $("#datumCover").attr("iconid"),
+                                    "meet_att_id": $("#datumCover2").attr("iconid"),
+                                    "keynote_speaker_tel": $("#keynote_speaker_tel").val(),
+                                    "keynote_speaker_email": $("#keynote_speaker_email").val(),
+                                    "course_id": $("#course_id").val()
                                 };
                                 var parsl = $('#detail').parsley();
                                 parsl.validate();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Services\AreaService;
+use App\Http\Services\DictService;
 use App\Http\Services\MeetService;
 use App\Http\Services\UploadService;
 use App\Utils\DataStandard;
@@ -21,10 +22,13 @@ class MeetController extends HomeController
         $provinces = $areaService->getArea("province");
         $cities = $areaService->getArea("city");
         $areas = $areaService->getArea();
+        $dictService = new DictService();
+        $courses = $dictService->getDictByType("course");
         $pages = [
             "provinces" => $provinces,
             "cities" => $cities,
-            "areas" => $areas
+            "areas" => $areas,
+            "courses" => $courses
         ];
         return view("meets.meet")->with($pages);
     }
