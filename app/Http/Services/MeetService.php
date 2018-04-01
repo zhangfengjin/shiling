@@ -308,8 +308,38 @@ class MeetService extends CommonService
         $where = [];
         $meetName = isset($searchs["meetName"]) ? trim($searchs["meetName"])
             : (isset($this->allInput["meetName"]) ? trim($this->allInput["meetName"]) : "");//合同号
+        $status = isset($searchs["status"]) ? trim($searchs["status"])
+            : (isset($this->allInput["status"]) ? trim($this->allInput["status"]) : false);//合同号
+        $courseId = isset($this->user["course_id"]) ? $this->user["course_id"] : 0;
+        $type = isset($searchs["type"]) ? trim($searchs["type"])
+            : (isset($this->allInput["type"]) ? trim($this->allInput["type"]) : false);
         if (!empty($meetName)) {
             array_push($where, "meet.name like '%$meetName%'");
+        }
+        if ($status !== false) {
+            switch ($status) {
+                case 1:
+                    //已取消
+                    array_push($where, "meet.status = $status");
+                    break;
+                case 3:
+                    //正常
+                    array_push($where, "(meet.status = 0 and meet.end_time>now())");
+                    break;
+                case 4:
+                    //已结束
+                    array_push($where, "(meet.status = 0 and meet.end_time<now())");
+                    break;
+                default:
+                    array_push($where, "meet.status = $status");
+                    break;
+            }
+        }
+        if ($courseId) {
+            array_push($where, "meet.course_id = $courseId");
+        }
+        if ($type !== false) {
+            array_push($where, "meet.type = $type");
         }
         $where = implode(" and ", $where);
         if (empty($where)) {

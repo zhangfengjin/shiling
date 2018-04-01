@@ -25,10 +25,17 @@ class UserService extends CommonService
     public function getUserByToken($token)
     {
         $where = [
-            'im_token' => $token,
-            'flag' => 0
+            'u.im_token' => $token,
+            'u.flag' => 0
         ];
-        return User::where($where)->first();
+        $select = [
+            'u.id', 'u.name', 'u.phone', 'u.email', 'u.age', 'u.sex', 'u.unum', 'uc.course_id'
+        ];
+        //获取查询结果
+        $user = DB::table("users as u")
+            ->leftJoin("user_courses as uc", "uc.user_id", "=", "u.id")
+            ->where($where)->get($select)->first();
+        return $user;
     }
 
     /**

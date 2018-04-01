@@ -18,7 +18,8 @@ class ApiCheck
      */
     public function handle($request, Closure $next)
     {
-        $token = $request->input('token');//登录token 用户唯一标识
+        $token = empty($request->header('token')) ? $request->input('token')
+            : $request->header('token');//登录token 用户唯一标识
         if (empty($token)) {
             return DataStandard::printStandardData([], config("validator.112"), 112);
         }
@@ -28,6 +29,7 @@ class ApiCheck
             "user" => [
                 "uid" => $userInfo->id,
                 "userName" => $userInfo->name,
+                "course_id" => $userInfo->course_id,
                 "avatar" => ""
             ]
         ];
