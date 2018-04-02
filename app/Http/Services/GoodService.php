@@ -23,6 +23,7 @@ class GoodService extends CommonService
         try {
             $goods = new Goods();
             $goods->name = $input['goods_name'];
+            $goods->series = $input['goods_name'];
             $goods->goods_type_id = $input['goods_type_id'];
             $goods->goods_count = $input['goods_count'];
             $goods->goods_residue_count = $input['goods_count'];
@@ -60,7 +61,7 @@ class GoodService extends CommonService
         ];
         $select = [
             'g.id', 'g.name', 'g.goods_type_id', 'g.goods_count',
-            'g.goods_residue_count','g.price', 'g.abstract', 'goods_detail'
+            'g.goods_residue_count', 'g.price', 'g.abstract', 'goods_detail'
         ];
         $userName = DB::raw("u.name as user_name");
         $goodsTypeName = DB::raw("dict.value as goods_type");
@@ -103,6 +104,7 @@ class GoodService extends CommonService
         try {
             $goods = Goods::find($goodsId);
             $goods->name = $input['goods_name'];
+            $goods->series = $input['goods_name'];
             $goods->goods_type_id = $input['goods_type_id'];
             $goods->goods_count = $input['goods_count'];
             $goods->price = $input['price'];
@@ -181,14 +183,14 @@ class GoodService extends CommonService
         $total = DB::table("goods as g")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
-            'g.id', 'g.name', 'g.goods_type_id','g.goods_residue_count',
-            'g.goods_count','g.price', 'g.abstract'
+            'g.id', 'g.name', 'g.goods_type_id', 'g.goods_residue_count',
+            'g.goods_count', 'g.price', 'g.abstract', 'g.series'
         ];
         $goodsSellCount = DB::raw("g.goods_count-g.goods_residue_count as goods_sell_count");
         $userName = DB::raw("u.name as user_name");
         $goodsTypeName = DB::raw("dict.value as goods_type");
         $goodsStatus = DB::raw("case when g.status=1 then '已上架' when g.status=2 then '已下架' else '暂存' end as status");
-        array_push($select, $goodsSellCount,$userName, $goodsTypeName, $goodsStatus);
+        array_push($select, $goodsSellCount, $userName, $goodsTypeName, $goodsStatus);
         //获取查询结果
         $sortField = "g.id";
         $sSortDir = "asc";
@@ -212,7 +214,7 @@ class GoodService extends CommonService
         $total = DB::table("goods as g")->whereRaw($where)->where("flag", 0)->count();
         //要查询的字段
         $select = [
-            'g.id', 'g.name', 'g.goods_type_id','g.goods_count', 'g.price', 'g.abstract'
+            'g.id', 'g.name', 'g.goods_type_id', 'g.goods_count', 'g.price', 'g.abstract'
         ];
         $userName = DB::raw("u.name as user_name");
         $goodsTypeName = DB::raw("dict.value as goods_type");

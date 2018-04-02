@@ -33,6 +33,7 @@ class OrderService extends CommonService
                 $order->code = "goods_" . $this->user['uid'] . "_" . time();//订单号
                 $order->status = 0;
                 $order->place_order_people = $this->user['uid'];
+                $order->type = 2;//0 会议 1 课程 2 商品
                 foreach ($inputFields as $inputField) {
                     if (isset($input[$inputField])) {
                         $order->$inputField = $input[$inputField];
@@ -40,6 +41,7 @@ class OrderService extends CommonService
                 }
                 $order->save();
                 $goods = $input['goods'];
+                $total = 0;
                 foreach ($goods as $good) {
                     $goodsIds[] = $good["goods_id"];
                 }
@@ -60,6 +62,7 @@ class OrderService extends CommonService
                             ) {
                                 if ($dbGood->goods_residue_count >= $goodsCount) {
                                     $goodsPrice = $goodsCount * $dbGood->price;
+                                    $total += $goodsCount;
                                     $totalPrice += $goodsPrice;
                                     $orderGoods[] = [
                                         "goods_id" => $goodsId,
@@ -81,6 +84,7 @@ class OrderService extends CommonService
                         DB::table("order_goods")->insert($orderGoods);
                     }
                     $order->total_price = $totalPrice;
+                    $order->total = $total;
                     $order->save();
                     DB::commit();
                     return $order;
@@ -124,7 +128,7 @@ class OrderService extends CommonService
                     //删除订单下的所有商品
                     OrderGoods::where($ogWhere)->update(["flag" => 1]);
                     $dbGoods = Goods::whereIn("id", $goodsIds)
-                        ->get(["id", "goods_residue_count", "name", "price","status","flag"]);
+                        ->get(["id", "goods_residue_count", "name", "price", "status", "flag"]);
                     $orderGoods = [];
                     $totalPrice = 0;
                     foreach ($dbGoods as $dbGood) {
@@ -269,9 +273,21 @@ class OrderService extends CommonService
             ->orderBy($sortField, $sSortDir)
             ->take($this->iDisplayLength)
             ->skip($this->iDisplayStart)->get($select);
+        $where = [
+            "og.flag" => 0
+        ];
+        $select = [
+            "g.name", "g.series", "g.price", "og.goods_count",
+        ];
         foreach ($rows as $row) {
+            $where["orders_id"] = $row->id;
+            $goods = DB::table("order_goods as og")
+                ->leftJoin("goods as g", 'g.id', '=', 'og.goods_id')
+                ->where($where)->get($select);
+            $row->goods = $goods;
             $row->id = strval($row->id);
         }
+
         return DataStandard::getListData($this->sEcho, $total, $rows);
     }
 
