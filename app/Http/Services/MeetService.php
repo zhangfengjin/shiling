@@ -276,7 +276,7 @@ class MeetService extends CommonService
             $order->status = 0;
             $order->place_order_people = $userId;
             $order->total_price = count($users) * $inPrice;
-            $order->total = $input['total'];
+            $order->total = count($users);
             $order->save();
             $orderMeet = [];
             foreach ($users as $user) {
