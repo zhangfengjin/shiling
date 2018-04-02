@@ -48,11 +48,20 @@ class MeetController extends Controller
                 return DataStandard::getStandardData([], config('validator.703'), 703);
             }
             $userService = new UserService();
-            if ($userService->uniqueUid($input['userId'])) {
+            if (isset($input['users'])) {
+                if (!$userService->uniqueUid($input['userId'])) {//检查代报名用户
+                    return DataStandard::getStandardData([], config('validator.126'), 126);
+                }
+                $users = $input['users'];
+                foreach ($users as $user) {//检查需要报名的用户
+                    if (!$userService->uniqueUid($user['user_id'])) {
+                        return DataStandard::getStandardData([], config('validator.126'), 126);
+                    }
+                }
                 $ret = $meetService->enroll($input);
                 return DataStandard::getStandardData();
             }
-            return DataStandard::getStandardData([], config('validator.126'), 126);
+            return DataStandard::getStandardData(["请求中不存在users参数"], config('validator.127'), 127);
         }
         return DataStandard::getStandardData([], config('validator.702'), 702);
     }

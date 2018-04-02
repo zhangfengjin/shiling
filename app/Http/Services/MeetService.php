@@ -268,25 +268,30 @@ class MeetService extends CommonService
         $inPrice = $meet->in_price;
         DB::beginTransaction();
         try {
-            //生成参会订单
+            $users = $input['users'];
+            //生成报名订单
             $order = new Order();
-            $order->name = "用户" . $userId . "参加会议" . $meetId . "的支付订单";
+            $order->name = "用户" . $userId . "报名会议" . $meetId . "的支付订单";
             $order->code = "meet_" . $userId . "_" . $meetId . time();//订单号
             $order->status = 0;
             $order->place_order_people = $userId;
-            $order->total_price = $inPrice;
+            $order->total_price = count($users) * $inPrice;
+            $order->total = $input['total'];
             $order->save();
-            $meetUser = new MeetUser();
-            $meetUser->user_id = $input['userId'];
-            $meetUser->meet_id = $input['meetId'];
-            $meetUser->order_id = $order->id;
-            $meetUser->save();
-            DB::commit();
-            $codeImg = config('app.qrcode.path') . 'meet_user/' . $meetUser->id . ".png";
-            if (!file_exists($codeImg)) {
-                $sign = config('app.qrcode.usersign') . "?userId" . $meetUser->user_id . "&meetId" . $meetUser->meet_id;
-                QrCode::format('png')->size(300)->generate($sign, $codeImg);
+            $orderMeet = [];
+            foreach ($users as $user) {
+                $meetUser = new MeetUser();
+                $meetUser->user_id = $user['user_id'];
+                $meetUser->meet_id = $meetId;
+                $meetUser->order_id = $order->id;
+                $meetUser->save();
+                $codeImg = config('app.qrcode.path') . 'meet_user/' . $meetUser->id . ".png";
+                if (!file_exists($codeImg)) {
+                    $sign = config('app.qrcode.usersign') . "?userId" . $meetUser->user_id . "&meetId" . $meetUser->meet_id;
+                    QrCode::format('png')->size(300)->generate($sign, $codeImg);
+                }
             }
+            DB::commit();
         } catch (\Exception $ex) {
             DB::rollback();
             throw  $ex;
