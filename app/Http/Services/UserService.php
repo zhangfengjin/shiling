@@ -181,19 +181,25 @@ class UserService extends CommonService
         ];
         $user = User::where($where)->find($userId);
         if ($user) {
+            $fileds = [
+                "userName" => "name",
+                "unum" => "unum",
+                "age" => "age",
+                "seniority" => "seniority",
+                "role_id" => "role_id",
+                "sex" => "sex",
+                "user_title_id" => "user_title_id",
+                "school_id" => "school_id",
+                "address" => "address",
+                "ext" => "ext",
+            ];
             DB::beginTransaction();
             try {
-                $user->name = $input["userName"];
-                /*$user->email = $input["email"];*/
-                $user->unum = $input["unum"];
-                $user->age = $input["age"];
-                $user->seniority = $input["seniority"];
-                $user->role_id = $input["roles"];
-                $user->sex = $input["sex"];
-                $user->user_title_id = $input["userTitle"];
-                $user->school_id = $input["school"];
-                $user->address = $input["address"];
-                $user->ext = $input["ext"];
+                foreach ($fileds as $arg => $filed) {
+                    if (isset($input[$arg])) {
+                        $user->$filed = $input[$arg];
+                    }
+                }
                 $user->save();
 
                 $linkWhere = [
@@ -259,7 +265,6 @@ class UserService extends CommonService
                         UserGrade::whereIn("grade_id", $delGrades)->where("user_id", $userId)->delete();
                     }
                 }
-
                 DB::commit();
             } catch (\Exception $ex) {
                 DB::rollback();
