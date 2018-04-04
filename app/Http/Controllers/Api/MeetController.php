@@ -59,7 +59,7 @@ class MeetController extends Controller
                     }
                 }
                 $ret = $meetService->enroll($input);
-                return DataStandard::getStandardData();
+                return DataStandard::getStandardData($ret);
             }
             return DataStandard::getStandardData(["请求中不存在users参数"], config('validator.127'), 127);
         }

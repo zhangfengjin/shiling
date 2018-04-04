@@ -240,7 +240,7 @@ return [
             'wechat' => [
                 'appid' => 'wx2421b1c4370ec43b',             // 公众号APPID
                 'mch_id' => '10000100',             // 微信商户号
-                'notify_url' => '',         // 支付成功后回调
+                'notify_url' => 'http://lingshi.weibo.com/pay/notify/wechat',         // 支付成功后异步回调服务端接口
                 'key' => '0CB01533B8C1EF103065174F50BCA001',                // 微信支付签名秘钥
                 'cert_client' => '',        // 客户端证书路径，退款时需要用到
                 'cert_key' => '',           // 客户端秘钥路径，退款时需要用到
@@ -248,10 +248,10 @@ return [
         ],
         'alipay' => [
             'alipay' => [
-                'appid' => '',             // 支付宝提供的 APP_ID
-                'notify_url' => '',         // 支付宝异步通知地址
-                'ali_public_key' => '',     // 支付宝公钥，1行填写
-                'private_key' => '',        // 自己的私钥，1行填写
+                'appid' => '2018032302431797',             // 支付宝提供的 APP_ID
+                'notify_url' => 'http://lingshi.weibo.com/pay/notify/ali',         // 支付成功后异步回调服务端接口
+                'ali_public_key' => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAypj5nLQuc7muxCkVIJeDp/HizDtSlTy/gESkkTvfXpgwH7gab9nBr3XOtPLFch4pIO1PR80Ir/z4oaV/jdzPfU17pD+AdMzkPrEmA7PDVcauK1EP7zkjS5EThjaDmMRY19S4wGmW74ptpig82tvC2VUeAlrjGQeaRdfDs+bPts+QpHm1ZnyN5X+UoTrffhsNXu9lE/OlEqsVzzNhFblqQp+I0lw8fg8kOJKUPCN4ROyLCBhszFb7unmiBxk1cWgydxSSDfod0lsHuYfIzOOuqevYCSk4rrkm6zyjgd0UxnGhuokd0b4C8Zm/PG9QKgpoPIcXFvO5880HCUbuzNYN1QIDAQAB',     // 支付宝公钥，1行填写
+                'private_key' => 'MIIEowIBAAKCAQEAypj5nLQuc7muxCkVIJeDp/HizDtSlTy/gESkkTvfXpgwH7gab9nBr3XOtPLFch4pIO1PR80Ir/z4oaV/jdzPfU17pD+AdMzkPrEmA7PDVcauK1EP7zkjS5EThjaDmMRY19S4wGmW74ptpig82tvC2VUeAlrjGQeaRdfDs+bPts+QpHm1ZnyN5X+UoTrffhsNXu9lE/OlEqsVzzNhFblqQp+I0lw8fg8kOJKUPCN4ROyLCBhszFb7unmiBxk1cWgydxSSDfod0lsHuYfIzOOuqevYCSk4rrkm6zyjgd0UxnGhuokd0b4C8Zm/PG9QKgpoPIcXFvO5880HCUbuzNYN1QIDAQABAoIBAA5Jx6DjnDsRJ2AyPYk05lYb2xDoRiS8Sg0zyh9sB47WUN6Lz2GADAbh2hgs3vvzYJcv5V18+lXfE3HjCCHrJr8BjezBhb+3C4nYWIP+U5JjFrl7WBJZB0I3ExduFM3bWyCtofIAAGMYci87uz78LLvDIwCrhESpopm2Y9j2OEP+M2XsM0IVIRlrew32MN1tfyOq0ep13aZzn5Ul5G90TmLQm3st11D12aiYHg/0P2CtypQP7DI84F407fk5lVFt9RgK/R1hg0XDPApCNODXVk4g/HeoiMlkfBEU3r6+bHzmZ0Mxy0Qlbuw/Y/PrPHtw58sN/wtCv1Bkwo2EnqLIFSkCgYEA6J0eNzWgmxPK8k8SmiYdT5Cu4Ornso+tQv96PgvJtN721KEOTH0e8xekwrB0QEtj7pt1/jl0ct0qSOa1h0a2TNHzIsJCprFL7oHGYaorQoaP45ZWvf9U06hNK2y/ZkU+JGAy4Lc8j5XhSCHjwNEkVoHaQgaXNCLKL1Y9HFAnUzMCgYEA3vdRPHxiznRmu7gcmACuSN/Bs9VQLaXQoCUMdmChu2t4DrUNjNDog6GM9xghIcS9fdvTDDJznaFPHdqD4rqFOdVsecyDQRx9OCbnckQNNlTNzE/7xgQQY1kJ19AmQPxxoAwuqqmyy/7fx3QYjcJHe4Vne2CvPU6Du1Nf/w00GtcCgYAT+rLGsS97QmbzCwGhBdcMp3Ot099Uwexyzbi1LZQEmgX/W1n8Dd8jqAs5wagqgY8yxl2LGWo8F2zzWAWNefBchsfoW2EYKjBIaxMb/l661w3y0U3gAddKWrFOIogKA7aDr1OPY42rE4eHB4olXJFPcNXLR/+itb5B9JlJHkVSawKBgCVFPCwbMr0GEiIw7X6vJnMCDDQOZT+sJwqOBt5G2uIkXcY/l4tBZIyUVab8PpWReIdwVoAEcvUXgM0huMgOm7SGK4LUn+Ajbf8T6b5dB8RcOqZ7fD+mcELbIF0V6z8Ts76oKqjWgw+8hBWoH26a2i4Yp6qlB8X8uOJ4VmShBWOzAoGBAIedqe3/KE3cOaWLnybgUfZDOkbrzP155AdXqOd+rTTbGmB02Gt9GEGBCdrT7nCLrBbkdF9A77dwG8uuxAlL5vtgXyRQvqYEBklEC6IJw1t+8r2tWXAs4j+XHTiLJsdD7c5cmHI2foa0wnNRuouhduMwbRlOqNJpdhNrcifDTqyW',        // 自己的私钥，1行填写
             ]
         ]
     ],

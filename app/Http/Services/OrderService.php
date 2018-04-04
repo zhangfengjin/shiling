@@ -190,7 +190,6 @@ class OrderService extends CommonService
         DataStandard::printStandardDataExit([], config("validator.755"), 755);
     }
 
-
     public function show($orderId)
     {
         $where = [
@@ -325,6 +324,91 @@ class OrderService extends CommonService
                 $sheet->rows($rows);
             });
         })->export('xlsx');
+    }
+
+    public function getOrderByTradeCode($tradeCode)
+    {
+        $where = [
+            "code" => $tradeCode
+        ];
+        return Order::where($where)->first();
+    }
+
+    /**
+     * 更新支付状态
+     * @param $checkInfo
+     * @param bool $sync
+     * @throws \Exception
+     */
+    public function updateOrderPay($checkInfo, $sync = true)
+    {
+        DB::beginTransaction();
+        try {
+            //查询订单是否存在
+            $order = $this->getOrderByTradeCode($checkInfo["code"]);
+            if ($order) {
+                $code = 0;
+                if (in_array($order->status, [1, 2, 3])) {//订单状态为 支付成功
+                    $code = 0;
+                } else if (in_array($order->status, [6])) {//订单状态为 支付失败
+                    $code = 802;
+                } else if (in_array($order->status, [4])) {//订单状态为 订单已取消
+                    $code = 807;
+                } else if (in_array($order->status, [0])) {//订单状态为 未支付
+                    if ($order->total_price == $checkInfo["total_price"]) {//校验金额是否一致
+                        if ($order->pay_app_id == $checkInfo["pay_app_id"]) {//校验支付商户app_id是否一致
+                            if (!$sync) {//接收到异步通知后再更新订单状态信息
+                                $orderInfo = [
+                                    "status" => 1,//支付成功--待发货
+                                    "order_json" => $checkInfo["order_json"],
+                                ];
+                                $this->updateOrderPayInfo($orderInfo, $order->id);
+                                DB::commit();
+                            }
+                            $code = 0;
+                        } else {
+                            DataStandard::printStandardDataExit([], config("validator.805"), 805);
+                        }
+                    } else {
+                        DataStandard::printStandardDataExit([], config("validator.804"), 804);
+                    }
+                }
+                if ($sync) {
+                    DataStandard::printStandardDataExit([], config("validator.$code"), $code);
+                } else {
+                    echo "success";
+                    exit();
+                }
+            }
+            DataStandard::printStandardDataExit([], config("validator.803"), 803);
+        } catch (\Exception $ex) {
+            DB::rollback();
+            throw $ex;
+        }
+    }
+
+    /**
+     * 更新支付信息
+     * @param $input
+     * @param $orderId
+     * @return mixed|static
+     */
+    public function updateOrderPayInfo($input, $orderId)
+    {
+        $order = Order::find($orderId);
+        $fileds = [
+            "status" => "status",
+            "pay_way" => "pay_way",
+            "pay_app_id" => "pay_app_id",
+            "order_json" => "order_json",
+        ];
+        foreach ($fileds as $filed => $val) {
+            if (isset($input[$val])) {
+                $order->$filed = $input[$val];
+            }
+        }
+        $order->save();
+        return $order;
     }
 
 

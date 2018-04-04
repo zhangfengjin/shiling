@@ -60,6 +60,8 @@ Route::group(['domain' => '', 'middleware' => ['logger']], function () {
 
                 Route::group(['prefix' => 'pay'], function () {
                     Route::post("unifiedorder", "PayController@unifiedorder");
+                    Route::post("return/wechat", "PayController@weChatOrderQuery");//客户端确认支付状态
+                    Route::post("return/ali", "PayController@aliOrderQuery");//客户端确认支付状态
                 });
 
                 Route::get("school/list", "SchoolController@getList");//学校列表
@@ -72,5 +74,10 @@ Route::group(['domain' => '', 'middleware' => ['logger']], function () {
         });
     });
     Route::post("signin/code", "Api\MeetUserController@userSignin");//二维码签到--会议用户个人二维码
+
+    Route::group(["namespace" => 'Api', 'prefix' => 'pay/notify'], function () {
+        Route::post("wechat", "PayController@weChatPayNotify");//三方异步通知支付状态
+        Route::post("ali", "PayController@aliPayNotify");//三方异步通知支付状态
+    });
 
 });
