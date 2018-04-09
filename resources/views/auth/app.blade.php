@@ -33,7 +33,8 @@
                     src="{{url('/images/homeimgs/logo.png')}}" alt="">--}} <span
                     id="homeNavigate">会员登录</span>
         </a> @if(empty($user))<span class="header-span"> 您还没有登录账号？<a
-                    href="{{ url('/auth/register') }}" class="register">点击注册</a>
+                    href="{{ url('/auth/register')}}{{isset($meetId)?"?meet_id=".$meetId:"" }}"
+                    class="register">点击注册</a>
 			</span> @endif
     </div>
 </div>

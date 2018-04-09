@@ -231,6 +231,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
+    'sys_app_key' => "123",
     'app_key' => [
         '123' => []
     ],
@@ -263,6 +264,9 @@ return [
     'wy' => [
         'appkey' => env('Wy_App_Key', ''),
         'secret' => env('Wy_Secret', '')
+    ],
+    'enroll' => [
+        'url' => 'http://lingshi.weibo.com/api/meet/signup'
     ],
 
 

@@ -282,7 +282,7 @@ class MeetService extends CommonService
             $orderMeet = [];
             foreach ($users as $user) {
                 $meetUser = new MeetUser();
-                $meetUser->user_id = $user['user_id'];
+                $meetUser->user_id = $user['userId'];
                 $meetUser->meet_id = $meetId;
                 $meetUser->order_id = $order->id;
                 $meetUser->save();

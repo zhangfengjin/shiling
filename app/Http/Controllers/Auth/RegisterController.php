@@ -8,6 +8,7 @@ use App\Http\Services\VerifyService;
 use App\User;
 use App\Http\Controllers\Controller;
 use App\Utils\DataStandard;
+use App\Utils\HttpHelper;
 use App\Utils\RegHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -150,6 +151,28 @@ class RegisterController extends Controller
                     //$this->guard()->login($user); // 登录
                     $token = empty($user['im_token']) ? DataStandard::getToken($user->id) : $user['im_token'];
                     Cache::put($token, $token, 60 * 24 * 365);
+                    $meetId = $request->input("meet_id");//带有meet_id字段的表示需要直接报名
+                    if ($meetId) {
+                        //todo
+                        //报名
+                        $url = config("app.enroll.url");
+                        $post_data = [
+                            'meetId' => $meetId,
+                            'userId' => $user->id
+                        ];
+                        $headers = [
+                            'Content-Type:application/json;charset=utf-8',
+                            'appKey:' . config("app.sys_app_key")
+                        ];
+                        // 发送请求
+                        $ret = HttpHelper::http_post_curlcontents($url, $headers, $post_data);
+                        $ret = json_decode($ret, true);
+                        if (isset($ret['code']) && $ret['code'] === 0) {
+                            //报名成功 退出登录状态
+                            //$this->guard()->logout();
+                            return DataStandard::getStandardData([], config("validator.651"), 651);
+                        }
+                    }
                     return DataStandard::getStandardData(["token" => $token]);
                 }
             }

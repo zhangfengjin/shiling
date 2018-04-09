@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Services\VerifyService;
 use App\Utils\DataStandard;
+use App\Utils\HttpHelper;
 use App\Utils\RegHelper;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -45,9 +46,12 @@ class LoginController extends Controller
         //$this->middleware('guest')->except('logout');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return view("auth.login");
+        $pages = [
+            "meetId" => $request->input('meet_id')
+        ];
+        return view("auth.login")->with($pages);
     }
 
     /**
@@ -101,6 +105,7 @@ class LoginController extends Controller
             $credentials ["password"] = $request->input('password');
             $bsLimit = [1, 4, 5];//
             $bs = false;
+            $meetId = $request->input("meet_id");//带有meet_id字段的表示需要直接报名
             if (!empty($request->input("bs"))) {
                 $code = $request->input('verify');
                 $verifyService = new VerifyService();
@@ -108,7 +113,9 @@ class LoginController extends Controller
                 if ($msg) {
                     return DataStandard::getStandardData([], $msg, 123);
                 }
-                $credentials["role_id"] = $bsLimit;//后台登录 只允许管理员
+                if (!$meetId) {
+                    $credentials["role_id"] = $bsLimit;//后台登录 只允许管理员
+                }
                 $bs = true;
             }
             $credentials["flag"] = 0;
@@ -116,6 +123,27 @@ class LoginController extends Controller
                 $user = Auth::user();
                 $token = empty($user->im_token) ? DataStandard::getToken($user->id) : $user->im_token;
                 Cache::put($token, $token, 60 * 24 * 365);
+                if ($meetId) {
+                    //todo
+                    //报名
+                    $url = config("app.enroll.url");
+                    $post_data = [
+                        'meetId' => $meetId,
+                        'userId' => $user->id
+                    ];
+                    $headers = [
+                        'Content-Type:application/json;charset=utf-8',
+                        'appKey:' . config("app.sys_app_key")
+                    ];
+                    // 发送请求
+                    $ret = HttpHelper::http_post_curlcontents($url, $headers, $post_data);
+                    $ret = json_decode($ret, true);
+                    if (isset($ret['code']) && $ret['code'] === 0) {
+                        //报名成功 退出登录状态
+                        $this->guard()->logout();
+                        return DataStandard::getStandardData([], config("validator.651"), 651);
+                    }
+                }
                 return DataStandard::getStandardData(["token" => $token]);
             }
             return DataStandard::getStandardData([], config("validator.124"), 124);
@@ -129,7 +157,7 @@ class LoginController extends Controller
         $bs = false;
         if (!empty($request->input("bs"))) {
             $token = empty($user->im_token) ? DataStandard::getToken($user->id) : $user->im_token;
-            $bs = true;
+            $bs = true;//pc端
         } else {
             $token = $request->input('token');
         }

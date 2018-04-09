@@ -43,8 +43,17 @@ class MeetController extends Controller
                 }
                 $users = $input['users'];
                 foreach ($users as $user) {//检查需要报名的用户
-                    if (!$userService->uniqueUid($user['user_id'])) {
+                    $userId = $user['userId'];
+                    if (!$userService->uniqueUid($userId)) {
                         return DataStandard::getStandardData([], config('validator.126'), 126);
+                    }
+                    $args = [
+                        "meetId" => $input["meetId"],
+                        "userId" => $userId
+                    ];
+                    $meetUser = $meetUserService->getMeetUser($args);
+                    if ($meetUser) {
+                        return DataStandard::getStandardData([], config('validator.703'), 703);
                     }
                 }
                 $ret = $meetService->enroll($input);
