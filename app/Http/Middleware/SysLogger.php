@@ -35,7 +35,7 @@ class SysLogger
             $slogService = new SysLogService();
             $slogService->save($request, $response, $user, 1); // 成功日志
         } catch (\Exception $e) {
-            Log::info("\r\nSysLog:" . json_encode($response->getContent()) . "\r\n");
+            Log::info("\r\nSysLog:$e->getMessage()---" . json_encode($response->getContent()) . "\r\n");
         }
     }
 }

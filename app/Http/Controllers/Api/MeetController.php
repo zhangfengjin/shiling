@@ -31,6 +31,7 @@ class MeetController extends Controller
         $meetService = new MeetService($request);
         $meet = $meetService->getMeet($input);
         if ($meet) {
+            $input['type'] = $meet->type;
             $meetUserService = new MeetUserService($request);
             $meetUser = $meetUserService->getMeetUser($input);
             if ($meetUser) {

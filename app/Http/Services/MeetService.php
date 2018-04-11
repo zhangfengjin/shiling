@@ -258,7 +258,7 @@ class MeetService extends CommonService
             "status" => 0,
             "id" => $input['meetId']
         ];
-        return Meet::where($where)->count();
+        return Meet::where($where)->first();
     }
 
     /**

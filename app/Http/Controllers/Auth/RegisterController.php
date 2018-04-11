@@ -153,25 +153,29 @@ class RegisterController extends Controller
                     Cache::put($token, $token, 60 * 24 * 365);
                     $meetId = $request->input("meet_id");//带有meet_id字段的表示需要直接报名
                     if ($meetId) {
-                        //todo
-                        //报名
                         $url = config("app.enroll.url");
-                        $post_data = [
-                            'meetId' => $meetId,
-                            'userId' => $user->id
-                        ];
                         $headers = [
                             'Content-Type:application/json;charset=utf-8',
-                            'appKey:' . config("app.sys_app_key")
+                            'appKey:' . config("app.sys_app_key"),
+                            'token:' . $token
                         ];
+                        $post_data = [
+                            "meetId" => $meetId,
+                            "userId" => $user->id,
+                            "users" => [
+                                ["userId" => $user->id]
+                            ]
+                        ];
+                        $url = $url . "?" . http_build_query($post_data);
                         // 发送请求
-                        $ret = HttpHelper::http_post_curlcontents($url, $headers, $post_data);
+                        $ret = HttpHelper::http_post_curlcontents($url, $headers, []);
                         $ret = json_decode($ret, true);
                         if (isset($ret['code']) && $ret['code'] === 0) {
                             //报名成功 退出登录状态
-                            //$this->guard()->logout();
+                            $this->guard()->logout();
                             return DataStandard::getStandardData([], config("validator.651"), 651);
                         }
+                        return DataStandard::getStandardData([], isset($ret["message"]) ? $ret["message"] : config("validator.652"), 652);
                     }
                     return DataStandard::getStandardData(["token" => $token]);
                 }
