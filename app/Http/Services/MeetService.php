@@ -10,6 +10,7 @@ namespace App\Http\Services;
 
 
 use App\Jobs\NotifyJob;
+use App\Models\Area;
 use App\Models\Meet;
 use App\Models\MeetAtt;
 use App\Models\MeetNotify;
@@ -147,7 +148,7 @@ class MeetService extends CommonService
             'meet.keynote_speaker', 'meet.limit_count', 'meet.to_object', 'meet.in_price',
             'meet.icon_att_id'
         ];
-        $status = DB::raw("case when meet.status=1 then '已取消' else '正常' end status");
+        $status = DB::raw("case when meet.status=1 then '已取消' when (meet.status=0 and meet.end_time>now()) then '可报名' else '已结束'end status");
         $areaName = DB::raw("CONCAT(province_name,'-',city_name,'-',area_name) as pca_name");
         $userName = DB::raw("u.name as user_name");
         $type = DB::raw("case when meet.type=1 then '课程' else '会议' end type");
@@ -185,20 +186,23 @@ class MeetService extends CommonService
             'meet.limit_count', 'meet.to_object', 'meet.creator', 'meet.abstract',
             'meet.area_id', 'meet.in_price', 'meet.icon_att_id',
             'area.area_name', 'area.province_code', 'area.province_name', 'area.city_code',
-            'area.city_name', 'meet.keynote_speaker_tel', 'meet.keynote_speaker_email', 'meet.course_id'
+            'area.city_name', 'meet.keynote_speaker_tel', 'meet.keynote_speaker_email', 'meet.course_id',
+            'keynote_speaker_tel','keynote_speaker_email'
         ];
         $creatorName = DB::RAW("u.name as creator_name");
         $meetName = DB::RAW("meet.name as meet_name");
         $iconUrl = DB::raw("CONCAT(att1.diskposition,att1.filename) as icon_url");
         $meetAttId = DB::raw("att2.id as meet_att_id");
         $meetUrl = DB::raw("CONCAT(att2.diskposition,att2.filename) as meet_url");
-        array_push($select, $creatorName, $meetName, $iconUrl, $meetAttId, $meetUrl);
+        $courseName = DB::raw("value as course_name");
+        array_push($select, $creatorName, $meetName, $iconUrl, $meetAttId, $meetUrl,$courseName);
         $meet = DB::table("meets as meet")
             ->leftJoin("users as u", 'u.id', '=', 'meet.creator')
             ->leftJoin("areas as area", 'area.id', '=', 'meet.area_id')
             ->leftJoin("attachments as att1", 'att1.id', '=', 'meet.icon_att_id')
             ->leftJoin("meet_atts as ma", 'ma.meet_id', '=', 'meet.id')
             ->leftJoin("attachments as att2", 'att2.id', '=', 'ma.att_id')
+            ->leftJoin("dicts as dic", 'dic.id', '=', 'meet.course_id')
             ->where("meet.id", $meetId)->get($select)->first();
         return $meet;
     }
@@ -320,6 +324,44 @@ class MeetService extends CommonService
         $courseId = isset($this->user["course_id"]) ? $this->user["course_id"] : 0;
         $type = isset($searchs["type"]) ? trim($searchs["type"])
             : (isset($this->allInput["type"]) ? trim($this->allInput["type"]) : false);
+        $areaId = isset($searchs["area_id"]) ? trim($searchs["area_id"])
+            : (isset($this->allInput["area_id"]) ? trim($this->allInput["area_id"]) : []);
+        if (empty($areaId)) {
+            $cityCode = isset($searchs["city_code"]) ? trim($searchs["city_code"])
+                : (isset($this->allInput["city_code"]) ? trim($this->allInput["city_code"]) : []);
+            if (empty($cityCode)) {
+                $provinceCode = isset($searchs["province_code"]) ? trim($searchs["province_code"])
+                    : (isset($this->allInput["province_code"]) ? trim($this->allInput["province_code"]) : []);
+                if (!empty($provinceCode)) {
+                    $areaWhere = [
+                        "flag" => 0,
+                        "province_code" => $provinceCode
+                    ];
+                    $ares = Area::where($areaWhere)->get(["id"]);
+                    foreach ($ares as $are) {
+                        $areaId[] = $are->id;
+                    }
+                }
+            } else {
+                $areaWhere = [
+                    "flag" => 0,
+                    "city_code" => $cityCode
+                ];
+                $ares = Area::where($areaWhere)->get(["id"]);
+                foreach ($ares as $are) {
+                    $areaId[] = $are->id;
+                }
+            }
+            if (empty($areaId)) {
+                $areaId = [0];
+            }
+        }
+        if (!empty($areaId)) {
+            if (is_array($areaId)) {
+                $areaId = implode(",", $areaId);
+            }
+            array_push($where, "meet.area_id in ($areaId)");
+        }
         if (!empty($meetName)) {
             array_push($where, "meet.name like '%$meetName%'");
         }
@@ -330,14 +372,14 @@ class MeetService extends CommonService
                     array_push($where, "meet.status = $status");
                     break;
                 case 3:
-                    //正常
+                    //正常--可报名
                     array_push($where, "(meet.status = 0 and meet.end_time>now())");
                     break;
                 case 4:
                     //已结束
-                    array_push($where, "(meet.status = 0 and meet.end_time<now())");
+                    array_push($where, "(meet.status = 0 and meet.end_time<=now())");
                     break;
-                default:
+                default://正常状态
                     array_push($where, "meet.status = $status");
                     break;
             }

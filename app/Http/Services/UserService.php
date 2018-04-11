@@ -207,10 +207,11 @@ class UserService extends CommonService
                     "flag" => 0
                 ];
                 //科目
-                $inputCourses = $input['courses'];
-                if (empty($inputCourses)) {
+                $inputCourses = isset($input['courses']) ? $input['courses'] : [];
+                /*if (empty($inputCourses)) {
                     UserCourse::where("user_id", $userId)->delete();
-                } else {
+                } else {*/
+                if (!empty($inputCourses)) {
                     $courses = UserCourse::where($linkWhere)->distinct()->get(["course_id"]);
                     $delCourses = [];
                     foreach ($courses as $course) {
@@ -236,8 +237,10 @@ class UserService extends CommonService
                     }
                 }
 
+                /*}*/
+
                 //年级
-                $inputGrades = $input['grades'];
+                $inputGrades = isset($input['grades'])?$input['grades']:[];
                 if (empty($inputGrades)) {
                     UserGrade::where("user_id", $userId)->delete();
                 } else {

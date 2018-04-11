@@ -66,6 +66,9 @@ class MeetController extends Controller
 
     public function getList(Request $request)
     {
+        if (!$request->input('status')) {
+            $request->offsetSet("status", 0);
+        }
         $meetService = new MeetService($request);
         $list = $meetService->getList();
         return DataStandard::printStandardData($list);

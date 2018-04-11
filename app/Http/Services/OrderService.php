@@ -276,8 +276,10 @@ class OrderService extends CommonService
             "og.flag" => 0
         ];
         $select = [
-            "g.name", "g.series", "g.price", "og.goods_count",
+            "g.name", "g.series", "g.price","g.goods_count"
         ];
+        $ogcount = DB::raw("og.goods_count as order_goods_count");
+        array_push($select, $ogcount);
         foreach ($rows as $row) {
             $where["orders_id"] = $row->id;
             $goods = DB::table("order_goods as og")
@@ -419,7 +421,7 @@ class OrderService extends CommonService
      */
     private function getSearchWhere($searchs)
     {
-        $sql = "1=1";
+        $sql = "o.type=2";
         if ((!count($searchs) || empty($searchs)) && empty($this->allInput)) {
             return $sql;
         }
